@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Section - Elite Finds</title>
-    <link rel="stylesheet" href="men_section.css">
+    <link rel="stylesheet" href="kids_section.css">
 </head>
 <body>
     <header>
@@ -24,8 +24,8 @@
     </div>
         <nav class="navbar">
             <a href="women_section.html">Women</a>
-            <a href="men_section.html" class="pink-highlight">Men</a>
-            <a href="kids_section.html">Kids</a>
+            <a href="men_section.html">Men</a>
+            <a href="#" class="pink-highlight">Kids</a>
             <a href="bags_section.html">Bags</a>
             <a href="jewelry_section.html">Jewelry</a>
             <a href="accessories_section.html">Accessories</a>
@@ -51,13 +51,12 @@
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
-                    <option value="shirts">Shirts</option>
+                    <option value="dresses">Dresses</option>
                     <option value="coats">Coats</option>
                     <option value="shoes">Shoes</option>
                     <option value="jeans">Jeans</option>
                     <option value="trousers">Trousers</option>
-                    <option value="shorts">Shorts</option>
-                    <option value="blazers">Blazers</option>
+                    <option value="shorts and skirts">Shorts and Skirts</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -90,53 +89,6 @@
 
         </aside>
         <div class="products">
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../test_dress.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
 
             <div class="product">
                 <img src="../test_dress.png" alt="Vintage Gucci Dress">
@@ -206,12 +158,11 @@
             subcategory.innerHTML = '';
     
             var options = {
-                'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
+                'dresses': ['Mini', 'Midi', 'Maxi'],
                 'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
-                'jeans': ['Lose Fit','Skinny Fit'],
-                'shorts': ['Jeans','Other Materials'],
-                'blazers': ['Neutral', 'Patterns']
+                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
+                'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
+                'shorts and skirts': ['Mini','Midi', 'Maxi']
             };
     
             if (options[category]) {
