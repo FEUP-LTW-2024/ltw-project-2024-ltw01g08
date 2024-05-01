@@ -14,7 +14,7 @@ body, html {
 }
 
 header {
-    background-color: #F8F8F8;
+    background-color: #ECBFBF;
     padding: 10px 20px;
 }
 
@@ -54,10 +54,12 @@ header {
     color: #000000;
 }
 
-.pink-highlight {
+.navbar a.pink-highlight {
     color: var(--darkerpink);
-    background: var(--lightpink);
+    font-weight: bold;
+    text-decoration: underline;
 }
+
 
 .products {
     display: flex;

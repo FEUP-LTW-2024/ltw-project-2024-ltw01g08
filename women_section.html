@@ -17,20 +17,34 @@
                 <span>P</span>
                 <img src="shopping_cart_icon.png" alt="Shopping Cart">
             </div>
-        </div>
-        <nav class="navbar">
-            <a href="#">New Arrivals</a>
-            <a href="#" class="pink-highlight">Women</a>
-            <a href="#">Men</a>
-            <a href="#">Kids</a>
-            <a href="#">Jewelry</a>
-        </nav>        
+           
     </header>
 
     <main>
+    </div>
+        <nav class="navbar">
+            <a href="#" class="pink-highlight">Women</a>
+            <a href="#">Men</a>
+            <a href="#">Kids</a>
+            <a href="#">Bags</a>
+            <a href="#">Jewelry</a>
+            <a href="#">Accessories</a>
+
+        </nav>     
         <aside class="filter-sidebar">
-            <h2>Sort By</h2>
+            <h2>Filter By</h2>
             <form id="filters">
+                <label for="department">Department</label>
+                <select id="category" onchange="updateSubcategories();">
+                    <option value="all">All</option>
+                    <option value="women">Women</option>
+                    <option value="men">Men</option>
+                    <option value="kids">Kids</option>
+                    <option value="bags">Bags</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
