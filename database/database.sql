@@ -10,7 +10,7 @@ CREATE TABLE User (
     email TEXT NOT NULL UNIQUE
     password TEXT NOT NULL,
     address TEXT NOT NULL,
-    profile_picture BLOB
+    profile_picture TEXT
 );
 
 DROP TABLE IF EXISTS Admin;
@@ -20,12 +20,20 @@ CREATE TABLE Admin (
     user_id INTEGER NOT NULL UNIQUE REFERENCES User(id)
 );
 
+DROP TABLE IF EXISTS Department;
+
+CREATE TABLE Department (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    id INTEGER REFERENCES Category(id),
+);
+
 DROP TABLE IF EXISTS Category;
 
 CREATE TABLE Category (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    id INTEGER REFERENCES Subcategory(id),
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  category_id INTEGER NOT NULL REFERENCES Department(id)
 );
 
 DROP TABLE IF EXISTS Subcategory;
@@ -43,14 +51,14 @@ CREATE TABLE Item (
   seller_id INTEGER NOT NULL REFERENCES User(id),
   title TEXT NOT NULL,
   description TEXT NOT NULL,
-  category_id INTEGER NOT NULL REFERENCES Category(id),
-  subcategory_id INTEGER NOT NULL REFERENCES SubCategory(id),
+  Department_id INTEGER NOT NULL REFERENCES Department(id),
+  Category_id INTEGER NOT NULL REFERENCES Category(id),
   brand TEXT NOT NULL,
   size TEXT NOT NULL,
   color TEXT NOT NULL,
   condition TEXT NOT NULL,
   price DECIMAL(10, 2),
-  image_url VARCHAR(255),
+  image_url TEXT,
 );
 
 DROP TABLE IF EXISTS Transaction;
@@ -115,60 +123,62 @@ INSERT INTO User VALUES (9, 'João', 'Cruz', 'jcruzj', 'jcruzz@hotmail.com', 'cr
 INSERT INTO User VALUES (10, 'Lara', 'Almeida', 'laraalmeida9', 'laralmeida@hotmail.com', '2018EDU',  'address', 'profile picture url');
 INSERT INTO User VALUES (11, 'Admin', 'Admin', 'admin1', 'admin1@hotmail.com', 'adminp',  'address', 'profile picture url');
 
-
 INSERT INTO Admin VALUES(1,11);
 
-INSERT INTO Category VALUES(1, 'WOMEN');
-INSERT INTO Category VALUES(2, 'MEN');
-INSERT INTO Category VALUES(3, 'KIDS');
-INSERT INTO Category VALUES(4, 'JEWELRY');
-INSERT INTO Category VALUES(5, 'BAGS');
-INSERT INTO Category VALUES(6, 'ACCESSORIES');
+INSERT INTO Department VALUES(1, 'WOMEN');
+INSERT INTO Department VALUES(2, 'MEN');
+INSERT INTO Department VALUES(3, 'KIDS');
+INSERT INTO Department VALUES(4, 'JEWELRY');
+INSERT INTO Department VALUES(5, 'BAGS');
+INSERT INTO Department VALUES(6, 'ACCESSORIES');
 
-INSERT INTO Subcategory VALUES(1,'Dresses', 1); --
-INSERT INTO Subcategory VALUES(2,'Tops', 1); --
-INSERT INTO Subcategory VALUES(3,'Jeans', 1); --
-INSERT INTO Subcategory VALUES(4,'Skirts', 1); --
-INSERT INTO Subcategory VALUES(37,'Shorts', 1); --
-INSERT INTO Subcategory VALUES(5,'Pants', 1); --
-INSERT INTO Subcategory VALUES(6,'Swimwear', 1); --
-INSERT INTO Subcategory VALUES(7,'Coats', 1); --
-INSERT INTO Subcategory VALUES(8,'Shoes', 1); --
+INSERT INTO Category VALUES(1,'Dresses', 1); --
+INSERT INTO Category VALUES(2,'Tops', 1); --
+INSERT INTO Category VALUES(3,'Jeans', 1); --
+INSERT INTO Category VALUES(4,'Skirts', 1); --
+INSERT INTO Category VALUES(37,'Shorts', 1); --
+INSERT INTO Category VALUES(5,'Pants', 1); --
+INSERT INTO Category VALUES(6,'Swimwear', 1); --
+INSERT INTO Category VALUES(7,'Coats', 1); --
+INSERT INTO Category VALUES(8,'Shoes', 1); --
 
-INSERT INTO Subcategory VALUES(9,'Shirts', 2); --
-INSERT INTO Subcategory VALUES(10,'Jeans', 2); --
-INSERT INTO Subcategory VALUES(11,'Pants', 2); --
-INSERT INTO Subcategory VALUES(38,'Shorts', 2); --
-INSERT INTO Subcategory VALUES(12,'Swimwear', 2); --
-INSERT INTO Subcategory VALUES(13,'Coats', 2); --
-INSERT INTO Subcategory VALUES(14,'Shoes', 2); --
+INSERT INTO Category VALUES(9,'Shirts', 2); --
+INSERT INTO Category VALUES(10,'Jeans', 2); --
+INSERT INTO Category VALUES(11,'Pants', 2); --
+INSERT INTO Category VALUES(38,'Shorts', 2); --
+INSERT INTO Category VALUES(12,'Swimwear', 2); --
+INSERT INTO Category VALUES(13,'Coats', 2); --
+INSERT INTO Category VALUES(14,'Shoes', 2); --
 
-INSERT INTO Subcategory VALUES(15,'Dresses', 3); -- 
-INSERT INTO Subcategory VALUES(16,'Tops', 3); --
-INSERT INTO Subcategory VALUES(17,'Jeans', 3);
-INSERT INTO Subcategory VALUES(18,'Skirts', 3);
-INSERT INTO Subcategory VALUES(39,'Shorts', 3);
-INSERT INTO Subcategory VALUES(19,'Pants', 3);
-INSERT INTO Subcategory VALUES(20,'Swimwear', 3);
-INSERT INTO Subcategory VALUES(21,'Coats', 3); --
-INSERT INTO Subcategory VALUES(22,'Shoes', 3);
+INSERT INTO Category VALUES(15,'Dresses', 3); -- 
+INSERT INTO Category VALUES(16,'Tops', 3); --
+INSERT INTO Category VALUES(17,'Jeans', 3);
+INSERT INTO Category VALUES(18,'Skirts', 3);
+INSERT INTO Category VALUES(39,'Shorts', 3);
+INSERT INTO Category VALUES(19,'Pants', 3);
+INSERT INTO Category VALUES(20,'Swimwear', 3);
+INSERT INTO Category VALUES(21,'Coats', 3); --
+INSERT INTO Category VALUES(22,'Shoes', 3);
 
-INSERT INTO Subcategory VALUES(23,'Rings', 4); --
-INSERT INTO Subcategory VALUES(24,'Necklaces', 4); -- 
-INSERT INTO Subcategory VALUES(25'Earrings', 4); -- 
-INSERT INTO Subcategory VALUES(26,'Bracelets', 4); --
+INSERT INTO Category VALUES(23,'Rings', 4); --
+INSERT INTO Category VALUES(24,'Necklaces', 4); -- 
+INSERT INTO Category VALUES(25'Earrings', 4); -- 
+INSERT INTO Category VALUES(26,'Bracelets', 4); --
 
-INSERT INTO Subcategory VALUES(27,'Shoulder Bags', 5); --
-INSERT INTO Subcategory VALUES(28,'Handbags', 5); -- 
-INSERT INTO Subcategory VALUES(29,'Crossbody Bags', 5); --
-INSERT INTO Subcategory VALUES(30,'Clutch Bags', 5); --
+INSERT INTO Category VALUES(27,'Shoulder Bags', 5); --
+INSERT INTO Category VALUES(28,'Handbags', 5); -- 
+INSERT INTO Category VALUES(29,'Crossbody Bags', 5); --
+INSERT INTO Category VALUES(30,'Clutch Bags', 5); --
 
-INSERT INTO Subcategory VALUES(31,'Belts', 6); -- 
-INSERT INTO Subcategory VALUES(32,'Sunglasses', 6); -- 
-INSERT INTO Subcategory VALUES(33,'Hats', 6); --
-INSERT INTO Subcategory VALUES(34,'Scarfs', 6); -- 
-INSERT INTO Subcategory VALUES(35,'Wallets', 6); -- 
-INSERT INTO Subcategory VALUES(36,'Watches', 6); -- 
+INSERT INTO Category VALUES(31,'Belts', 6); -- 
+INSERT INTO Category VALUES(32,'Sunglasses', 6); -- 
+INSERT INTO Category VALUES(33,'Hats', 6); --
+INSERT INTO Category VALUES(34,'Scarfs', 6); -- 
+INSERT INTO Category VALUES(35,'Wallets', 6); -- 
+INSERT INTO Category VALUES(36,'Watches', 6); -- 
+
+-- FALTA SUBCATEGORIES!!!!!!!!
+
 
 --Women Items
 INSERT INTO Item VALUES (1, 3,
@@ -177,56 +187,56 @@ INSERT INTO Item VALUES (1, 3,
   1,7,
   'Gucci', 'L', 'Beige',
   'Excelent', 400.00,
-  'image');
+  '../images/items/item1.png');
 INSERT INTO Item VALUES (2, 5,
   'Jimmy Choo Heels',
   'pink shoes',
   1,8,
   'Jimmy Choo', 'M', 'Pink',
   'Very good', 450.00,
-  'image');
+  '../images/items/item2.png');
 INSERT INTO Item VALUES (3, 2,
   'Balenciaga Jeans',
   'beautiful jeans',
   1, 3,
   'Balenciaga', 'XS', 'Blue',
   'Very good', 910.00,
-  'image');
+  '../images/items/item3.png');
 INSERT INTO Item VALUES (4, 7,
   'Dior skirt',
   'beautiful skirt',
   1, 4,
   'Dior', 'L', 'Blue',
   'Very good', 725.00,
-  'image');
+  '../images/items/item4.png');
 INSERT INTO Item VALUES (5, 2,
   'Burberry Dress',
   'very good quality',
   1,1,
   'Burberry', 'M', 'Brown',
   'Excelent', 545.00,
-  'image');
+  '../images/items/item5.png');
 INSERT INTO Item VALUES (19, 9,
   'Miu Miu Top',
   'Navy blue top',
   1,2,
   'Burberry', 'M', 'Blue',
   'Bad', 100.00,
-  'image');
+  '../images/items/item19.png');
   INSERT INTO Item VALUES (20, 6,
   'Fendi Trousers',
   'Black trousers',
   1,5,
   'Fendi', 'L', 'Black',
   'Excellent', 700.00,
-  'image');
+  '../images/items/item20.png');
   INSERT INTO Item VALUES (21, 2,
   'Dior Swimsuit',
-  'Navy blue swimsuit',
+  'Pink swimsuit',
   1,6,
-  'Dior', 'M', 'Blue',
+  'Dior', 'M', 'Pink',
   'Bad', 100.00,
-  'image');
+  '../images/items/item21.png');
   INSERT INTO Item VALUES (22, 2,
   'Dolce&Gabbana Shorts',
   'Brown Shorts',
