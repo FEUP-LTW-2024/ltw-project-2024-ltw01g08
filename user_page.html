@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Elite Finds</title>
+    <link rel="stylesheet" href="user_page.css">
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <input type="text" placeholder="Search" class="search-bar">
+            <span class="logo"><a href="index.html">ELITE FINDS</a></span>
+            <div class="actions">
+                <span>H</span>
+                <span>N</span>
+                <span>P</span>
+                <img src="shopping_cart_icon.png" alt="Shopping Cart">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="user-profile">
+            <img src="../channels4_profile.jpg" alt="Anne's Profile" class="profile-photo">
+            <div class="user-details">
+                <h1>Anne</h1>
+                <p>@Anneuser</p>
+                <p> 3 reviews</p>
+                <p>Portugal</p>
+                <p>0 items for sale</p>
+            </div>
+            <div class="social-info">
+                <p>3 Followers</p>
+                <p>3 Following</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-link active" onclick="openTab('items')">Items for sale</button>
+            <button class="tab-link" onclick="openTab('reviews')">Reviews</button>
+        </div>
+
+        <div id="items" class="tab-content active">
+            <div class="products">
+                <div class="product">
+                    <img src="vintage_gucci_dress.jpg" alt="Vintage Gucci Dress">
+                    <p>Vintage Gucci Dress € 60,00</p>
+                    <p>Size EU 36</p>
+                </div>
+                <!--  produtos -->
+            </div>
+        </div>
+
+        <div id="reviews" class="tab-content">
+            <!-- Reviews  -->
+            <p>No reviews yet.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <p>Customer Care</p>
+            <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping info</a></li>
+                <li><a href="#">Returns policy</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p>Company</p>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">How to sell</a></li>
+                <li><a href="#">Terms of service</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>
