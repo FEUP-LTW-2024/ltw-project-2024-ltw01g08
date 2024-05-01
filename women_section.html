@@ -31,20 +31,23 @@
             <a href="#">Accessories</a>
 
         </nav>     
+
+        
+        <aside class="sorter-sidebar">
+            <h2>Sort By</h2>
+            <form id="sorters">
+                <label for="sort-price">Price:</label>
+                <select id="sort-price" onchange="sortProducts();">
+                    <option value="default">--</option>
+                    <option value="low-to-high">Low to High</option>
+                    <option value="high-to-low">High to Low</option>
+                </select>
+            </form>
+        </aside>
+        
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters">
-                <label for="department">Department</label>
-                <select id="category" onchange="updateSubcategories();">
-                    <option value="all">All</option>
-                    <option value="women">Women</option>
-                    <option value="men">Men</option>
-                    <option value="kids">Kids</option>
-                    <option value="bags">Bags</option>
-                    <option value="Jewelry">Jewelry</option>
-                    <option value="accessories">Accessories</option>
-                </select>
-
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
@@ -82,6 +85,8 @@
                 <input type="text" id="price" placeholder="Min Price">
                 <input type="text" id="price" placeholder="Max Price">
             </form>
+           
+
         </aside>
         <div class="products">
             <div class="product">
@@ -167,6 +172,7 @@
             <span id="pageNumber">1</span>
             <button onclick="changePage(1)">Next</button>
         </div>
+        
         
     </main>
 
@@ -268,6 +274,38 @@
                 paginateProducts(); 
             });
         </script>
+
+<script>
+    function sortProducts() {
+        var sortBy = document.getElementById('sort-price').value;
+        var container = document.querySelector('.products');
+        var products = Array.from(container.querySelectorAll('.product'));
+    
+        products.sort(function(a, b) {
+            // Assume each product's price is contained in an element like <h3>€ 60,00</h3>
+            var priceA = parseInt(a.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
+            var priceB = parseInt(b.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
+    
+            if (sortBy === 'low-to-high') {
+                return priceA - priceB;
+            } else if (sortBy === 'high-to-low') {
+                return priceB - priceA;
+            }
+            return 0;
+        });
+    
+        // Clear existing products
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    
+        // Append sorted products
+        products.forEach(function(product) {
+            container.appendChild(product);
+        });
+    }
+    </script>
+    
         
 </body>
 </html>
