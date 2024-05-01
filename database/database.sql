@@ -24,7 +24,16 @@ DROP TABLE IF EXISTS Category;
 
 CREATE TABLE Category (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE
+    name TEXT NOT NULL UNIQUE,
+    id INTEGER REFERENCES Subcategory(id),
+);
+
+DROP TABLE IF EXISTS Subcategory;
+
+CREATE TABLE Subcategory (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  category_id INTEGER NOT NULL REFERENCES Category(id)
 );
 
 DROP TABLE IF EXISTS Item;
@@ -34,7 +43,8 @@ CREATE TABLE Item (
   seller_id INTEGER NOT NULL REFERENCES User(id),
   title TEXT NOT NULL,
   description TEXT NOT NULL,
-  category_id INTEGER REFERENCES Category(id),
+  category_id INTEGER NOT NULL REFERENCES Category(id),
+  subcategory_id INTEGER NOT NULL REFERENCES SubCategory(id),
   brand TEXT NOT NULL,
   size TEXT NOT NULL,
   color TEXT NOT NULL,
@@ -111,136 +121,300 @@ INSERT INTO Admin VALUES(1,11);
 INSERT INTO Category VALUES(1, 'WOMEN');
 INSERT INTO Category VALUES(2, 'MEN');
 INSERT INTO Category VALUES(3, 'KIDS');
-INSERT INTO Category VALUES(4, 'JEWERLY');
+INSERT INTO Category VALUES(4, 'JEWELRY');
 INSERT INTO Category VALUES(5, 'BAGS');
-INSERT INTO Category VALUES(6, 'WATCHES');
+INSERT INTO Category VALUES(6, 'ACCESSORIES');
 
+INSERT INTO Subcategory VALUES(1,'Dresses', 1); --
+INSERT INTO Subcategory VALUES(2,'Tops', 1); --
+INSERT INTO Subcategory VALUES(3,'Jeans', 1); --
+INSERT INTO Subcategory VALUES(4,'Skirts', 1); --
+INSERT INTO Subcategory VALUES(37,'Shorts', 1); --
+INSERT INTO Subcategory VALUES(5,'Pants', 1); --
+INSERT INTO Subcategory VALUES(6,'Swimwear', 1); --
+INSERT INTO Subcategory VALUES(7,'Coats', 1); --
+INSERT INTO Subcategory VALUES(8,'Shoes', 1); --
+
+INSERT INTO Subcategory VALUES(9,'Shirts', 2); --
+INSERT INTO Subcategory VALUES(10,'Jeans', 2); --
+INSERT INTO Subcategory VALUES(11,'Pants', 2); --
+INSERT INTO Subcategory VALUES(38,'Shorts', 2); --
+INSERT INTO Subcategory VALUES(12,'Swimwear', 2); --
+INSERT INTO Subcategory VALUES(13,'Coats', 2); --
+INSERT INTO Subcategory VALUES(14,'Shoes', 2); --
+
+INSERT INTO Subcategory VALUES(15,'Dresses', 3); -- 
+INSERT INTO Subcategory VALUES(16,'Tops', 3); --
+INSERT INTO Subcategory VALUES(17,'Jeans', 3);
+INSERT INTO Subcategory VALUES(18,'Skirts', 3);
+INSERT INTO Subcategory VALUES(39,'Shorts', 3);
+INSERT INTO Subcategory VALUES(19,'Pants', 3);
+INSERT INTO Subcategory VALUES(20,'Swimwear', 3);
+INSERT INTO Subcategory VALUES(21,'Coats', 3); --
+INSERT INTO Subcategory VALUES(22,'Shoes', 3);
+
+INSERT INTO Subcategory VALUES(23,'Rings', 4); --
+INSERT INTO Subcategory VALUES(24,'Necklaces', 4); -- 
+INSERT INTO Subcategory VALUES(25'Earrings', 4); -- 
+INSERT INTO Subcategory VALUES(26,'Bracelets', 4); --
+
+INSERT INTO Subcategory VALUES(27,'Shoulder Bags', 5); --
+INSERT INTO Subcategory VALUES(28,'Handbags', 5); -- 
+INSERT INTO Subcategory VALUES(29,'Crossbody Bags', 5); --
+INSERT INTO Subcategory VALUES(30,'Clutch Bags', 5); --
+
+INSERT INTO Subcategory VALUES(31,'Belts', 6); -- 
+INSERT INTO Subcategory VALUES(32,'Sunglasses', 6); -- 
+INSERT INTO Subcategory VALUES(33,'Hats', 6); --
+INSERT INTO Subcategory VALUES(34,'Scarfs', 6); -- 
+INSERT INTO Subcategory VALUES(35,'Wallets', 6); -- 
+INSERT INTO Subcategory VALUES(36,'Watches', 6); -- 
 
 --Women Items
 INSERT INTO Item VALUES (1, 3,
   'Gucci Coat',
   'beige coat',
-  1,
+  1,7,
   'Gucci', 'L', 'Beige',
   'Excelent', 400.00,
   'image');
 INSERT INTO Item VALUES (2, 5,
-  'Jimmy Choo Shoes',
+  'Jimmy Choo Heels',
   'pink shoes',
-  1,
+  1,8,
   'Jimmy Choo', 'M', 'Pink',
   'Very good', 450.00,
   'image');
 INSERT INTO Item VALUES (3, 2,
   'Balenciaga Jeans',
   'beautiful jeans',
-  1,
+  1, 3,
   'Balenciaga', 'XS', 'Blue',
   'Very good', 910.00,
   'image');
 INSERT INTO Item VALUES (4, 7,
   'Dior skirt',
   'beautiful skirt',
-  1,
+  1, 4,
   'Dior', 'L', 'Blue',
   'Very good', 725.00,
   'image');
 INSERT INTO Item VALUES (5, 2,
-  'Burberry Scarf',
-  'very good quality scarf',
-  1,
-  'Baurberry', 'M', 'Brown',
-  'Excelent', 260.00,
+  'Burberry Dress',
+  'very good quality',
+  1,1,
+  'Burberry', 'M', 'Brown',
+  'Excelent', 545.00,
+  'image');
+INSERT INTO Item VALUES (19, 9,
+  'Miu Miu Top',
+  'Navy blue top',
+  1,2,
+  'Burberry', 'M', 'Blue',
+  'Bad', 100.00,
+  'image');
+  INSERT INTO Item VALUES (20, 6,
+  'Fendi Trousers',
+  'Black trousers',
+  1,5,
+  'Fendi', 'L', 'Black',
+  'Excellent', 700.00,
+  'image');
+  INSERT INTO Item VALUES (21, 2,
+  'Dior Swimsuit',
+  'Navy blue swimsuit',
+  1,6,
+  'Dior', 'M', 'Blue',
+  'Bad', 100.00,
+  'image');
+  INSERT INTO Item VALUES (22, 2,
+  'Dolce&Gabbana Shorts',
+  'Brown Shorts',
+  1,37,
+  'Dolce&Gabbana', 'L', 'Brown',
+  'Bad', 90.00,
   'image');
 --Men Items
 INSERT INTO Item VALUES (6, 10,
   'Prada Jacket',
   'green jacket',
-  2,
+  2, 13,
   'Prada', 'S', 'Green',
   'Very Good', 550.00,
   'image');
 INSERT INTO Item VALUES (7, 2,
   'Louis Vuitton Sneakers',
   'white sneakers',
-  2,
+  2, 14, 
   'Louis Vuitton', 'XL', 'White',
   'Good', 500.00,
   'image');
-INSERT INTO Item VALUES (8, 4,
+INSERT INTO Item VALUES (8, 5,
   'Gucci Shirt',
   'white shirt',
-  2,
+  2, 9,
   'Gucci', 'M', 'White',
   'Bad', 150.00,
+  'image');
+INSERT INTO Item VALUES (23, 1,
+  'Gucci Jeans',
+  'Light jeans',
+  2, 10,
+  'Gucci', 'XL', 'Blue',
+  'Very good', 300.00,
+  'image');
+INSERT INTO Item VALUES (24, 4,
+  'Classic Bulgari Trousers',
+  'Black Trousers',
+  2, 11,
+  'Bulgari', 'XS', 'Black',
+  'Very good', 415.00,
+  'image');
+INSERT INTO Item VALUES (25, 6,
+  'Armani Shorts',
+  'Beige shorts',
+  2, 38,
+  'Armani', 'S', 'Beige',
+  'Good', 95.00,
+  'image');
+INSERT INTO Item VALUES (26, 8,
+  'Prada Swim Shorts',
+  'Red shorts',
+  2, 12,
+  'Armani', 'S', 'Red',
+  'Good', 95.00,
   'image');
 --Kids Items
 INSERT INTO Item VALUES (9, 3,
   'Blouse Miu Miu',
   'black top',
-  3,
+  3, 16,
   'Miu Miu', 'S', 'Black',
   'Good', 510.00,
   'image');
 INSERT INTO Item VALUES (10, 8,
   'Prada Jacket',
   'pink jacket',
-  3,
+  3, 21,
   'Prada', 'S', 'Pink',
   'Good', 600.00,
+  'image');
+INSERT INTO Item VALUES (27, 8,
+  'Gucci dress',
+  'pink dress',
+  3, 15,
+  'Gucci', 'L', 'Pink',
+  'Very good', 700.00,
   'image');
 --Jewerly Items
 INSERT INTO Item VALUES (11, 7,
   'Swarovski Necklace',
   'diamond necklace',
-  4,
+  4, 24,
   'Swarovski', 'S', 'Silver',
-  'Good', 2500.00,
+  'Very Good', 2500.00,
   'image');
 INSERT INTO Item VALUES (12, 6,
   'Cartier Ring',
   'gold ring',
-  4,
+  4, 23,
   'Cartier', '17', 'Gold',
   'Good', 1000.00,
+  'image');
+INSERT INTO Item VALUES (28, 3,
+  'Tiffany&Co Earrings',
+  'gold earrings',
+  4, 25,
+  'Tiffany&Co', '-', 'Gold',
+  'Good', 900.00,
+  'image');
+INSERT INTO Item VALUES (29, 6,
+  'Van Cleef Bracelet',
+  'gold gorgeous bracelet',
+  4, 26,
+  'Van Cleef', '-', 'Gold',
+  'Excellent', 2300.00,
+  'image');
+INSERT INTO Item VALUES (30, 9,
+  'Cartier Bracelet',
+  'silver bracelet',
+  4, 26,
+  'Van Cleef', '-', 'Silver',
+  'Bad', 900.00,
   'image');
 --Bags 
 INSERT INTO Item VALUES (13, 1,
   'Prada Purse',
   'black purse',
-  5,
+  5, 27,
   'Prada', 'S', 'Black',
   'Excelent', 870.00,
   'image');
 INSERT INTO Item VALUES (14, 5,
   'Hermes Birkin Bag',
   'Birkin bag',
-  5,
+  5, 28,
   'Hermes', 'Medium', 'Orange',
   'Good', 10000.00,
   'image');
 INSERT INTO Item VALUES (15, 9,
   'Chanel Purse',
   'pink purse',
-  5,
-  'Chanel', 'Small', 'Pink',
+  5, 29,
+  'Chanel', 'Large', 'Pink',
   'Very good', 800.00,
   'image');
---Watches 
+INSERT INTO Item VALUES (31, 9,
+  'Chloé Clutch',
+  'Gold purse',
+  5, 30,
+  'Chanel', 'Small', 'Gold',
+  'Bad', 500.00,
+  'image');
+--Accessories
 INSERT INTO Item VALUES (16, 7,
   'Rolex Watch',
   'stylish rolex watch',
-  6,
+  6, 36,
   'Rolex', '6', 'Silver',
   'Very Good', 25000.00,
   'image');
 INSERT INTO Item VALUES (17, 3,
-  'YSL Watch',
-  'beautiful detailed watch',
-  6,
-  'Yves Saint Laurent', 'S', 'Gold',
-  'Good', 1200.00,
+  'YSL Sunglasses',
+  'beautiful sunglasses',
+  6, 32,
+  'Yves Saint Laurent', 'S', 'Black',
+  'Good', 300.00,
   'image');
+INSERT INTO Item VALUES (32, 3,
+  'Polo Ralph Lauren hat',
+  'Purple hat',
+  6, 33,
+  'Polo Ralph Lauren', 'S', 'Purple',
+  'Good', 150.00,
+  'image');
+INSERT INTO Item VALUES (18, 2,
+  'Burberry Scarf',
+  'very good quality scarf',
+  6,34,
+  'Burberry', 'M', 'Brown',
+  'Excelent', 260.00,
+  'image');
+INSERT INTO Item VALUES (33, 10,
+  'Louis Vuitton wallet',
+  'Red small wallet',
+  6,35,
+  'Louis Vuitton', 'Small', 'Red',
+  'Very good', 110.00,
+  'image');
+INSERT INTO Item VALUES (34, 10,
+  'Jacquemus belt',
+  'Black simple belt',
+  6,31,
+  'Jacquemus', '-', 'Black',
+  'Good', 120.00,
+  'image');
+
 
   
 
