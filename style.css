@@ -118,3 +118,14 @@ footer {
     text-decoration: none;
     color: var(--black); 
 }
+
+
+.category-bar a {
+    color: black; 
+    text-decoration: none; /* Remove sublinhado */
+    display: block; /* clicar */
+}
+
+.category-bar a:hover {
+    text-decoration: underline; /* quando se passa com o cursor sublinha */
+}
