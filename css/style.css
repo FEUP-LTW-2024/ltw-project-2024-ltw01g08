@@ -26,19 +26,24 @@ header {
 }
 
 .logo {
+    padding-top: 1em;
     flex-grow: 1;
-    text-align: center;
-    margin: 0; 
     display: flex;
     align-items: center;
     justify-content: center; 
 }
 
 .header-actions {
+    padding-top: 1em;
     display: flex;
     align-items: center; 
     justify-content: flex-end;
     gap: 10px; 
+}
+
+.header-actions span img{
+    width: 20px; 
+    height: auto; 
 }
 
 .promo-message {

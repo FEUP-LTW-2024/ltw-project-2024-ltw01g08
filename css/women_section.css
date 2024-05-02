@@ -41,6 +41,11 @@ header {
     gap: 10px;
 }
 
+.actions span img{
+    width: 20px; 
+    height: auto; 
+}
+
 .navbar {
     display: flex;
     justify-content: center;
