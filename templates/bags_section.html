@@ -51,12 +51,10 @@
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
-                    <option value="dresses">Dresses</option>
-                    <option value="coats">Coats</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="trousers">Trousers</option>
-                    <option value="shorts and skirts">Shorts and Skirts</option>
+                    <option value="Shoulder Bags">Shoulder Bags</option>
+                    <option value="Handbags">Handbags</option>
+                    <option value="Crossbody Bags">Crossbody Bags</option>
+                    <option value="Clutch Bags">Clutch Bags</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -65,9 +63,11 @@
     
                 <label for="condition">Condition</label>
                 <select id="condition">
-                    <option value="all">All</option>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
+                    <option value="default">All</option>
+                    <option value="Excelent">Excelent</option>
+                    <option value="Very good">Very good</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
                 </select>
     
                 <label for="size">Size</label>
@@ -158,11 +158,10 @@
             subcategory.innerHTML = '';
     
             var options = {
-                'dresses': ['Mini', 'Midi', 'Maxi'],
-                'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-                'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'shorts and skirts': ['Mini','Midi', 'Maxi']
+                'Shoulder Bags': ['Mini', 'Midi', 'Maxi'],
+                'Handbags': ['Winter', 'Summer', 'Raincoat'],
+                'Crossbody Bags': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
+                'Clutch Bags': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit']
             };
     
             if (options[category]) {

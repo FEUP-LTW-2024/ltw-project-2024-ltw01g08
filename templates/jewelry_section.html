@@ -51,12 +51,12 @@
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
-                    <option value="dresses">Dresses</option>
-                    <option value="coats">Coats</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="trousers">Trousers</option>
-                    <option value="shorts and skirts">Shorts and Skirts</option>
+                    <option value="belts">Belts</option>
+                    <option value="sunglasses">Sunglasses</option>
+                    <option value="hats">Hats</option>
+                    <option value="scrafs">Scarfs</option>
+                    <option value="wallets">Wallets</option>
+                    <option value="watches">Watches</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -65,9 +65,11 @@
     
                 <label for="condition">Condition</label>
                 <select id="condition">
-                    <option value="all">All</option>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
+                    <option value="default">All</option>
+                    <option value="Excelent">Excelent</option>
+                    <option value="Very good">Very good</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
                 </select>
     
                 <label for="size">Size</label>
@@ -156,13 +158,14 @@
             var category = document.getElementById('category').value;
             var subcategory = document.getElementById('subcategory');
             subcategory.innerHTML = '';
-    
+
             var options = {
-                'dresses': ['Mini', 'Midi', 'Maxi'],
-                'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-                'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'shorts and skirts': ['Mini','Midi', 'Maxi']
+                'belts': ['Mini', 'Midi', 'Maxi'],
+                'sunglasses': ['Winter', 'Summer', 'Raincoat'],
+                'hats': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
+                'scrafs': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
+                'wallets': ['Mini','Midi', 'Maxi'],
+                'watches': ['Mini','Midi', 'Maxi']
             };
     
             if (options[category]) {
