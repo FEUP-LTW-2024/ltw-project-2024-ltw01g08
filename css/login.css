@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Lexend+Mega:wght@100..900&display=swap');
 
-
 :root {
     --lightpink: #ECBFBF;
     --darkerpink: #D5A8A8; 
@@ -9,48 +8,76 @@
     --white: #FFFFFF;
 }
 
-
-.form-login, .Logo-login {
-    background-color: #fff;
+body {
+    background-color: var(--darkerpink);
+    font-family: 'Lexend Mega', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    margin-top: 10em;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
-.Logo-login span:first-of-type {
-    font-family: 'League Spartan';
-
-}
-
-.Logo-login span:last-of-type {
-    font-family: 'Lexend Mega';
-}
-
-
-body {
-    background-color: var(--darkerpink);
-
-}
-
-form {
+.form-login {
     background-color: var(--white);
-    display: block;
-
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
 }
 
-button {
-    background-color: var(--darkerpink);
+.logo-login {
+    margin-bottom: 20px;
+}
+
+.logo-login .main-logo {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--black);
+    font-size: 24px;
     font-weight: bold;
-    width: 20em;
-    height: 2em;
+}
+
+.logo-login .tagline {
+    font-size: 14px;
+    color: var(--darkerpink);
 }
 
 input {
-    background-color: var(--white);
-    width: 20em;
-    height: 3em;
-    border-color: lightgray;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--darkerpink);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #b65a7a;
+}
+
+form p {
+    font-size: 14px;
+    color: var(--black);
+}
+
+a {
+    color: var(--darkerpink);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
