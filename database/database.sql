@@ -239,11 +239,11 @@ INSERT INTO Item VALUES (19, 9,
   '../images/items/item21.png');
   INSERT INTO Item VALUES (22, 2,
   'Dolce&Gabbana Shorts',
-  'Brown Shorts',
+  'Animal print shorts',
   1,37,
   'Dolce&Gabbana', 'L', 'Brown',
   'Bad', 90.00,
-  'image');
+  '../images/items/item22.png');
 --Men Items
 INSERT INTO Item VALUES (6, 10,
   'Prada Jacket',
@@ -251,57 +251,57 @@ INSERT INTO Item VALUES (6, 10,
   2, 13,
   'Prada', 'S', 'Green',
   'Very Good', 550.00,
-  'image');
+  '../images/items/item6.png');
 INSERT INTO Item VALUES (7, 2,
   'Louis Vuitton Sneakers',
   'white sneakers',
   2, 14, 
-  'Louis Vuitton', 'XL', 'White',
+  'Louis Vuitton', '43', 'White',
   'Good', 500.00,
-  'image');
+  '../images/items/item7.png');
 INSERT INTO Item VALUES (8, 5,
   'Gucci Shirt',
   'white shirt',
   2, 9,
   'Gucci', 'M', 'White',
   'Bad', 150.00,
-  'image');
+  '../images/items/item8.png');
 INSERT INTO Item VALUES (23, 1,
   'Gucci Jeans',
   'Light jeans',
   2, 10,
   'Gucci', 'XL', 'Blue',
   'Very good', 300.00,
-  'image');
+  '../images/items/item23.png');
 INSERT INTO Item VALUES (24, 4,
-  'Classic Bulgari Trousers',
-  'Black Trousers',
+  'Jacquemus Trousers',
+  'Grey Trousers',
   2, 11,
-  'Bulgari', 'XS', 'Black',
+  'Jacquemus', 'XS', 'Grey',
   'Very good', 415.00,
-  'image');
+  '../images/items/item24.png');
 INSERT INTO Item VALUES (25, 6,
   'Armani Shorts',
   'Beige shorts',
   2, 38,
   'Armani', 'S', 'Beige',
   'Good', 95.00,
-  'image');
+  '../images/items/item25.png');
 INSERT INTO Item VALUES (26, 8,
   'Prada Swim Shorts',
-  'Red shorts',
+  'Green shorts',
   2, 12,
-  'Armani', 'S', 'Red',
+  'Prada', 'S', 'Green',
   'Good', 95.00,
-  'image');
+  '../images/items/item26.png');
 --Kids Items
 INSERT INTO Item VALUES (9, 3,
-  'Blouse Miu Miu',
-  'black top',
+  'Blouse Burberry',
+  'White top',
   3, 16,
-  'Miu Miu', 'S', 'Black',
+  'Burberry', 'S', 'White',
   'Good', 510.00,
-  'image');
+  '../images/items/item9.png');
 INSERT INTO Item VALUES (10, 8,
   'Prada Jacket',
   'pink jacket',
