@@ -10,13 +10,18 @@
 
 body {
     background-color: var(--darkerpink);
-    font-family: 'Lexend Mega', sans-serif;
+    font-family: 'League Spartan', sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 50em;
     margin: 0;
     padding: 0;
+}
+
+h2 {
+    font-weight: 500;
+    font-size: 1em;
 }
 
 .form-login {
@@ -29,19 +34,21 @@ body {
 }
 
 .logo-login {
+    display: flex;
     margin-bottom: 20px;
+    flex-direction: column;
 }
 
 .logo-login .main-logo {
-    font-family: 'League Spartan', sans-serif;
     color: var(--black);
     font-size: 24px;
     font-weight: bold;
 }
 
 .logo-login .tagline {
-    font-size: 14px;
-    color: var(--darkerpink);
+    font-family: 'Lexend Mega';
+    font-size: 0.8em;
+    color: var(--black);
 }
 
 input {
@@ -56,11 +63,12 @@ button {
     width: 100%;
     padding: 10px;
     background-color: var(--darkerpink);
-    color: var(--white);
+    color: var(--black);
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
     margin-top: 20px;
 }
 
@@ -74,7 +82,8 @@ form p {
 }
 
 a {
-    color: var(--darkerpink);
+    color: var(--black);
+    font-weight: 500;
     text-decoration: none;
 }
 
