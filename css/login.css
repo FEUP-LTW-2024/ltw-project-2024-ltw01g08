@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Lexend+Mega:wght@100..900&display=swap');
+
+
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+
+.form-login, .Logo-login {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10em;
+}
+
+.Logo-login span:first-of-type {
+    font-family: 'League Spartan';
+
+}
+
+.Logo-login span:last-of-type {
+    font-family: 'Lexend Mega';
+}
+
+
+body {
+    background-color: var(--darkerpink);
+
+}
+
+form {
+    background-color: var(--white);
+    display: block;
+
+}
+
+button {
+    background-color: var(--darkerpink);
+    font-weight: bold;
+    width: 20em;
+    height: 2em;
+}
+
+input {
+    background-color: var(--white);
+    width: 20em;
+    height: 3em;
+    border-color: lightgray;
+}
+
