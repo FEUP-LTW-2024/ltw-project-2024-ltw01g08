@@ -51,13 +51,13 @@
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
-                    <option value="shirts">Shirts</option>
                     <option value="coats">Coats</option>
+                    <option value="shirts">Shirts</option>
                     <option value="shoes">Shoes</option>
                     <option value="jeans">Jeans</option>
-                    <option value="trousers">Trousers</option>
+                    <option value="pants">Pants</option>
                     <option value="shorts">Shorts</option>
-                    <option value="blazers">Blazers</option>
+                    <option value="swimwear">Swimwear</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -66,9 +66,11 @@
     
                 <label for="condition">Condition</label>
                 <select id="condition">
-                    <option value="all">All</option>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
+                    <option value="default">All</option>
+                    <option value="Excelent">Excelent</option>
+                    <option value="Very good">Very good</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
                 </select>
     
                 <label for="size">Size</label>
@@ -207,11 +209,12 @@
     
             var options = {
                 'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
+                'jeans': ['Lose Fit','Skinny Fit'],
+                'pants': ['Lose Fit','Skinny Fit'],
+                'shorts': ['Jeans','Other Materials'],
+                'swimwear': ['Neutral', 'Patterns'],
                 'coats': ['Winter', 'Summer', 'Raincoat'],
                 'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
-                'jeans': ['Lose Fit','Skinny Fit'],
-                'shorts': ['Jeans','Other Materials'],
-                'blazers': ['Neutral', 'Patterns']
             };
     
             if (options[category]) {

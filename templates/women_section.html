@@ -50,13 +50,16 @@
             <form id="filters">
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
-                    <option value="all">All</option>
+                    <option value="default">All</option>
                     <option value="dresses">Dresses</option>
                     <option value="coats">Coats</option>
                     <option value="shoes">Shoes</option>
                     <option value="jeans">Jeans</option>
-                    <option value="trousers">Trousers</option>
-                    <option value="shorts and skirts">Shorts and Skirts</option>
+                    <option value="pants">Pants</option>
+                    <option value="shorts">Shorts</option>
+                    <option value="skirts">Skirts</option>
+                    <option value="swimwear">Swimwear</option>
+                    <option value="tops">Tops</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -65,9 +68,11 @@
     
                 <label for="condition">Condition</label>
                 <select id="condition">
-                    <option value="all">All</option>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
+                    <option value="default">All</option>
+                    <option value="Excelent">Excelent</option>
+                    <option value="Very good">Very good</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
                 </select>
     
                 <label for="size">Size</label>
@@ -209,7 +214,11 @@
                 'coats': ['Winter', 'Summer', 'Raincoat'],
                 'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
                 'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'shorts and skirts': ['Mini','Midi', 'Maxi']
+                'skirts': ['Mini','Midi', 'Maxi'],
+                'shorts': ['Mini','Midi', 'Maxi'],
+                'tops': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
+                'pants': ['Mini','Midi', 'Maxi'],
+                'swimwear': ['Mini','Midi', 'Maxi']
             };
     
             if (options[category]) {
