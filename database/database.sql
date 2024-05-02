@@ -398,9 +398,9 @@ INSERT INTO Item VALUES (17, 3,
   'image');
 INSERT INTO Item VALUES (32, 3,
   'Polo Ralph Lauren hat',
-  'Purple hat',
+  'Blue hat',
   6, 33,
-  'Polo Ralph Lauren', 'S', 'Purple',
+  'Polo Ralph Lauren', 'S', 'Blue',
   'Good', 150.00,
   'image');
 INSERT INTO Item VALUES (18, 2,
@@ -412,9 +412,9 @@ INSERT INTO Item VALUES (18, 2,
   'image');
 INSERT INTO Item VALUES (33, 10,
   'Louis Vuitton wallet',
-  'Red small wallet',
+  'Black small wallet',
   6,35,
-  'Louis Vuitton', 'Small', 'Red',
+  'Louis Vuitton', 'Small', 'Black',
   'Very good', 110.00,
   'image');
 INSERT INTO Item VALUES (34, 10,
@@ -423,6 +423,13 @@ INSERT INTO Item VALUES (34, 10,
   6,31,
   'Jacquemus', '-', 'Black',
   'Good', 120.00,
+  'image');
+INSERT INTO Item VALUES (35, 8,
+  'Acne studios wool',
+  'Pink wool scarf',
+  6,34,
+  'Acne Studios', '-', 'Pink',
+  'Good', 128.00,
   'image');
 
 
