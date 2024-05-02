@@ -1,0 +1,178 @@
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--white);
+}
+
+header {
+    background-color: #ECBFBF;
+    padding: 10px 20px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: var(--black);
+}
+
+main {
+    padding: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    background-color: #f9f9f9; /* Light background for each item */
+    margin-bottom: 10px; /* Space between items */
+}
+
+.cart-item img {
+    width: 100px; /* Fixed width for the image */
+    height: auto;
+    margin-right: 20px;
+}
+
+.item-details {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between; /* Spreads content across the available space */
+}
+
+.item-details h3 {
+    margin: 0; /* Removes default margin */
+    font-size: 16px;
+    flex-grow: 1; /* Allows the title to take up any extra space */
+}
+
+.item-details p {
+    margin: 0 10px 0 0; /* Only right margin */
+    color: #666;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: auto; /* Pushes the price to the right */
+}
+
+.cart-summary {
+    text-align: right;
+    padding: 20px 0;
+    position: relative; /* Needed for absolute positioning of the line */
+}
+
+.cart-summary .line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    border-top: 1px solid #ccc; /* Light gray line */
+}
+
+.cart-summary p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: var(--black);
+}
+
+.cart-summary p span {
+    font-weight: bold; /* Makes the price bold */
+}
+
+.checkout-btn {
+    background-color: var(--darkerpink);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%; /* Full width button */
+    margin-top: 10px; /* Space above the button */
+}
+
+/* Additional styles to ensure everything aligns nicely */
+.main {
+    padding: 20px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    background-color: #f9f9f9; /* Light background for each item */
+    margin-bottom: 10px; /* Space between items */
+}
+
+.cart-item img {
+    width: 100px; /* Fixed width for the image */
+    height: auto;
+    margin-right: 20px;
+}
+
+.item-details {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between; /* Spreads content across the available space */
+}
+
+.item-details h3, .item-details p {
+    margin: 0; /* Removes default margin */
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: auto; /* Pushes the price to the right */
+}
+
+.footer-section {
+    padding: 10px 0;
+    background-color: #eee; /* Footer background */
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar {
+    flex: 0 1 200px; 
+    padding: 8px;
+}
+
+.logo {
+    flex-grow: 2;
+    text-align: center;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions span img{
+    width: 20px; 
+    height: auto; 
+}
