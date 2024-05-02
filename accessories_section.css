@@ -136,7 +136,7 @@ footer {
     }
 }
 
-.filter-sidebar {
+.filter-sidebar{
     width: 200px;  
     float: left;  
     padding: 20px;
@@ -144,12 +144,12 @@ footer {
     margin-right: 20px; 
 }
 
-.filter-sidebar h2 {
+.filter-sidebar h2{
     font-size: 18px;
     margin-bottom: 10px;
 }
 
-.filter-sidebar form {
+.filter-sidebar form{
     display: flex;
     flex-direction: column;
 }
@@ -159,7 +159,7 @@ footer {
     margin-top: 10px;
 }
 
-.filter-sidebar select, .filter-sidebar input[type="text"] {
+.filter-sidebar select, .filter-sidebar input[type="text"]{
     padding: 8px;
     margin-top: 5px;
 }
@@ -209,5 +209,6 @@ footer {
 .pagination span {
     font-size: 16px;
 }
+
 
 

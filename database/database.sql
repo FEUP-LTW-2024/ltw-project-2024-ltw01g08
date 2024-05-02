@@ -8,8 +8,8 @@ CREATE TABLE User (
     last_name TEXT NOT NULL,
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE
-    password TEXT NOT NULL,
-    address TEXT NOT NULL,
+    user_password TEXT NOT NULL,
+    user_address TEXT NOT NULL,
     profile_picture TEXT
 );
 
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS Department;
 
 CREATE TABLE Department (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
+    d_name TEXT NOT NULL UNIQUE,
     id INTEGER REFERENCES Category(id),
 );
 
@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS Category;
 
 CREATE TABLE Category (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
+  c_name TEXT NOT NULL UNIQUE,
   category_id INTEGER NOT NULL REFERENCES Department(id)
 );
 
@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS Subcategory;
 
 CREATE TABLE Subcategory (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
+  subc_name TEXT NOT NULL UNIQUE,
   category_id INTEGER NOT NULL REFERENCES Category(id)
 );
 
@@ -50,11 +50,11 @@ CREATE TABLE Item (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   seller_id INTEGER NOT NULL REFERENCES User(id),
   title TEXT NOT NULL,
-  description TEXT NOT NULL,
+  i_description TEXT NOT NULL,
   Department_id INTEGER NOT NULL REFERENCES Department(id),
   Category_id INTEGER NOT NULL REFERENCES Category(id),
   brand TEXT NOT NULL,
-  size TEXT NOT NULL,
+  i_size TEXT NOT NULL,
   color TEXT NOT NULL,
   condition TEXT NOT NULL,
   price DECIMAL(10, 2),
@@ -94,7 +94,7 @@ CREATE TABLE Review (
   item_id INTEGER NOT NULL,
   rating DECIMAL(2,1),
   comment TEXT,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  r_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (seller_id) REFERENCES Users(id),
   FOREIGN KEY (reviewer_id) REFERENCES Users(id),
   FOREIGN KEY (item_id) REFERENCES Items(id)
