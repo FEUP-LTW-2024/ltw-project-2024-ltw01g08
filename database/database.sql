@@ -303,19 +303,19 @@ INSERT INTO Item VALUES (9, 3,
   'Good', 510.00,
   '../images/items/item9.png');
 INSERT INTO Item VALUES (10, 8,
-  'Prada Jacket',
+  'Moncler Jacket',
   'pink jacket',
   3, 21,
-  'Prada', 'S', 'Pink',
-  'Good', 600.00,
-  'image');
+  'Moncler', 'S', 'Pink',
+  'Good', 120.00,
+  '../images/items/item10.png');
 INSERT INTO Item VALUES (27, 8,
   'Gucci dress',
   'pink dress',
   3, 15,
   'Gucci', 'L', 'Pink',
   'Very good', 700.00,
-  'image');
+  '../images/items/item27.png');
 --Jewerly Items
 INSERT INTO Item VALUES (11, 7,
   'Swarovski Necklace',
@@ -323,7 +323,7 @@ INSERT INTO Item VALUES (11, 7,
   4, 24,
   'Swarovski', 'S', 'Silver',
   'Very Good', 2500.00,
-  'image');
+  '../images/items/item11.png');
 INSERT INTO Item VALUES (12, 6,
   'Cartier Ring',
   'gold ring',
@@ -349,7 +349,7 @@ INSERT INTO Item VALUES (30, 9,
   'Cartier Bracelet',
   'silver bracelet',
   4, 26,
-  'Van Cleef', '-', 'Silver',
+  'Cartier', '-', 'Silver',
   'Bad', 900.00,
   'image');
 --Bags 
