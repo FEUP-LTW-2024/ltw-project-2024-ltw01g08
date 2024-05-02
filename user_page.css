@@ -1,0 +1,92 @@
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--white);
+}
+
+header, footer {
+    background-color: var(--lightpink);
+    padding: 10px 20px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.user-details h1 {
+    font-size: 24px;
+    color: var(--black);
+}
+
+.user-details p {
+    color: var(--black);
+    margin: 5px 0;
+}
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.social-info {
+    margin-left: auto;
+    text-align: right;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+}
+
+.tab-link {
+    padding: 10px;
+    border: none;
+    background: var(--lightpink);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.tab-link.active {
+    background: var(--darkerpink);
+    color: var(--white);
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product {
+    width: 250px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+}
