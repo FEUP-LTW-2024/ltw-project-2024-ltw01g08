@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Section - Elite Finds</title>
-    <link rel="stylesheet" href="bags_section.css">
+    <link rel="stylesheet" href="../css/men_section.css">
 </head>
 <body>
     <header>
         <div class="top-bar">
             <input type="text" placeholder="Search" class="search-bar">
-            <span class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
+            <span class="logo"><a href="../index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <span>H</span>
                 <span>N</span>
@@ -23,12 +23,12 @@
     <main>
     </div>
         <nav class="navbar">
-            <a href="women_section.html">Women</a>
-            <a href="men_section.html">Men</a>
-            <a href="kids_section.html">Kids</a>
-            <a href="#" class="pink-highlight">Bags</a>
-            <a href="jewelry_section.html">Jewelry</a>
-            <a href="accessories_section.html">Accessories</a>
+            <a href="../templates/women_section.html">Women</a>
+            <a href="../templates/men_section.html" class="pink-highlight">Men</a>
+            <a href="../templates/kids_section.html">Kids</a>
+            <a href="../templates/bags_section.html">Bags</a>
+            <a href="../templates/jewelry_section.html">Jewelry</a>
+            <a href="../templates/accessories_section.html">Accessories</a>
 
         </nav>     
 
@@ -51,12 +51,13 @@
                 <label for="category">Category</label>
                 <select id="category" onchange="updateSubcategories();">
                     <option value="all">All</option>
-                    <option value="dresses">Dresses</option>
+                    <option value="shirts">Shirts</option>
                     <option value="coats">Coats</option>
                     <option value="shoes">Shoes</option>
                     <option value="jeans">Jeans</option>
                     <option value="trousers">Trousers</option>
-                    <option value="shorts and skirts">Shorts and Skirts</option>
+                    <option value="shorts">Shorts</option>
+                    <option value="blazers">Blazers</option>
                 </select>
     
                 <label for="subcategory">Subcategory</label>
@@ -89,6 +90,53 @@
 
         </aside>
         <div class="products">
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
+
+            <div class="product">
+                <img src="../test_dress.png" alt="Vintage Gucci Dress">
+                <p>@ronaysmith</p>
+                <h3>Vintage Gucci Dress € 60,00</h3>
+                <p>Size EU 36</p>
+            </div>
 
             <div class="product">
                 <img src="../test_dress.png" alt="Vintage Gucci Dress">
@@ -158,11 +206,12 @@
             subcategory.innerHTML = '';
     
             var options = {
-                'dresses': ['Mini', 'Midi', 'Maxi'],
+                'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
                 'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-                'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'shorts and skirts': ['Mini','Midi', 'Maxi']
+                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
+                'jeans': ['Lose Fit','Skinny Fit'],
+                'shorts': ['Jeans','Other Materials'],
+                'blazers': ['Neutral', 'Patterns']
             };
     
             if (options[category]) {
