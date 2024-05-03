@@ -13,8 +13,12 @@ body, html {
 }
 
 header {
-    text-align: center;
+
+    background-color: var(--white);
+    padding: 10px 20px;
 }
+
+
 
 .header-top {
     display: flex;
@@ -25,6 +29,12 @@ header {
     color: var(--black);
 }
 
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .logo {
     padding-top: 1em;
     flex-grow: 1;
@@ -33,18 +43,18 @@ header {
     justify-content: center; 
 }
 
-.header-actions {
-    padding-top: 1em;
+
+.actions {
     display: flex;
-    align-items: center; 
-    justify-content: flex-end;
-    gap: 10px; 
+    align-items: center;
+    gap: 10px;
 }
 
-.header-actions span img{
+.actions span img{
     width: 20px; 
     height: auto; 
 }
+
 
 .promo-message {
     background-color: var(--black);
@@ -52,6 +62,7 @@ header {
     font-size: 20px;
     padding: 15px;
     text-align: center;
+    width: 100%;
 }
 
 .category-bar ul {
