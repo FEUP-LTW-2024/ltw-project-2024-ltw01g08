@@ -16,16 +16,61 @@ header, footer {
     background-color: var(--lightpink);
     padding: 10px 20px;
     color: var(--black);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.search-bar {
+    flex: 0 1 200px; 
+    padding: 8px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.actions img.cart-icon {
+    width: 32px;
+    height: 32px;
+    margin-left: 10px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.header-actions img {
+    margin-left: 10px;
+    width: 30px; /* Ajusta o tamanho do ícone para se alinhar com o tamanho do texto */
+    height: auto;
 }
 
 .user-profile {
     display: flex;
     align-items: center;
     padding: 20px;
+    border-bottom: 1px solid var(--darkerpink);
 }
 
 .user-details h1 {
     font-size: 24px;
+    margin-bottom: 5px; 
 }
 
 .user-details p {
@@ -40,8 +85,8 @@ header, footer {
     margin-right: 20px;
 }
 
-.social-info p {
-    margin: 0;
+.social-info {
+    margin-left: auto;
     text-align: right;
 }
 
@@ -76,37 +121,42 @@ header, footer {
     display: block;
 }
 
-.products {
+.products, .review-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around; /* espaço entre produtos */
+    justify-content: space-around;
     padding: 20px;
 }
 
-.product {
-    width: calc(33.333% - 20px); /* ajusta a width para caber 3 */
-    margin-bottom: 20px; /* espaço entre filas */
+.product, .review {
+    width: calc(33.333% - 20px);
+    margin-bottom: 20px;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     text-align: center;
     background-color: var(--white);
 }
 
-.product img {
+.product img, .review img {
     width: 100%;
     height: auto;
     margin-bottom: 10px;
 }
 
-/* Responsive adjustments */
+.review {
+    padding: 10px;
+    text-align: left;
+    border-left: 5px solid var(--darkerpink);
+}
+
 @media (max-width: 768px) {
-    .product {
-        width: calc(50% - 20px); /* 2 produtos por linha em ecrãs pequnos */
+    .product, .review {
+        width: calc(50% - 20px);
     }
 }
 
 @media (max-width: 480px) {
-    .product {
-        width: 100%; /* 1 produto se o ecrã é mais pequeno  */
+    .product, .review {
+        width: 100%;
     }
 }
