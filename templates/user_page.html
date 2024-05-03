@@ -26,7 +26,7 @@
             <div class="user-details">
                 <h1>Anne</h1>
                 <p>@Anneuser</p>
-                <p> 3 reviews</p>
+                <p>3 reviews</p>
                 <p>Portugal</p>
                 <p>0 items for sale</p>
             </div>
@@ -37,24 +37,35 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-link active" onclick="openTab('items')">Items for sale</button>
-            <button class="tab-link" onclick="openTab('reviews')">Reviews</button>
-        </div>
+            <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
+            <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
+            <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
+        </div>        
 
         <div id="items" class="tab-content active">
             <div class="products">
-                <div class="product">
-                    <img src="vintage_gucci_dress.jpg" alt="Vintage Gucci Dress">
-                    <p>Vintage Gucci Dress € 60,00</p>
-                    <p>Size EU 36</p>
-                </div>
-                <!--  produtos -->
+                <!-- Produtos para aqui através do JavaScript -->
+            </div>
+            <div class="pagination">
+                <button onclick="changePage('items', -1)">Prev</button>
+                <span id="items-page-number">1</span>
+                <button onclick="changePage('items', 1)">Next</button>
             </div>
         </div>
 
         <div id="reviews" class="tab-content">
-            <!-- Reviews  -->
             <p>No reviews yet.</p>
+        </div>
+
+        <div id="favorites" class="tab-content">
+            <div class="products">
+                <!-- Produtos para aqui através do JavaScript -->
+            </div>
+            <div class="pagination">
+                <button onclick="changePage('favorites', -1)">Prev</button>
+                <span id="favorites-page-number">1</span>
+                <button onclick="changePage('favorites', 1)">Next</button>
+            </div>
         </div>
     </main>
 
@@ -79,7 +90,68 @@
     </footer>
 
     <script>
-        function openTab(tabName) {
+        let currentPage = {
+            items: 1,
+            favorites: 1
+        };
+        const itemsPerPage = 6;
+        const products = [
+        { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+        ];
+
+        const favoriteProducts = [
+        { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+            { img: "test_dress.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
+        ];
+
+        function displayProducts(category) {
+            const page = currentPage[category];
+            const data = (category === 'favorites' ? favoriteProducts : products);
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const productsToShow = data.slice(start, end);
+
+            const container = document.querySelector(`#${category} .products`);
+            container.innerHTML = productsToShow.map(product => `
+                <div class="product">
+                    <img src="${product.img}" alt="${product.title}">
+                    <p>${product.title} ${product.price}</p>
+                    <p>${product.size}</p>
+                </div>
+            `).join('');
+
+            document.getElementById(`${category}-page-number`).textContent = page;
+        }
+
+        function changePage(category, step) {
+            const numberOfPages = Math.ceil(
+                (category === 'favorites' ? favoriteProducts : products).length / itemsPerPage
+            );
+            currentPage[category] += step;
+            currentPage[category] = Math.max(1, Math.min(numberOfPages, currentPage[category]));
+            displayProducts(category);
+        }
+
+        function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
@@ -91,7 +163,16 @@
             }
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+            if (!currentPage[tabName]) { 
+                currentPage[tabName] = 1; 
+            }
+            displayProducts(tabName); 
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProducts('items'); 
+            displayProducts('favorites'); 
+        });
     </script>
 </body>
 </html>
