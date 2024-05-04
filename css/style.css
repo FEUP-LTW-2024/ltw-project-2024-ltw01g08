@@ -66,6 +66,7 @@ header {
 }
 
 .promo-message button {
+    font-family: 'Lexend Mega';
     background-color: var(--white);
     height: 2.5em;
     font-weight: 900;
@@ -85,20 +86,61 @@ header {
 }
 
 .category-bar li {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
     padding: 17px 15px;
     color: var(--black);
 }
 
-.search-bar {
-    margin: 20px;
-    padding: 10px;
+.main-bar {
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
     background-color: var(--lightpink);
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 8px;
+
+.main-bar img {
+    position: absolute;
+    height: 38em;
+    margin-top: 2em;
+    margin-left: 62em;
+}
+
+.main-text {
+    margin-top: 6em;
+    margin-bottom: 10em;
+}
+
+.main-text span {
+    display: block;
+    margin-left: 7em;
+}
+
+.main-text span:first-of-type, .main-text span:nth-of-type(2){
+    flex-grow: 1;
+    margin-right: 2em;
+    font-weight: bolder;
+    font-size: 5em;
+}
+
+
+.main-text span:last-of-type {
+    font-size: 1em;
+    margin-left: 34.8em;
+}
+
+.search-bar {
     font-size: 16px;
+    flex-grow: 1; 
+    width: 53%;
+    margin-left: 0.6em;
 }
 
 nav ul {
@@ -113,7 +155,8 @@ nav ul {
 }
 
 .top-picks {
-    background: var(--lightpink);
+    margin-top: 4em;
+ 
     padding: 20px;
     margin-bottom: 50px; 
 }
