@@ -17,7 +17,8 @@ body, html {
 }
 
 header {
-    background-color: #ECBFBF;
+    height: 2em;
+    background-color: var(--lightpink);
     padding: 10px 20px;
 }
 
@@ -25,6 +26,12 @@ header {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    font-size: 1.2em;
+}
+
+.top-bar a {
+    text-decoration: none;
+    color: var(--black);
 }
 
 .search-bar {
@@ -34,6 +41,8 @@ header {
 
 
 .logo {
+    text-decoration: none;
+    font-weight: bold;
     flex-grow: 2;
     text-align: center;
 }
@@ -49,25 +58,46 @@ header {
     height: auto; 
 }
 
-.navbar {
+.category-bar {
+    text-transform: uppercase;
     display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
     justify-content: center;
-    padding: 10px 0;
-    background-color: #FFFFFF;
 }
 
-.navbar a {
-    margin: 0 15px;
-    text-decoration: none;
-    color: #000000;
+.category-bar a {
+    color: black; 
+    text-decoration: none; 
+    display: block;
+    font-family: 'Lexend Mega', sans-serif;
 }
 
-.navbar a.pink-highlight {
-    color: var(--darkerpink);
-    font-weight: bold;
-    text-decoration: underline;
+
+.category-bar ul {
+    text-transform: uppercase;
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
 }
 
+.category-bar li {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding: 17px 15px;
+
+}
+
+.category-bar li:hover a {
+    text-decoration: underline; 
+}
+
+.category-bar li.pink-highlight a {
+    color: var(--lightpink); 
+}
 
 .products {
     display: flex;
@@ -142,6 +172,9 @@ footer {
     .product {
         width: 90%; 
     }
+    .search-bar {
+        width: 100px; 
+    }
 }
 
 .filter-sidebar {
@@ -172,6 +205,11 @@ footer {
     margin-top: 5px;
 }
 
+.sorter-sidebar {
+    margin-left: 1.5em;
+    
+}
+
 .products {
     flex: 1; /* Takes remaining space */
     display: flex;
@@ -185,17 +223,6 @@ footer {
     margin-bottom: 20px;
 }
 
-
-@media (max-width: 600px) {
-    .search-bar {
-        width: 100px; 
-    }
-}
-
-.logo-link {
-    color: inherit;  /* fica com a cor do .logo span */
-    text-decoration: none;  /* tira o sublinhado */
-}
 
 .pagination {
     text-align: center;
