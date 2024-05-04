@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Lexend+Mega:wght@100..900&display=swap');
+
 :root {
     --lightpink: #ECBFBF;
     --darkerpink: #D5A8A8; 
@@ -8,39 +11,30 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lexend Mega', sans-serif;
     background-color: var(--white); 
 }
 
 header {
-
     background-color: var(--white);
     padding: 10px 20px;
 }
 
 
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: var(--white);
-    color: var(--black);
-}
-
 .top-bar {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    margin: 0.5em;
 }
 
+
 .logo {
-    padding-top: 1em;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center; 
+    flex-grow: 2;
+    text-align: center;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 
@@ -48,6 +42,8 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+    background-color: var(--white);
+    color: var(--black);
 }
 
 .actions span img{
@@ -60,12 +56,26 @@ header {
     background-color: var(--black);
     color: var(--lightpink); 
     font-size: 20px;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     width: 100%;
+    font-weight: bold;
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+}
+
+.promo-message button {
+    background-color: var(--white);
+    height: 2.5em;
+    font-weight: 900;
+    font-size: 0.8em;
+    border-color: var(--white);
+    margin-left: 40px;
 }
 
 .category-bar ul {
+    text-transform: uppercase;
     display: flex;
     list-style-type: none;
     padding: 0;
@@ -120,7 +130,7 @@ nav ul {
 
 footer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 20px;
     background: var(--darkerpink); 
     margin-top: 50px; 
