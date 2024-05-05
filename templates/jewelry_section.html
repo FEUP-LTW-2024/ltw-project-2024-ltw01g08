@@ -13,7 +13,13 @@
             <span class="logo"><a href="../index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <span>H</span>
-                <span>N</span>
+                <span class="profile-dropdown">
+                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <a href="../templates/user_page.html">User Profile</a>
+                        <a href="../templates/account_info.html">Account Info</a>
+                    </div>
+                </span>
                 <span>
                     <a href="shopping_cart.html">
                         <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
@@ -265,6 +271,25 @@
             container.appendChild(product);
         });
     }
+     // Function to toggle the dropdown menu
+     function toggleProfileDropdown() {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            dropdownContainer.classList.toggle('show');
+    }
+
+        // Event listener for clicking the profile icon
+    document.getElementById('profile-icon').addEventListener('click', function (event) {
+            event.stopPropagation(); 
+            toggleProfileDropdown();
+    });
+
+        // Event listener for clicking outside the dropdown to close it
+    window.addEventListener('click', function () {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            if (dropdownContainer.classList.contains('show')) {
+                dropdownContainer.classList.remove('show');
+            }
+    });
     </script>
     
         

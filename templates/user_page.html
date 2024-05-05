@@ -12,11 +12,15 @@
             <input type="text" placeholder="Search" class="search-bar">
             <span class="logo"><a href="../index.html">ELITE FINDS</a></span>
             <div class="actions">
-                <span>H</span>
-                <span>N</span>
-                <span>P</span>
+                <span class="profile-dropdown">
+                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile" class="icon">
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <a href="../templates/user_page.html">User Profile</a>
+                        <a href="../templates/account_info.html">Account Info</a>
+                    </div>
+                </span>
                 <a href="../templates/shopping_cart.html">
-                    <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart" class="cart-icon">
+                    <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart" class="icon cart-icon">
                 </a>
             </div>
         </div>
@@ -204,6 +208,26 @@
             displayProducts('favorites'); 
             displayReviews();        
         });
+
+        // Function to toggle the dropdown menu
+     function toggleProfileDropdown() {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            dropdownContainer.classList.toggle('show');
+    }
+
+        // Event listener for clicking the profile icon
+    document.getElementById('profile-icon').addEventListener('click', function (event) {
+            event.stopPropagation(); 
+            toggleProfileDropdown();
+    });
+
+        // Event listener for clicking outside the dropdown to close it
+    window.addEventListener('click', function () {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            if (dropdownContainer.classList.contains('show')) {
+                dropdownContainer.classList.remove('show');
+            }
+    });
     </script>
 </body>
 </html>
