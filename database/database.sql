@@ -7,17 +7,16 @@ CREATE TABLE User (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     username TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE
+    email TEXT NOT NULL UNIQUE,
     user_password TEXT NOT NULL,
     user_address TEXT NOT NULL,
-    profile_picture TEXT
+    profile_picture BLOB 
 );
 
 DROP TABLE IF EXISTS Admin;
 
 CREATE TABLE Admin (
-    id INTEGER PRIMARY KEY,
-    user_id INTEGER NOT NULL UNIQUE REFERENCES User(id)
+    user_id INTEGER PRIMARY KEY REFERENCES User(id)
 );
 
 DROP TABLE IF EXISTS Department;
@@ -25,7 +24,6 @@ DROP TABLE IF EXISTS Department;
 CREATE TABLE Department (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     d_name TEXT NOT NULL UNIQUE,
-    id INTEGER REFERENCES Category(id),
 );
 
 DROP TABLE IF EXISTS Category;
@@ -33,7 +31,7 @@ DROP TABLE IF EXISTS Category;
 CREATE TABLE Category (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   c_name TEXT NOT NULL UNIQUE,
-  category_id INTEGER NOT NULL REFERENCES Department(id)
+  department_id INTEGER NOT NULL REFERENCES Department(id)
 );
 
 DROP TABLE IF EXISTS Subcategory;
@@ -47,14 +45,15 @@ CREATE TABLE Subcategory (
 DROP TABLE IF EXISTS Item;
 
 CREATE TABLE Item (
-  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   seller_id INTEGER NOT NULL REFERENCES User(id),
   title TEXT NOT NULL,
-  i_description TEXT NOT NULL,
-  Department_id INTEGER NOT NULL REFERENCES Department(id),
-  Category_id INTEGER NOT NULL REFERENCES Category(id),
+  item_description TEXT NOT NULL,
+  department_id INTEGER NOT NULL REFERENCES Department(id),
+  category_id INTEGER NOT NULL REFERENCES Category(id),
+  subcategory_id INTEGER NOT NULL REFERENCES Subcategory(id),
   brand TEXT NOT NULL,
-  i_size TEXT NOT NULL,
+  item_size TEXT NOT NULL,
   color TEXT NOT NULL,
   condition TEXT NOT NULL,
   price DECIMAL(10, 2),
@@ -64,40 +63,34 @@ CREATE TABLE Item (
 DROP TABLE IF EXISTS Transaction;
 
 CREATE TABLE Transaction (
-  transaction_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  buyer_id INTEGER NOT NULL,
-  seller_id INTEGER NOT NULL,
-  item_id INTEGER NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  buyer_id INTEGER NOT NULL REFERENCES User(id),
+  seller_id INTEGER NOT NULL REFERENCES User(id),
+  item_id INTEGER NOT NULL REFERENCES Item(id),
   transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   price DECIMAL(10, 2),
-  FOREIGN KEY (buyer_id) REFERENCES User(id),
-  FOREIGN KEY (seller_id) REFERENCES User(id),
-  FOREIGN KEY (item_id) REFERENCES Item(id)
 );
 
 DROP TABLE IF EXISTS Favourite;
 
 CREATE TABLE Favourite (
-  favorite_id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT,
-  item_id INT,
-  FOREIGN KEY (user_id) REFERENCES Users(id),
-  FOREIGN KEY (item_id) REFERENCES Items(id)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES User(id),
+  item_id INTEGER NOT NULL REFERENCES Item(id),
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_active BOOLEAN DEFAULT TRUE
 );
 
 DROP TABLE IF EXISTS Review;
 
 CREATE TABLE Review (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  seller_id INTEGER NOT NULL
-  reviewer_id INTEGER NOT NULL,
-  item_id INTEGER NOT NULL,
-  rating DECIMAL(2,1),
+  seller_id INTEGER NOT NULL REFERENCES User(id),
+  reviewer_id INTEGER NOT NULL REFERENCES User(id),
+  item_id INTEGER NOT NULL REFERENCES Item(id),
+  rating DECIMAL(2,1) CHECK (rating >= 0 AND rating <= 5),
   comment TEXT,
-  r_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (seller_id) REFERENCES Users(id),
-  FOREIGN KEY (reviewer_id) REFERENCES Users(id),
-  FOREIGN KEY (item_id) REFERENCES Items(id)
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );
 
 DROP TABLE IF EXISTS Cart;
@@ -108,6 +101,16 @@ CREATE TABLE Cart (
   item_id INTEGER NOT NULL,
   FOREIGN KEY (user_id) REFERENCES Users(id),
   FOREIGN KEY (item_id) REFERENCES Items(id)
+);
+
+DROP TABLE IF EXISTS PendingOrder;
+
+CREATE TABLE PendingOrder (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL REFERENCES User(id),
+    item_id INTEGER NOT NULL REFERENCES Item(id),
+    quantity INTEGER NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -150,41 +153,134 @@ INSERT INTO Category VALUES(12,'Swimwear', 2); --
 INSERT INTO Category VALUES(13,'Coats', 2); --
 INSERT INTO Category VALUES(14,'Shoes', 2); --
 
-INSERT INTO Category VALUES(15,'Dresses', 3); -- 
-INSERT INTO Category VALUES(16,'Tops', 3); --
-INSERT INTO Category VALUES(17,'Jeans', 3);
-INSERT INTO Category VALUES(18,'Skirts', 3);
-INSERT INTO Category VALUES(39,'Shorts', 3);
-INSERT INTO Category VALUES(19,'Pants', 3);
-INSERT INTO Category VALUES(20,'Swimwear', 3);
-INSERT INTO Category VALUES(21,'Coats', 3); --
-INSERT INTO Category VALUES(22,'Shoes', 3);
+--INSERT INTO Category VALUES(15,'Dresses', 3); -- 
+--INSERT INTO Category VALUES(16,'Tops', 3); --
+--INSERT INTO Category VALUES(17,'Jeans', 3);
+--INSERT INTO Category VALUES(18,'Skirts', 3);
+--INSERT INTO Category VALUES(39,'Shorts', 3);
+--INSERT INTO Category VALUES(19,'Pants', 3);
+--INSERT INTO Category VALUES(20,'Swimwear', 3);
+--INSERT INTO Category VALUES(21,'Coats', 3); --
+--INSERT INTO Category VALUES(22,'Shoes', 3);
 
-INSERT INTO Category VALUES(23,'Rings', 4); --
-INSERT INTO Category VALUES(24,'Necklaces', 4); -- 
-INSERT INTO Category VALUES(25'Earrings', 4); -- 
-INSERT INTO Category VALUES(26,'Bracelets', 4); --
+INSERT INTO Category VALUES(15,'Girl', 3); -- 
+INSERT INTO Category VALUES(16,'Boy', 3); --
 
-INSERT INTO Category VALUES(27,'Shoulder Bags', 5); --
-INSERT INTO Category VALUES(28,'Handbags', 5); -- 
-INSERT INTO Category VALUES(29,'Crossbody Bags', 5); --
-INSERT INTO Category VALUES(30,'Clutch Bags', 5); --
 
-INSERT INTO Category VALUES(31,'Belts', 6); -- 
-INSERT INTO Category VALUES(32,'Sunglasses', 6); -- 
-INSERT INTO Category VALUES(33,'Hats', 6); --
-INSERT INTO Category VALUES(34,'Scarfs', 6); -- 
-INSERT INTO Category VALUES(35,'Wallets', 6); -- 
-INSERT INTO Category VALUES(36,'Watches', 6); -- 
 
--- FALTA SUBCATEGORIES!!!!!!!!
+INSERT INTO Category VALUES(17,'Rings', 4); --
+INSERT INTO Category VALUES(18,'Necklaces', 4); -- 
+INSERT INTO Category VALUES(19,'Earrings', 4); -- 
+INSERT INTO Category VALUES(20,'Bracelets', 4); --
+
+INSERT INTO Category VALUES(21,'Shoulder Bags', 5); --
+INSERT INTO Category VALUES(22,'Handbags', 5); -- 
+INSERT INTO Category VALUES(23,'Crossbody Bags', 5); --
+INSERT INTO Category VALUES(24,'Clutch Bags', 5); --
+
+INSERT INTO Category VALUES(25,'Belts', 6); -- 
+INSERT INTO Category VALUES(26,'Sunglasses', 6); -- 
+INSERT INTO Category VALUES(27,'Hats', 6); --
+INSERT INTO Category VALUES(28,'Scarfs', 6); -- 
+INSERT INTO Category VALUES(29,'Wallets', 6); -- 
+INSERT INTO Category VALUES(30,'Watches', 6); -- 
+
+-- SUBCATEGORIES!!!!!!!!
+--For Woman dresses
+INSERT INTO Subcategory VALUES(41,'Mini', 1); 
+INSERT INTO Subcategory VALUES(42,'Midi', 1);
+INSERT INTO Subcategory VALUES(43,'Maxi', 1); 
+--For Woman tops
+INSERT INTO Subcategory VALUES(44,'Blouses', 2); 
+INSERT INTO Subcategory VALUES(45,'Crop-tops', 2); 
+INSERT INTO Subcategory VALUES(46,'Shirts', 2); 
+INSERT INTO Subcategory VALUES(47,'T-Shirts', 2); 
+--For woman jeans
+INSERT INTO Subcategory VALUES(48,'Lose fit', 3); 
+INSERT INTO Subcategory VALUES(49,'Skinny Fit', 3); 
+INSERT INTO Subcategory VALUES(50,'Bootcut fit', 3); 
+-- For woman skirts
+INSERT INTO Subcategory VALUES(51,'Mini', 4); 
+INSERT INTO Subcategory VALUES(52,'Midi', 4); 
+INSERT INTO Subcategory VALUES(53,'Maxi', 4); 
+-- For woman shorts
+INSERT INTO Subcategory VALUES(54,'short length', 37); 
+INSERT INTO Subcategory VALUES(55,'longer length', 37); 
+-- For woman pants
+INSERT INTO Subcategory VALUES(56,'Lose fit', 5); 
+INSERT INTO Subcategory VALUES(57,'Skinny fit', 5); 
+INSERT INTO Subcategory VALUES(58,'Bootcut fit', 5); 
+-- For woman Swimwear 
+INSERT INTO Subcategory VALUES(59,'Bikini top', 6); 
+INSERT INTO Subcategory VALUES(60,'Bikini bottom', 6); 
+INSERT INTO Subcategory VALUES(61,'Bikini set', 6); 
+INSERT INTO Subcategory VALUES(62,'Swimsuits', 6); 
+-- For woman coats 
+INSERT INTO Subcategory VALUES(63,'Winter', 7); 
+INSERT INTO Subcategory VALUES(64,'Summer', 7); 
+INSERT INTO Subcategory VALUES(65,'Rain coats', 7); 
+-- For woman shoes 
+INSERT INTO Subcategory VALUES(66,'Sneakers', 8); 
+INSERT INTO Subcategory VALUES(67,'Boots', 8); 
+INSERT INTO Subcategory VALUES(68,'Heels', 8);
+INSERT INTO Subcategory VALUES(69,'Sandals', 8); 
+
+
+-- For man 
+-- For man shirts 
+INSERT INTO Subcategory VALUES(70,'Long Sleeve', 9); 
+INSERT INTO Subcategory VALUES(71,'Mid Sleeve', 9); 
+INSERT INTO Subcategory VALUES(72,'Short Sleeve', 9); 
+-- For man jeans 
+INSERT INTO Subcategory VALUES(73,'Lose Fit', 10); 
+INSERT INTO Subcategory VALUES(74,'Skinny Fit', 10); 
+-- For man pants 
+INSERT INTO Subcategory VALUES(75,'Lose Fit', 11);
+INSERT INTO Subcategory VALUES(76,'Skinny Fit', 11);
+-- For man shorts 
+INSERT INTO Subcategory VALUES(103,'Denim', 38); 
+INSERT INTO Subcategory VALUES(78,'Fabric', 38); 
+-- For man swimwear 
+INSERT INTO Subcategory VALUES(79,'Shorts', 12); 
+-- For man coats
+INSERT INTO Subcategory VALUES(80,'Winter', 13); 
+INSERT INTO Subcategory VALUES(81,'Summer', 13); 
+INSERT INTO Subcategory VALUES(82,'Rain Coats', 13); 
+-- For man shoes 
+INSERT INTO Subcategory VALUES(83,'Sneakers', 14); 
+INSERT INTO Subcategory VALUES(84,'Boots', 14); 
+INSERT INTO Subcategory VALUES(85,'Sandals', 14); 
+INSERT INTO Subcategory VALUES(86,'Loafers', 14); 
+
+
+-- For kids 
+-- For girls
+INSERT INTO Subcategory VALUES(87,'Dresses', 15); -- 
+INSERT INTO Subcategory VALUES(88,'Tops', 15); --
+INSERT INTO Subcategory VALUES(89,'Jeans', 15);
+INSERT INTO Subcategory VALUES(90,'Skirts', 15);
+INSERT INTO Subcategory VALUES(91,'Shorts', 15);
+INSERT INTO Subcategory VALUES(92,'Pants', 15);
+INSERT INTO Subcategory VALUES(93,'Swimwear', 15);
+INSERT INTO Subcategory VALUES(94,'Coats', 15); --
+INSERT INTO Subcategory VALUES(95,'Shoes', 15);
+
+-- for boys 
+INSERT INTO Subcategory VALUES(96,'Tops', 16); --
+INSERT INTO Subcategory VALUES(97,'Jeans', 16);
+INSERT INTO Subcategory VALUES(98,'Shorts', 16);
+INSERT INTO Subcategory VALUES(99,'Pants', 16);
+INSERT INTO Subcategory VALUES(100,'Swimwear', 16);
+INSERT INTO Subcategory VALUES(101,'Coats', 16); --
+INSERT INTO Subcategory VALUES(102,'Shoes', 16);
+
 
 
 --Women Items
 INSERT INTO Item VALUES (1, 3,
   'Gucci Coat',
   'beige coat',
-  1,7,
+  1,7, 
   'Gucci', 'L', 'Beige',
   'Excelent', 400.00,
   '../images/items/item1.png');
@@ -455,7 +551,7 @@ INSERT INTO Favourite VALUES (11, 9, 7);
 INSERT INTO Favourite VALUES (12, 8, 7);
 
 INSERT INTO Review VALUES (1, 3, 1, 2, 4.5, "Very professional.");
-INSERT INTO Review VALUES (1, 10, 4, 16, 5.0, "Excellent");
-INSERT INTO Review VALUES (1, 7, 10, 11, 3.5, "");
-INSERT INTO Review VALUES (1, 1, 5, 4, 5.0, "Nice!");
-INSERT INTO Review VALUES (1, 7, 4, 7, 5.0, "");
+INSERT INTO Review VALUES (2, 10, 4, 16, 5.0, "Excellent");
+INSERT INTO Review VALUES (3, 7, 10, 11, 3.5, "");
+INSERT INTO Review VALUES (4, 1, 5, 4, 5.0, "Nice!");
+INSERT INTO Review VALUES (5, 7, 4, 7, 5.0, "");
