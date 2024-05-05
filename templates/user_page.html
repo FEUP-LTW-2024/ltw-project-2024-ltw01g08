@@ -46,8 +46,10 @@
             <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
+            <button class="add-item-button" onclick="openAddItemPage()">Add Item</button>
         </div>        
 
+    
         <div id="items" class="tab-content active">
             <div class="products">
                 <!-- Produtos para aqui através do JavaScript -->
@@ -98,6 +100,10 @@
     </footer>
 
     <script>
+        function openAddItemPage() {
+            window.location.href = "../templates/add_item.html"; 
+        }
+
         let currentPage = {
             items: 1,
             favorites: 1
