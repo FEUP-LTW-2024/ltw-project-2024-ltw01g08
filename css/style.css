@@ -198,3 +198,40 @@ footer {
 .category-bar a:hover {
     text-decoration: underline; /* quando se passa com o cursor sublinha */
 }
+
+/* Dropdown Container */
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content: Initially Hidden */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    transform: translateX(-50%); 
+    background-color: var(--white);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    min-width: 120px;
+    text-align: left;
+}
+
+
+/* Links in the Dropdown */
+.dropdown-content a {
+    color: var(--black);
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Link Hover Effect */
+.dropdown-content a:hover {
+    background-color: var(--lightpink);
+}
+
+/* Toggling Visibility: Make Dropdown Visible */
+.profile-dropdown.show .dropdown-content {
+    display: block;
+}
