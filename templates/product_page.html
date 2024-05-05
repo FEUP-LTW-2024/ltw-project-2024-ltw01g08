@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page - Elite Finds</title>
+    <link rel="stylesheet" href="../css/product_page.css">
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <input type="text" placeholder="Search" class="search-bar">
+            <span class="logo"><a href="../index.html">ELITE FINDS</a></span>
+            <div class="actions">
+                <span class="profile-dropdown">
+                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <a href="../templates/user_page.html">User Profile</a>
+                        <a href="../templates/account_info.html">Account Info</a>
+                    </div>
+                </span>
+                <span>
+                    <a href="shopping_cart.html">
+                        <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
+                    </a>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <nav class="category-bar">
+            <ul>
+                <li class="pink-highlight"><a href="women_section.html">Women</a></li> 
+                <li><a href="men_section.html">Men</a></li> 
+                <li><a href="kids_section.html">Kids</a></li> 
+                <li><a href="bags_section.html">Bags</a></li> 
+                <li><a href="jewelry_section.html">Jewelry</a></li> 
+                <li><a href="accessories_section.html">Accessories</a></li> 
+            </ul>
+        </nav> 
+
+        <div class="product-container">
+            <!-- Product Images Section -->
+            <div class="product-images">
+                <img id="main-image" src="../images/items/item1_1.png" alt="Vintage Gucci Dress" onclick="openImageModal(this, 0)">
+                <div class="additional-images">
+                    <img src="../images/items/item1_1.png" alt="Vintage Gucci Dress Side" onclick="changeMainImage(this, 0)">
+                    <img src="../images/items/item1_2.png" alt="Vintage Gucci Dress Back" onclick="changeMainImage(this, 1)">
+                </div>
+            </div>
+
+            <!-- Product Details Section -->
+            <div class="product-details">
+                <h2>€ 60,00</h2>
+                <h3>Vintage Gucci Dress</h3>
+                <ul>
+                    <li><strong>Brand:</strong> Gucci</li>
+                    <li><strong>Size:</strong> 36 EU</li>
+                    <li><strong>Color:</strong> Red</li>
+                    <li><strong>Condition:</strong> Very Good</li>
+                </ul>
+                <p><strong>Description:</strong> Gucci dress with flower pattern</p>
+                <button class="add-to-cart">Add to cart</button>
+                <button class="add-to-favorites">Add to favourites</button>
+                <div class="seller-info">
+                    <p><strong>Seller:</strong> <a href="../templates/user_page.html">Anne @anneuser</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <p>Customer Care</p>
+            <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping info</a></li>
+                <li><a href="#">Returns policy</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p>Company</p>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Terms of service</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="image-modal">
+        <div id="modal-content">
+            <button id="prev-btn" onclick="navigateImage(-1)">&#10094;</button>
+            <img id="modal-image" alt="">
+            <button id="next-btn" onclick="navigateImage(1)">&#10095;</button>
+        </div>
+    </div>
+
+    <script>
+    // Function to toggle the dropdown menu
+    function toggleProfileDropdown() {
+        const dropdownContainer = document.querySelector('.profile-dropdown');
+        dropdownContainer.classList.toggle('show');
+    }
+
+    // Event listener for clicking the profile icon
+    document.getElementById('profile-icon').addEventListener('click', function (event) {
+        event.stopPropagation(); 
+        toggleProfileDropdown();
+    });
+
+    // Event listener for clicking outside the dropdown to close it
+    window.addEventListener('click', function () {
+        const dropdownContainer = document.querySelector('.profile-dropdown');
+        if (dropdownContainer.classList.contains('show')) {
+            dropdownContainer.classList.remove('show');
+        }
+    });
+
+    const images = [
+        '../images/items/item1_1.png',
+        '../images/items/item1_2.png',
+       
+    ];
+
+    let currentImageIndex = 0;
+
+    // Change the main image to the clicked thumbnail and update the index
+    function changeMainImage(thumbnail, index) {
+        const mainImage = document.getElementById('main-image');
+        mainImage.src = thumbnail.src;
+        mainImage.alt = thumbnail.alt;
+        currentImageIndex = index; 
+    }
+
+    // Open the modal with a larger image
+    function openImageModal(image, index) {
+        const modal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const content = document.querySelector('main');
+
+        // Set the current index and update the modal image
+        currentImageIndex = index;
+        modalImage.src = image.src;
+        modalImage.alt = image.alt;
+
+        modal.style.display = 'flex'; 
+        content.classList.add('blur-background'); 
+    }
+
+    // Navigate to the next or previous image in the modal
+    function navigateImage(direction) {
+        currentImageIndex += direction;
+
+        // Loop around if at the end or beginning
+        if (currentImageIndex < 0) {
+            currentImageIndex = images.length - 1;
+        } else if (currentImageIndex >= images.length) {
+            currentImageIndex = 0;
+        }
+
+        const modalImage = document.getElementById('modal-image');
+        modalImage.src = images[currentImageIndex];
+    }
+
+    // Close the modal when clicking outside the image
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('image-modal');
+        const content = document.querySelector('main');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            content.classList.remove('blur-background'); 
+        }
+    });
+    </script>
+</body>
+</html>
