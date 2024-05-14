@@ -18,7 +18,6 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
-// User details extraction
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
 $profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png'; // Default image 
@@ -43,7 +42,7 @@ if ($pdo) {
     <header>
         <div class="top-bar">
             <input type="text" placeholder="Search" class="search-bar">
-            <span class="logo"><a href="../index.html">ELITE FINDS</a></span>
+            <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="<?php echo $profilePic; ?>" alt="Profile" class="icon">
@@ -68,7 +67,6 @@ if ($pdo) {
             <div class="user-details">
                 <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h1>
                 <p>@<?php echo $username; ?></p>
-                <!-- mais coisas se quisermos adicionar -->
             </div>
         </div>
         <div class="tabs">
@@ -76,11 +74,20 @@ if ($pdo) {
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="add-item-button" onclick="openAddItemPage()">Add Item</button>
-        </div>  
+        </div>
+        <div id="items" class="tab-content" style="display:block;">
+            <div class="products"></div>
+        </div>
+        <div id="reviews" class="tab-content" style="display:none;">
+            <div class="review-container"></div>
+        </div>
+        <div id="favorites" class="tab-content" style="display:none;">
+            <div class="products"></div>
+        </div>
     </main>
 
     <footer>
-    <div class="footer-section">
+        <div class="footer-section">
             <p>Customer Care</p>
             <ul>
                 <li><a href="#">FAQ</a></li>
@@ -104,44 +111,15 @@ if ($pdo) {
             window.location.href = "../templates/add_item.html"; 
         }
 
-        let currentPage = {
-            items: 1,
-            favorites: 1
-        };
         const itemsPerPage = 6;
-        const products = [
-        { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-        ];
-
-        const reviews = [
-            { date: "25/01/2024", rating: 5, user: "marysmith", comment: "Very nice!" },
-            { date: "01/10/2023", rating: 4, user: "marysmith", comment: "Okay." },
-            { date: "01/10/2023", rating: 3, user: "marysmith", comment: "Could be better." },
-        ];
-
-        const favoriteProducts = [
-        { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-            { img: "../images/items/item1_1.png", title: "Vintage Gucci Dress", price: "€ 60,00", size: "Size EU 36" },
-        ];
+        const currentPage = {
+            items: 1,
+            favorites: 1,
+            reviews: 1
+        };
+        const products = []; // populate from server or via AJAX TODO
+        const reviews = []; // populate from server or via AJAX TODO
+        const favoriteProducts = []; // populate from server or via AJAX TODO
 
         function displayProducts(category) {
             const page = currentPage[category];
@@ -151,10 +129,14 @@ if ($pdo) {
             const productsToShow = data.slice(start, end);
 
             const container = document.querySelector(`#${category} .products`);
+            if (data.length === 0) {
+                container.innerHTML = `<p>No ${category} yet.</p>`;
+                return;
+            }
             container.innerHTML = productsToShow.map(product => `
                 <div class="product">
                     <img src="${product.img}" alt="${product.title}">
-                    <p>${product.title} ${product.price}</p>
+                    <p>${product.title} - ${product.price}</p>
                     <p>${product.size}</p>
                 </div>
             `).join('');
@@ -162,16 +144,21 @@ if ($pdo) {
             document.getElementById(`${category}-page-number`).textContent = page;
         }
 
-        function changePage(category, step) {
-            const numberOfPages = Math.ceil((category === 'reviews' ? reviews.length : (category === 'favorites' ? favoriteProducts.length : products.length)) / itemsPerPage);
-            currentPage[category] += step;
-            currentPage[category] = Math.max(1, Math.min(numberOfPages, currentPage[category]));
-    
-            if (category === 'reviews') {
-                displayReviews();
-            } else {
-                displayProducts(category);
+        function displayReviews() {
+            const reviewContainer = document.querySelector('#reviews .review-container');
+            if (reviews.length === 0) {
+                reviewContainer.innerHTML = '<p>No reviews yet.</p>';
+                return;
             }
+
+            reviewContainer.innerHTML = reviews.map(review => `
+                <div class="review">
+                    <p class="review-date">${review.date}</p>
+                    <p class="review-rating">Rating: ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
+                    <p class="review-user">@${review.user}</p>
+                    <p class="review-comment">${review.comment}</p>
+                </div>
+            `).join('');
         }
 
         function openTab(evt, tabName) {
@@ -189,49 +176,35 @@ if ($pdo) {
             if (!currentPage[tabName]) { 
                 currentPage[tabName] = 1; 
             }
-            displayProducts(tabName); 
-        }
-
-        function displayReviews() {
-            const reviewContainer = document.querySelector('#reviews .review-container');
-            if (reviews.length === 0) {
-                reviewContainer.innerHTML = '<p>No reviews yet.</p>';
-                return;
+            if (tabName === 'reviews') {
+                displayReviews();
+            } else {
+                displayProducts(tabName);
             }
-
-            reviewContainer.innerHTML = reviews.map(review => `
-                <div class="review">
-                    <p class="review-date">${review.date}</p>
-                    <p class="review-rating">Rating: ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
-                    <p class="review-user">${review.user}</p>
-                    <p class="review-comment">${review.comment}</p>
-                </div>
-            `).join('');
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            displayProducts('items'); 
-            displayProducts('favorites'); 
-            displayReviews();        
-        });
-
-     function toggleProfileDropdown() {
+        function toggleProfileDropdown() {
             const dropdownContainer = document.querySelector('.profile-dropdown');
             dropdownContainer.classList.toggle('show');
-    }
+        }
 
-    document.getElementById('profile-icon').addEventListener('click', function (event) {
+        document.getElementById('profile-icon').addEventListener('click', function (event) {
             event.stopPropagation(); 
             toggleProfileDropdown();
-    });
+        });
 
-    window.addEventListener('click', function () {
+        window.addEventListener('click', function (event) {
             const dropdownContainer = document.querySelector('.profile-dropdown');
             if (dropdownContainer.classList.contains('show')) {
                 dropdownContainer.classList.remove('show');
             }
-    });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProducts('items');
+            displayProducts('favorites');
+            displayReviews();
+        });
     </script>
 </body>
 </html>
-

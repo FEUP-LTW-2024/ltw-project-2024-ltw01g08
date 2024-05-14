@@ -1,8 +1,7 @@
 <?php
-  declare(strict_types = 1);
-  require_once(__DIR__ . 'session.php');
-  session_start();
-  
+declare(strict_types = 1);
+session_start();  // Start session management
+$loggedIn = isset($_SESSION['user_id']);  // Check if user is logged in
 ?>
 
 <!DOCTYPE html>
@@ -10,45 +9,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Elite Finds - Luxury Secondhand Bazaar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-    
     <header>
         <div class="top-bar">
-            <span class="logo"><a href="../index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
+            <span class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <span>H</span>
-                <span class="profile-dropdown">
-                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
-                    <div id="dropdown-menu" class="dropdown-content">
-                        <a href="../templates/user_page.html">User Profile</a>
-                        <a href="../templates/account_info.html">Account Info</a>
-                        <form action="actions/action_logout.php" method="post" class="logout">
-                            <button type="submit">Log Out</button>
-                        </form>
-                    </div>
-                </span>
+                <?php if ($loggedIn): ?>
+                    <span class="profile-dropdown">
+                        <img id="profile-icon" src="images/icons/profile.png" alt="Profile" onclick="toggleProfileDropdown();">
+                        <div id="dropdown-menu" class="dropdown-content">
+                            <a href="templates/user_page.php">User Profile</a>
+                            <a href="templates/account_info.php">Account Info</a>
+                            <form action="actions/action_logout.php" method="post" class="logout">
+                                <button type="submit">Log Out</button>
+                            </form>
+                        </div>
+                    </span>
+                <?php else: ?>
+                    <span class="profile-dropdown">
+                        <img id="profile-icon" src="images/icons/profile.png" alt="Profile" onclick="location.href='templates/login.html';">
+                    </span>
+                <?php endif; ?>
                 <span>
-                    <a href="../templates/shopping_cart.html">
-                        <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
+                    <a href="templates/shopping_cart.html">
+                        <img src="images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
                 </span>
-                
             </div>
         </div>
         <div class="promo-message">
             <span>MAKE THE MOST OUT OF YOUR LUXURY ITEMS</span>
-            <!-- SE NAO TIVER LOGIN, IR PARA LOGIN PAGE -->
-            <a href="../templates/user_page.html">
+            <a href="<?php echo $loggedIn ? 'templates/user_page.php' : 'templates/login.html'; ?>">
                 <button>START SELLING NOW</button>
             </a>
         </div>
@@ -68,7 +66,7 @@
                 <span>FINDS</span>
                 <span>your luxury second hand bazaar</span>
             </div>
-            <img src="../images/mainpage_logo.png">
+            <img src="images/mainpage_logo.png">
         </div>
 
         <div class="search-bar">
@@ -122,27 +120,43 @@
         </div>
     </footer>
 
-    
     <script>
-        // Function to toggle the dropdown menu
         function toggleProfileDropdown() {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
+    console.log("toggleProfileDropdown called"); 
+    const dropdownContainer = document.querySelector('.profile-dropdown');
+    if (dropdownContainer) {
+        console.log("dropdownContainer found"); 
         dropdownContainer.classList.toggle('show');
+    } else {
+        console.log("dropdownContainer not found"); 
+    }
+}
+
+document.getElementById('profile-icon').addEventListener('click', function (event) {
+    event.stopPropagation(); 
+    console.log("profile-icon clicked"); 
+    toggleProfileDropdown();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const profileIcon = document.getElementById('profile-icon');
+    const dropdownContainer = document.querySelector('.profile-dropdown');
+
+    profileIcon.addEventListener('click', function(event) {
+        event.stopPropagation();
+        dropdownContainer.classList.toggle('show');
+    });
+
+    window.addEventListener('click', function(event) {
+        if (!dropdownContainer.contains(event.target) && dropdownContainer.classList.contains('show')) {
+            dropdownContainer.classList.remove('show');
         }
+    });
+});
 
-        // Event listener for clicking the profile icon
-        document.getElementById('profile-icon').addEventListener('click', function (event) {
-            event.stopPropagation(); 
-            toggleProfileDropdown();
-        });
 
-        // Event listener for clicking outside the dropdown to close it
-        window.addEventListener('click', function () {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
-            if (dropdownContainer.classList.contains('show')) {
-                dropdownContainer.classList.remove('show');
-            }
-        });
+        
+        
      </script>
 </body>
 </html>

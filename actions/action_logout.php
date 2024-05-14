@@ -1,9 +1,10 @@
 <?php
-  declare(strict_types = 1);
+session_start();
 
-  require_once(__DIR__ . '/../session.php');
-  $session = new Session();
-  $session->logout();
+// Destroy all session data.
+session_destroy();
 
-  header('Location: /../index.php');
+// Redirect to home page or login page.
+header('Location: ../index.php');
+exit;
 ?>
