@@ -1,25 +1,33 @@
 <?php
 session_start();
 
-// Check if the user is not logged in, redirect to login page
+// Check if user is not logged in, redirect to login page
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../php/login.php');
     exit;
 }
 
-// Extract user details from session
-$userId = $_SESSION['user_id'];
-$username = $_SESSION['username'];
-$profilePic = $_SESSION['profile_picture'];  
+session_regenerate_id(true);
 
-// Database connection
+// Database connection setup
+$pdo = null;
 try {
     $pdo = new PDO('sqlite:../database/database.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection error: " . $e->getMessage());
+}
+
+// User details extraction
+$userId = $_SESSION['user_id'];
+$username = $_SESSION['username'] ?? 'No username';  
+$profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png'; // Default image 
+
+$user = [];
+if ($pdo) {
     $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
     $stmt->execute([$userId]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Could not connect to the database :" . $e->getMessage());
 }
 ?>
 
@@ -57,7 +65,7 @@ try {
             <div class="user-details">
                 <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h1>
                 <p>@<?php echo $username; ?></p>
-                <!-- Placeholder for additional user data -->
+                <!-- mais coisas se quisermos adicionar -->
             </div>
         </div>
         <div class="tabs">
