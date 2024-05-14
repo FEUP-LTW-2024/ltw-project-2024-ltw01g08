@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+// Check if the user is not logged in, redirect to login page
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../php/login.php');
+    exit;
+}
+
+// Extract user details from session
+$userId = $_SESSION['user_id'];
+$username = $_SESSION['username'];
+$profilePic = $_SESSION['profile_picture'];  
+
+// Database connection
+try {
+    $pdo = new PDO('sqlite:../database/database.db');
+    $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Could not connect to the database :" . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,13 +38,13 @@
             <span class="logo"><a href="../index.html">ELITE FINDS</a></span>
             <div class="actions">
                 <span class="profile-dropdown">
-                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile" class="icon">
+                    <img id="profile-icon" src="<?php echo $profilePic; ?>" alt="Profile" class="icon">
                     <div id="dropdown-menu" class="dropdown-content">
-                        <a href="../templates/user_page.html">User Profile</a>
-                        <a href="../templates/account_info.html">Account Info</a>
+                        <a href="user_page.php">User Profile</a>
+                        <a href="account_info.php">Account Info</a>
                     </div>
                 </span>
-                <a href="../templates/shopping_cart.html">
+                <a href="shopping_cart.html">
                     <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart" class="icon cart-icon">
                 </a>
             </div>
@@ -28,59 +53,23 @@
 
     <main>
         <div class="user-profile">
-            <img src="../channels4_profile.jpg" alt="Anne's Profile" class="profile-photo">
+            <img src="<?php echo $profilePic; ?>" alt="User's Profile" class="profile-photo">
             <div class="user-details">
-                <h1>Anne</h1>
-                <p>@Anneuser</p>
-                <p>3 reviews</p>
-                <p>Portugal</p>
-                <p>0 items for sale</p>
-            </div>
-            <div class="social-info">
-                <p>3 Followers</p>
-                <p>3 Following</p>
+                <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h1>
+                <p>@<?php echo $username; ?></p>
+                <!-- Placeholder for additional user data -->
             </div>
         </div>
-
         <div class="tabs">
             <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="add-item-button" onclick="openAddItemPage()">Add Item</button>
-        </div>        
-
-    
-        <div id="items" class="tab-content active">
-            <div class="products">
-                <!-- Produtos para aqui através do JavaScript -->
-            </div>
-            <div class="pagination">
-                <button onclick="changePage('items', -1)">Prev</button>
-                <span id="items-page-number">1</span>
-                <button onclick="changePage('items', 1)">Next</button>
-            </div>
-        </div>
-
-        <div id="reviews" class="tab-content">
-            <div class="review-container">
-                <!-- Reviews para aqui através do JavaScript -->
-            </div>
-        </div>
-
-        <div id="favorites" class="tab-content">
-            <div class="products">
-                <!-- Produtos para aqui através do JavaScript -->
-            </div>
-            <div class="pagination">
-                <button onclick="changePage('favorites', -1)">Prev</button>
-                <span id="favorites-page-number">1</span>
-                <button onclick="changePage('favorites', 1)">Next</button>
-            </div>
-        </div>
+        </div>  
     </main>
 
     <footer>
-        <div class="footer-section">
+    <div class="footer-section">
             <p>Customer Care</p>
             <ul>
                 <li><a href="#">FAQ</a></li>
@@ -215,19 +204,16 @@
             displayReviews();        
         });
 
-        // Function to toggle the dropdown menu
      function toggleProfileDropdown() {
             const dropdownContainer = document.querySelector('.profile-dropdown');
             dropdownContainer.classList.toggle('show');
     }
 
-        // Event listener for clicking the profile icon
     document.getElementById('profile-icon').addEventListener('click', function (event) {
             event.stopPropagation(); 
             toggleProfileDropdown();
     });
 
-        // Event listener for clicking outside the dropdown to close it
     window.addEventListener('click', function () {
             const dropdownContainer = document.querySelector('.profile-dropdown');
             if (dropdownContainer.classList.contains('show')) {
@@ -237,3 +223,4 @@
     </script>
 </body>
 </html>
+

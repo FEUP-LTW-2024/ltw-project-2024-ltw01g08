@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Lexend+Mega:wght@100..900&display=swap');
+
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+body {
+    background-color: var(--darkerpink);
+    font-family: 'League Spartan', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50em;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.form-login {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.logo-login {
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.logo-login .main-logo {
+    color: var(--black);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo-login .tagline {
+    font-family: 'Lexend Mega';
+    font-size: 0.8em;
+    color: var(--black);
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--lightpink);
+    color: var(--black);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: var(--darkerpink);
+}
+
+form p {
+    font-size: 14px;
+    color: var(--black);
+}
+
+a {
+    color: var(--black);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
