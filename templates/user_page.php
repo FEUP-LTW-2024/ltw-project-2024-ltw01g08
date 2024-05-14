@@ -42,6 +42,9 @@ try {
                     <div id="dropdown-menu" class="dropdown-content">
                         <a href="user_page.php">User Profile</a>
                         <a href="account_info.php">Account Info</a>
+                        <form action="/../actions/action_logout.php" method="post" class="logout">
+                            <button type="submit">Log Out</button>
+                        </form>
                     </div>
                 </span>
                 <a href="shopping_cart.html">

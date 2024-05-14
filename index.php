@@ -1,3 +1,10 @@
+<?php
+  declare(strict_types = 1);
+  require_once(__DIR__ . 'session.php');
+  session_start();
+  
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +32,9 @@
                     <div id="dropdown-menu" class="dropdown-content">
                         <a href="../templates/user_page.html">User Profile</a>
                         <a href="../templates/account_info.html">Account Info</a>
+                        <form action="actions/action_logout.php" method="post" class="logout">
+                            <button type="submit">Log Out</button>
+                        </form>
                     </div>
                 </span>
                 <span>
@@ -112,6 +122,7 @@
         </div>
     </footer>
 
+    
     <script>
         // Function to toggle the dropdown menu
         function toggleProfileDropdown() {

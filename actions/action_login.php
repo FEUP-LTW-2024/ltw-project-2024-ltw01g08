@@ -1,4 +1,30 @@
 <?php
+  /*
+  declare(strict_types = 1);
+
+  require_once(__DIR__ . '/../session.php');
+  $session = new Session();
+
+  require_once(__DIR__ . '/../database/connection.php');
+  require_once(__DIR__ . '/../database/user_class.php');
+
+  $db = getDatabaseConnection();
+
+  $customer = Customer::getCustomerWithPassword($db, $_POST['email'], $_POST['password']);
+
+  if ($customer) {
+    $session->setId($customer->id);
+    $session->setName($customer->name());
+    $session->addMessage('success', 'Login successful!');
+  } else {
+    $session->addMessage('error', 'Invalid username or password.');
+  }
+
+  header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+*/
+
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
