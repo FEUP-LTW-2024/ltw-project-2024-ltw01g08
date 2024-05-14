@@ -57,19 +57,20 @@
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters">
-                <label for="category">Category</label>
-                <select id="category" onchange="updateSubcategories();">
-                    <option value="default">All</option>
-                    <option value="dresses">Dresses</option>
-                    <option value="coats">Coats</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="pants">Pants</option>
-                    <option value="shorts">Shorts</option>
-                    <option value="skirts">Skirts</option>
-                    <option value="swimwear">Swimwear</option>
-                    <option value="tops">Tops</option>
-                </select>
+                <fieldset>
+                    <legend>Category</legend>
+                    <label><input type="checkbox" value="all" name="category" checked>All</label>
+                    <label><input type="checkbox" value="dresses" name="category">Dresses</label>
+                    <label><input type="checkbox" value="coats" name="category">Coats</label>
+                    <label><input type="checkbox" value="shoes" name="category">Shoes</label>
+                    <label><input type="checkbox" value="jeans" name="category">Jeans</label>
+                    <label><input type="checkbox" value="pants" name="category">Pants</label>
+                    <label><input type="checkbox" value="shorts" name="category">Shorts</label>
+                    <label><input type="checkbox" value="skirts" name="category">Skirts</label>
+                    <label><input type="checkbox" value="swimwear" name="category">Swimwear</label>
+                    <label><input type="checkbox" value="tops" name="category">Tops</label>
+                </fieldset>
+            
     
                 <label for="subcategory">Subcategory</label>
                 <select id="subcategory">
@@ -214,36 +215,46 @@
     </footer>
     <script>
         function updateSubcategories() {
-            var category = document.getElementById('category').value;
-            var subcategory = document.getElementById('subcategory');
-            subcategory.innerHTML = '';
-    
-            var options = {
-                'dresses': ['Mini', 'Midi', 'Maxi'],
-                'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-                'jeans': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'skirts': ['Mini','Midi', 'Maxi'],
-                'shorts': ['Mini','Midi', 'Maxi'],
-                'tops': ['Lose Fit','Skinny Fit', 'Bootcut', 'Mom Fit'],
-                'pants': ['Mini','Midi', 'Maxi'],
-                'swimwear': ['Mini','Midi', 'Maxi']
-            };
-    
-            if (options[category]) {
-                options[category].forEach(function(option) {
-                    var newOption = document.createElement('option');
-                    newOption.value = option.toLowerCase();
-                    newOption.textContent = option;
-                    subcategory.appendChild(newOption);
-                });
-            }
+    var categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+    var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
+    var subcategory = document.getElementById('subcategory');
+    subcategory.innerHTML = '';
+
+    var options = {
+        'dresses': ['Mini', 'Midi', 'Maxi'],
+        'coats': ['Winter', 'Summer', 'Raincoat'],
+        'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
+        'jeans': ['Lose Fit', 'Skinny Fit', 'Bootcut', 'Mom Fit'],
+        'skirts': ['Mini', 'Midi', 'Maxi'],
+        'shorts': ['Mini', 'Midi', 'Maxi'],
+        'tops': ['Lose Fit', 'Skinny Fit', 'Bootcut', 'Mom Fit'],
+        'pants': ['Mini', 'Midi', 'Maxi'],
+        'swimwear': ['Mini', 'Midi', 'Maxi']
+    };
+
+    var subcategories = new Set();
+    selectedCategories.forEach(category => {
+        if (options[category]) {
+            options[category].forEach(sub => subcategories.add(sub));
         }
-    
-        // atualiza subcategorias quando a pagina muda
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSubcategories();
-        });
+    });
+
+    subcategories.forEach(sub => {
+        var newOption = document.createElement('option');
+        newOption.value = sub.toLowerCase();
+        newOption.textContent = sub;
+        subcategory.appendChild(newOption);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSubcategories);
+    });
+    updateSubcategories();
+});
+
         </script>
         <script>
             const productsPerPage = 9;

@@ -59,17 +59,17 @@
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters">
-                <label for="category">Category</label>
-                <select id="category" onchange="updateSubcategories();">
-                    <option value="all">All</option>
-                    <option value="coats">Coats</option>
-                    <option value="shirts">Shirts</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="pants">Pants</option>
-                    <option value="shorts">Shorts</option>
-                    <option value="swimwear">Swimwear</option>
-                </select>
+                <fieldset>
+                    <legend>Category</legend>
+                    <label><input type="checkbox" value="all" name="category" checked>All</label>
+                    <label><input type="checkbox" value="coats" name="category">Coats</label>
+                    <label><input type="checkbox" value="shirts" name="category">Shirts</label>
+                    <label><input type="checkbox" value="shoes" name="category">Shoes</label>
+                    <label><input type="checkbox" value="jeans" name="category">Jeans</label>
+                    <label><input type="checkbox" value="pants" name="category">Pants</label>
+                    <label><input type="checkbox" value="shorts" name="category">Shorts</label>
+                    <label><input type="checkbox" value="swimwear" name="category">Swimwear</label>
+                </fieldset>
     
                 <label for="subcategory">Subcategory</label>
                 <select id="subcategory">
@@ -213,35 +213,50 @@
         </div>
     </footer>
     <script>
-        function updateSubcategories() {
-            var category = document.getElementById('category').value;
-            var subcategory = document.getElementById('subcategory');
-            subcategory.innerHTML = '';
-    
-            var options = {
-                'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
+function updateSubcategories() {
+    var categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
+    var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
+    var subcategory = document.getElementById('subcategory');
+    subcategory.innerHTML = '';
+
+    var options = {
+        'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
                 'jeans': ['Lose Fit','Skinny Fit'],
                 'pants': ['Lose Fit','Skinny Fit'],
                 'shorts': ['Jeans','Other Materials'],
                 'swimwear': ['Neutral', 'Patterns'],
                 'coats': ['Winter', 'Summer', 'Raincoat'],
                 'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
-            };
-    
-            if (options[category]) {
-                options[category].forEach(function(option) {
-                    var newOption = document.createElement('option');
-                    newOption.value = option.toLowerCase();
-                    newOption.textContent = option;
-                    subcategory.appendChild(newOption);
-                });
-            }
+    };
+
+    var subcategories = new Set();
+    selectedCategories.forEach(category => {
+        if (options[category]) {
+            options[category].forEach(sub => subcategories.add(sub));
         }
+    });
+
+    subcategories.forEach(sub => {
+        var newOption = document.createElement('option');
+        newOption.value = sub.toLowerCase();
+        newOption.textContent = sub;
+        subcategory.appendChild(newOption);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSubcategories);
+    });
+    updateSubcategories();
+});
+
+
     
-        // atualiza subcategorias quando a pagina muda
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSubcategories();
-        });
+           
+    
+           
         </script>
         <script>
             const productsPerPage = 9;

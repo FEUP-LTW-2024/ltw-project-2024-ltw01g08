@@ -33,7 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $allowedfileExtensions = ['jpg', 'gif', 'png', 'jpeg'];
 
         if (in_array($fileExtension, $allowedfileExtensions)) {
-            $uploadFileDir = '../uploaded_files/';
+            $uploadFileDir = '../images/avatars/';
+            if (!is_dir($uploadFileDir)) {
+                mkdir($uploadFileDir, 0755, true); 
+            }
             $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
             $dest_path = $uploadFileDir . $newFileName;
 
