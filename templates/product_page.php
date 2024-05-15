@@ -71,10 +71,13 @@
 
         <div class="product-container">
             <div class="product-images">
-                <img id="main-image" src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Main Image" onclick="openImageModal(this, 0)">
+                <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_1.png"); ?>" alt="Main Image" onclick="openImageModal(this, 0)">
+
                 <div class="additional-images">
-                    <!-- Additional images would be loaded here -->
+                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_2.png"); ?>" alt="Other Image 1" onclick="openImageModal(this, 1)">
+                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_3.png"); ?>" alt="Other Image 2" onclick="openImageModal(this, 2)">
                 </div>
+
             </div>
 
             <!-- Product Details Section -->
@@ -116,5 +119,38 @@
             </ul>
         </div>
     </footer>
+
+    <script>
+        // Function to open a modal with the clicked image
+        function openImageModal(imageSrc) {
+            const modal = document.createElement('div');
+            modal.classList.add('modal');
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <img src="${imageSrc}" alt="Large Image">
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Close modal when clicking on the close button
+            modal.querySelector('.close-modal').addEventListener('click', function() {
+                document.body.removeChild(modal);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const additionalImages = document.querySelectorAll('.additional-images img');
+
+        // Add click event listeners to each additional image
+        additionalImages.forEach(function(image, index) {
+            image.addEventListener('click', function() {
+                const imageSrc = image.getAttribute('src');
+                openImageModal(imageSrc);
+            });
+        });
+    })
+</script>
+
 </body>
 </html>

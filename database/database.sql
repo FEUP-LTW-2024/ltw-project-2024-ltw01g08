@@ -300,7 +300,7 @@ INSERT INTO Item VALUES (1, 110,
   122,135, 63,
   'Gucci', 'L', 'Beige',
   'ExcelLent', 400.00,
-  '/Users/franciscafernandes/Desktop/2324/LTW/ltw-project-2024-ltw01g08/images/items/item1_1.png');
+  '../images/items/item1_1.png');
 INSERT INTO Item VALUES (2, 112,
   'Jimmy Choo Heels',
   'pink shoes',
@@ -365,49 +365,49 @@ INSERT INTO Item VALUES (6, 113,
   123, 142, 82,
   'Prada', 'S', 'Green',
   'Very Good', 550.00,
-  '../images/items/item6.png');
+  '../images/items/item6_1.png');
 INSERT INTO Item VALUES (7, 114,
   'Louis Vuitton Sneakers',
   'white sneakers',
   123, 143, 83,
   'Louis Vuitton', '43', 'White',
   'Good', 500.00,
-  '../images/items/item7.png');
+  '../images/items/item7_1.png');
 INSERT INTO Item VALUES (8, 114,
   'Gucci Shirt',
   'white shirt',
   123, 137, 70,
   'Gucci', 'M', 'White',
   'Bad', 150.00,
-  '../images/items/item8.png');
+  '../images/items/item8_1.png');
 INSERT INTO Item VALUES (23, 111,
   'Gucci Jeans',
   'Light jeans',
   123, 138, 73,
   'Gucci', 'XL', 'Blue',
   'Very good', 300.00,
-  '../images/items/item23.png');
+  '../images/items/item23_1.png');
 INSERT INTO Item VALUES (24, 110,
   'Jacquemus Trousers',
   'Grey Trousers',
   123, 139, 75,
   'Jacquemus', 'XS', 'Grey',
   'Very good', 415.00,
-  '../images/items/item24.png');
+  '../images/items/item24_1.png');
 INSERT INTO Item VALUES (25, 110,
   'Armani Shorts',
   'Beige shorts',
   123, 140, 78,
   'Armani', 'S', 'Beige',
   'Good', 95.00,
-  '../images/items/item25.png');
+  '../images/items/item25_1.png');
 INSERT INTO Item VALUES (26, 118,
   'Prada Swim Shorts',
   'Green shorts',
   123, 141, 79,
   'Prada', 'S', 'Green',
   'Good', 95.00,
-  '../images/items/item26.png');
+  '../images/items/item26_1.png');
 --Kids Items
 INSERT INTO Item VALUES (9, 114,
   'Blouse Burberry',
@@ -415,21 +415,21 @@ INSERT INTO Item VALUES (9, 114,
   124, 15, 88,
   'Burberry', 'S', 'White',
   'Good', 510.00,
-  '../images/items/item9.png');
+  '../images/items/item9_1.png');
 INSERT INTO Item VALUES (10, 113,
   'Moncler Jacket',
   'pink jacket',
   124, 15, 94,
   'Moncler', 'S', 'Pink',
   'Good', 120.00,
-  '../images/items/item10.png');
+  '../images/items/item10_1.png');
 INSERT INTO Item VALUES (27, 116,
   'Gucci dress',
   'pink dress',
   124, 15, 87,
   'Gucci', 'L', 'Pink',
   'Very good', 700.00,
-  '../images/items/item27.png');
+  '../images/items/item27_1.png');
 --Jewerly Items
 INSERT INTO Item VALUES (11, 115,
   'Swarovski Necklace',
@@ -437,35 +437,35 @@ INSERT INTO Item VALUES (11, 115,
   125, 24, NULL,
   'Swarovski', 'S', 'Silver',
   'Very Good', 2500.00,
-  '../images/items/item11.png');
+  '../images/items/item11_1.png');
 INSERT INTO Item VALUES (12, 115,
   'Cartier Ring',
   'gold ring',
   125, 23, NULL ,
   'Cartier', '17', 'Gold',
   'Good', 1000.00,
-  'image');
+  '../images/items/item12_1.png');
 INSERT INTO Item VALUES (28, 111,
   'Tiffany&Co Earrings',
   'gold earrings',
   125, 25, NULL,
   'Tiffany&Co', '-', 'Gold',
   'Good', 900.00,
-  'image');
+  '../images/items/item28_1.png');
 INSERT INTO Item VALUES (29, 112,
   'Van Cleef Bracelet',
   'gold gorgeous bracelet',
   125, 26, NULL,
   'Van Cleef', '-', 'Gold',
   'Excellent', 2300.00,
-  'image');
+  '../images/items/item29_1.png');
 INSERT INTO Item VALUES (30, 117,
   'Cartier Bracelet',
   'silver bracelet',
   125, 26, NULL,
   'Cartier', '-', 'Silver',
   'Bad', 900.00,
-  'image');
+  '../images/items/item30_1.png');
 
 --Bags 
 INSERT INTO Item VALUES (13, 115,
@@ -474,28 +474,28 @@ INSERT INTO Item VALUES (13, 115,
   126, 21, NULL,
   'Prada', 'S', 'Black',
   'Excelent', 870.00,
-  'image');
+  '../images/items/item13_1.png');
 INSERT INTO Item VALUES (14, 116,
   'Hermes Birkin Bag',
   'Birkin bag',
   126, 22, NULL,
   'Hermes', 'Medium', 'Orange',
   'Good', 10000.00,
-  'image');
+  '../images/items/item14_1.png');
 INSERT INTO Item VALUES (15, 112,
   'Chanel Purse',
   'pink purse',
   126, 22, NULL,
   'Chanel', 'Large', 'Pink',
   'Very good', 800.00,
-  'image');
+  '../images/items/item15_1.png');
 INSERT INTO Item VALUES (31, 111,
   'Chloé Clutch',
   'Gold purse',
   126, 24, NULL,
   'Chanel', 'Small', 'Gold',
   'Bad', 500.00,
-  'image');
+  '../images/items/item31_1.png');
 
 --Accessories
 INSERT INTO Item VALUES (16, 113,
@@ -504,49 +504,49 @@ INSERT INTO Item VALUES (16, 113,
   127, 30, NULL,
   'Rolex', '6', 'Silver',
   'Very Good', 25000.00,
-  'image');
+  '../images/items/item16_1.png');
 INSERT INTO Item VALUES (17, 113,
   'YSL Sunglasses',
   'beautiful sunglasses',
   127, 26, NULL,
   'Yves Saint Laurent', 'S', 'Black',
   'Good', 300.00,
-  'image');
+  '../images/items/item17_1.png');
 INSERT INTO Item VALUES (32, 114,
   'Polo Ralph Lauren hat',
   'Blue hat',
   127, 27, NULL,
   'Polo Ralph Lauren', 'S', 'Blue',
   'Good', 150.00,
-  'image');
+  '../images/items/item32_1.png');
 INSERT INTO Item VALUES (18, 117,
   'Burberry Scarf',
   'very good quality scarf',
   127,28, NULL,
   'Burberry', 'M', 'Brown',
   'Excelent', 260.00,
-  'image');
+  '../images/items/item18_1.png');
 INSERT INTO Item VALUES (33, 112,
   'Louis Vuitton wallet',
   'Black small wallet',
   127,29, NULL,
   'Louis Vuitton', 'Small', 'Black',
   'Very good', 110.00,
-  'image');
+  '../images/items/item33_1.png');
 INSERT INTO Item VALUES (34, 110,
   'Jacquemus belt',
   'Black simple belt',
   127,25, NULL,
   'Jacquemus', '-', 'Black',
   'Good', 120.00,
-  'image');
+  '../images/items/item34_1.png');
 INSERT INTO Item VALUES (35, 111,
   'Acne studios wool',
   'Pink wool scarf',
   127,28, NULL,
   'Acne Studios', '-', 'Pink',
   'Good', 128.00,
-  'image');
+  '../images/items/item35_1.png');
 
 
   

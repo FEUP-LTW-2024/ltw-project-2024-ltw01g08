@@ -185,6 +185,16 @@ footer {
     margin-right: 20px; 
 }
 
+.filter-sidebar fieldset {
+    margin-bottom: 20px; /* Add margin between each fieldset */
+}
+
+.filter-sidebar label {
+    display: block;
+    margin-top: 5px; /* Add margin between each label */
+}
+
+
 .filter-sidebar h2 {
     font-size: 18px;
     margin-bottom: 10px;
@@ -205,6 +215,40 @@ footer {
     margin-top: 5px;
 }
 
+.filter-sidebar button[type="submit"] {
+    background-color: var(--lightpink);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+}
+
+.filter-sidebar button[type="submit"]:hover {
+    background-color: var(--darkerpink);
+}
+
+.filter-sidebar button.reset {
+    background-color: transparent; /* Transparent background */
+    color: black; /* Black text color */
+    border: 1px solid #ccc; /* Grey border */
+    padding: 8px 16px; /* Adjust padding */
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 5px;
+    margin: 4px;
+}
+
+.filter-sidebar button.reset:hover {
+    background-color: #f0f0f0; /* Light grey background on hover */
+}
+
+
 .sorter-sidebar {
     margin-left: 1.5em;
     
@@ -217,6 +261,15 @@ footer {
     justify-content: flex-start;
 }
 
+.image-container {
+    height: 300px; 
+    overflow: hidden; 
+}
+
+.image-container img {
+    width: 100%; 
+    height: auto; 
+}
 
 
 .pagination {

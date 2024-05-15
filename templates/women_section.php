@@ -28,12 +28,15 @@ try {
 
     // Process categories
     if (!empty($categories) && !in_array('all', $categories)) {
-        $categoryPlaceholders = implode(', ', array_fill(0, count($categories), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($categoryPlaceholders) AND department_id = 122)";
+        $placeholders = implode(', ', array_fill(0, count($categories), '?'));
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 122)";
         foreach ($categories as $category) {
             $params[] = $category;
         }
     }
+    
+    
+
 
     // Process conditions
     if (!empty($conditions)) {
@@ -176,7 +179,7 @@ try {
                 <label for="max-price">Max Price:</label>
                 <input type="text" id="max-price" name="max_price" placeholder="Max Price">
 
-
+                <button type="button" class="reset" onclick="resetFilters()">Reset Filters</button>
                 <button type="submit">Apply Filters</button>
             </form>
            
@@ -192,18 +195,25 @@ try {
 
         // If no username was found, use a placeholder or empty string
         $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
+        $image_url = "../images/items/item{$item['id']}_1.png";
     ?>
         <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
             <div class="product">
                 <p>@<?php echo htmlspecialchars($seller_username); ?></p>
                 <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
-                <img src="<?php echo htmlspecialchars($item['image_url'] ?? 'path/to/default/image.png'); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                <div class="image-container">
+                    <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                </div>
                 <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
                 <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
             </div>
         </a>
     <?php endforeach; ?>
 </div>
+
+
+
+
 
 </div>
 
@@ -332,6 +342,23 @@ document.addEventListener('DOMContentLoaded', function() {
         </script>
 
 <script>
+
+function resetFilters() {
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Clear text inputs
+    document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+    });
+
+    // Submit the form
+    document.getElementById('filters').submit();
+}
+
+
     function sortProducts() {
     var sortBy = document.getElementById('sort-price').value;
     var container = document.querySelector('.products');
@@ -384,3 +411,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
