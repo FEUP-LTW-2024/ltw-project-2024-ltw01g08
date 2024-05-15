@@ -214,3 +214,20 @@ header, footer {
     transition: background-color 0.3s ease;
 }
 
+
+.product:nth-child(3n) {
+    margin-right: 0; /* Remove a margem direita do último item em cada linha */
+}
+
+@media (max-width: 768px) {
+    .product {
+        width: calc(50% - 20px); /* 50% para 2 itens por linha em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .product {
+        width: 100%; /* 100% para 1 item por linha em telas ainda menores */
+    }
+}
+

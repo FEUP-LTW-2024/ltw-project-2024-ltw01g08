@@ -72,7 +72,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Section - Elite Finds</title>
-    <link rel="stylesheet" href="../css/department_sections.css">
+    <link rel="stylesheet" href="../css/women_section.css">
 </head>
 <body>
     <header>
@@ -184,22 +184,27 @@ try {
         </aside>
 
         <div class="products">
-    <?php foreach ($items as $item): ?>
-        <div class="product">
-    <?php
-        $seller_username_query = "SELECT username FROM User WHERE id = :seller_id";
-        $seller_username_stmt = $pdo->prepare($seller_username_query);
-        $seller_username_stmt->execute(array(':seller_id' => $item['seller_id']));
+    <?php foreach ($items as $item):
+        // Assuming you have a seller_id and need to fetch the seller's username for each item
+        $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
+        $seller_username_stmt->execute([$item['seller_id']]);
         $seller_username = $seller_username_stmt->fetchColumn();
+
+        // If no username was found, use a placeholder or empty string
+        $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
     ?>
-    <p>@<?php echo htmlspecialchars($seller_username); ?></p>
-    <h3><?php echo htmlspecialchars($item['title']); ?></h3>
-    <img src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-    <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-    <p>Size <?php echo htmlspecialchars($item['item_size']); ?></p>
+        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
+            <div class="product">
+                <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+                <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                <img src="<?php echo htmlspecialchars($item['image_url'] ?? 'path/to/default/image.png'); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
+            </div>
+        </a>
+    <?php endforeach; ?>
 </div>
 
-    <?php endforeach; ?>
 </div>
 
     </main>
