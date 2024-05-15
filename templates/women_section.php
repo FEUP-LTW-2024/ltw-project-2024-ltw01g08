@@ -5,36 +5,55 @@ try {
 
     $sort = filter_input(INPUT_GET, 'sort', 513);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
-
     $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $size = filter_input(INPUT_GET, 'size', 513);
+    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);  // Changed to handle an array of sizes
+    $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
+    $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
-    // Base SQL
+    // Initialize the SQL query
     $sql = "SELECT * FROM Item WHERE department_id = 122";
     $params = [];
 
-    // Handle multiple categories
+    // conditions for price
+    if ($minPrice !== false && $minPrice != null) {
+        $sql .= " AND price >= ?";
+        $params[] = $minPrice;
+    }
+
+    if ($maxPrice !== false && $maxPrice != null) {
+        $sql .= " AND price <= ?";
+        $params[] = $maxPrice;
+    }
+
+    // Process categories
     if (!empty($categories) && !in_array('all', $categories)) {
         $categoryPlaceholders = implode(', ', array_fill(0, count($categories), '?'));
         $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($categoryPlaceholders) AND department_id = 122)";
-        $params = array_merge($params, $categories);
+        foreach ($categories as $category) {
+            $params[] = $category;
+        }
     }
 
-    // Handle multiple conditions
+    // Process conditions
     if (!empty($conditions)) {
         $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
         $sql .= " AND condition IN ($conditionPlaceholders)";
-        $params = array_merge($params, $conditions);
+        foreach ($conditions as $condition) {
+            $params[] = $condition;
+        }
     }
 
-    // Handle size
-    if (!empty($size)) {
-        $sql .= " AND item_size = ?";
-        $params[] = $size;
+    // Process sizes
+    if (!empty($sizes)) {
+        $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
+        $sql .= " AND item_size IN ($sizePlaceholders)";
+        foreach ($sizes as $size) {
+            $params[] = $size;
+        }
     }
 
-    // Sorting
+    //  sorting
     $sql .= " ORDER BY price $order";
 
     $stmt = $pdo->prepare($sql);
@@ -44,10 +63,6 @@ try {
     die("Error: " . $e->getMessage());
 }
 ?>
-
-
-
-
 
 
 
@@ -110,19 +125,20 @@ try {
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters" method="GET">
-                <fieldset>
-                    <legend>Category</legend>
-                    <label><input type="checkbox" value="all" name="category" checked>All</label>
-                    <label><input type="checkbox" value="dresses" name="category">Dresses</label>
-                    <label><input type="checkbox" value="coats" name="category">Coats</label>
-                    <label><input type="checkbox" value="shoes" name="category">Shoes</label>
-                    <label><input type="checkbox" value="jeans" name="category">Jeans</label>
-                    <label><input type="checkbox" value="pants" name="category">Pants</label>
-                    <label><input type="checkbox" value="shorts" name="category">Shorts</label>
-                    <label><input type="checkbox" value="skirts" name="category">Skirts</label>
-                    <label><input type="checkbox" value="swimwear" name="category">Swimwear</label>
-                    <label><input type="checkbox" value="tops" name="category">Tops</label>
-                </fieldset>
+    
+    <fieldset>
+        <legend>Category</legend>
+        <label><input type="checkbox" value="Dresses" name="category[]">Dresses</label>
+        <label><input type="checkbox" value="Coats" name="category[]">Coats</label>
+        <label><input type="checkbox" value="Shoes" name="category[]">Shoes</label>
+        <label><input type="checkbox" value="Jeans" name="category[]">Jeans</label>
+        <label><input type="checkbox" value="Pants" name="category[]">Pants</label>
+        <label><input type="checkbox" value="Shorts" name="category[]">Shorts</label>
+        <label><input type="checkbox" value="Skirts" name="category[]">Skirts</label>
+        <label><input type="checkbox" value="Swimwear" name="category[]">Swimwear</label>
+        <label><input type="checkbox" value="Tops" name="category[]">Tops</label>
+    </fieldset>
+
             
     
                 <fieldset>
@@ -135,28 +151,31 @@ try {
                 <fieldset>
                     <legend>Condition</legend>
                     <div id="condition-container">
-                        <label><input type="checkbox" name="condition" value="Excellent">Excellent</label>
-                        <label><input type="checkbox" name="condition" value="Very good">Very good</label>
-                        <label><input type="checkbox" name="condition" value="Good">Good</label>
-                        <label><input type="checkbox" name="condition" value="Bad">Bad</label>
+                        <label><input type="checkbox" name="condition[]" value="Excellent">Excellent</label>
+                        <label><input type="checkbox" name="condition[]" value="Very good">Very good</label>
+                        <label><input type="checkbox" name="condition[]" value="Good">Good</label>
+                        <label><input type="checkbox" name="condition[]" value="Bad">Bad</label>
                     </div>
                 </fieldset>
+
         
                 <fieldset>
                     <legend>Size</legend>
-                    <div id="size-container">
-                        <label><input type="checkbox" name="size" value="XS">XS</label>
-                        <label><input type="checkbox" name="size" value="S">S</label>
-                        <label><input type="checkbox" name="size" value="M">M</label>
-                        <label><input type="checkbox" name="size" value="L">L</label>
-                        <label><input type="checkbox" name="size" value="XL">XL</label>
-                    </div>
+                    <label><input type="checkbox" name="size[]" value="XS">XS</label>
+                    <label><input type="checkbox" name="size[]" value="S">S</label>
+                    <label><input type="checkbox" name="size[]" value="M">M</label>
+                    <label><input type="checkbox" name="size[]" value="L">L</label>
+                    <label><input type="checkbox" name="size[]" value="XL">XL</label>
                 </fieldset>
+
         
     
-                <label for="price">Price</label>
-                <input type="text" id="price" placeholder="Min Price">
-                <input type="text" id="price" placeholder="Max Price">
+                <label for="min-price">Min Price:</label>
+                <input type="text" id="min-price" name="min_price" placeholder="Min Price">
+
+                <label for="max-price">Max Price:</label>
+                <input type="text" id="max-price" name="max_price" placeholder="Max Price">
+
 
                 <button type="submit">Apply Filters</button>
             </form>
@@ -209,41 +228,45 @@ try {
     </footer>
     <script>
        function updateSubcategories() {
-    var categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
-    var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
-    var subcategoryContainer = document.getElementById('subcategory-container');
-    subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
+        var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:checked');
+        var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
+        var subcategoryContainer = document.getElementById('subcategory-container');
+        subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
 
     var options = {
-        'dresses': ['Mini', 'Midi', 'Maxi'],
-        'coats': ['Winter', 'Summer', 'Raincoat'],
-        'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-        'jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
-        'skirts': ['Mini', 'Midi', 'Maxi'],
-        'shorts': ['Short length', 'Mid length'],
-        'tops': ['T-shirts', 'Blouses', 'Crop tops', 'Shirts'],
-        'pants': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
-        'swimwear': ['Bikini', 'One-piece']
+        'Dresses': ['Mini', 'Midi', 'Maxi'],
+        'Coats': ['Winter', 'Summer', 'Raincoat'],
+        'Shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
+        'Jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
+        'Skirts': ['Mini', 'Midi', 'Maxi'],
+        'Shorts': ['Short length', 'Mid length'],
+        'Tops': ['T-shirts', 'Blouses', 'Crop tops', 'Shirts'],
+        'Pants': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
+        'Swimwear': ['Bikini', 'One-piece']
     };
 
-    var subcategories = new Set();
     selectedCategories.forEach(category => {
         if (options[category]) {
-            options[category].forEach(sub => subcategories.add(sub));
+            options[category].forEach(sub => {
+                var label = document.createElement('label');
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = sub;
+                checkbox.name = 'subcategory[]';
+                label.appendChild(checkbox);
+                label.append(sub);
+                subcategoryContainer.appendChild(label);
+            });
         }
     });
-
-    subcategories.forEach(sub => {
-        var label = document.createElement('label');
-        var checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = sub.toLowerCase();
-        checkbox.name = 'subcategory';
-        label.appendChild(checkbox);
-        label.append(sub);
-        subcategoryContainer.appendChild(label);
-    });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]');
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSubcategories);
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     var categoryCheckboxes = document.querySelectorAll('input[name="category"]');
