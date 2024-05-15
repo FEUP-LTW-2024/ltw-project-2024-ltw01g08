@@ -118,6 +118,20 @@ CREATE TABLE PendingOrder (
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    from_user_id INTEGER NOT NULL,
+    to_user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (from_user_id) REFERENCES User(id),
+    FOREIGN KEY (to_user_id) REFERENCES User(id),
+    FOREIGN KEY (product_id) REFERENCES Item(id)
+);
+
+
 
 INSERT INTO User VALUES (110, 'Dominic', 'Woods', 'dominic111','dominic055@hotmail.com', 'dominic22', 'address', 'profile picture url');
 INSERT INTO User VALUES (111, 'Zachary', 'Young', 'zacharyy', 'zacharyyoung@gmail.com', '7110eda4d09e062', 'address', 'profile picture url');

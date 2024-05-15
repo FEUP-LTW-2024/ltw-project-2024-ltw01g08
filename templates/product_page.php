@@ -90,13 +90,11 @@
                 <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
                 <button class="add-to-cart">Add to cart</button>
                 <button class="add-to-favorites">Add to favourites</button>
+                <button class="make-offer" onclick="window.location.href='chat.php?seller_id=<?php echo $product['seller_id']; ?>&product_id=<?php echo $product['id']; ?>'">Make an offer</button>
                 <div class="seller-info">
                     <p><strong>Seller:</strong> <a href="other_users_page.php?user_id=<?php echo $product['seller_id']; ?>"><?php echo htmlspecialchars($product['seller_username']); ?></a></p>
-                    
-
                 </div>
             </div>
-        </div>
         </div>
     </main>
 
