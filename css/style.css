@@ -237,6 +237,23 @@ footer {
 }
 
 
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+/* Adjust size on smaller screens */
+@media (max-width: 600px) {
+    .profile-pic {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+
 
 /* Responsive styles para ecras pequenos - caso da barra rosa */
 @media (max-width: 768px) {

@@ -1,3 +1,56 @@
+<?php
+try {
+    $pdo = new PDO('sqlite:../database/database.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sort = filter_input(INPUT_GET, 'sort', 513);
+    $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
+
+    $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $size = filter_input(INPUT_GET, 'size', 513);
+
+    // Base SQL
+    $sql = "SELECT * FROM Item WHERE department_id = 122";
+    $params = [];
+
+    // Handle multiple categories
+    if (!empty($categories) && !in_array('all', $categories)) {
+        $categoryPlaceholders = implode(', ', array_fill(0, count($categories), '?'));
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($categoryPlaceholders) AND department_id = 122)";
+        $params = array_merge($params, $categories);
+    }
+
+    // Handle multiple conditions
+    if (!empty($conditions)) {
+        $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
+        $sql .= " AND condition IN ($conditionPlaceholders)";
+        $params = array_merge($params, $conditions);
+    }
+
+    // Handle size
+    if (!empty($size)) {
+        $sql .= " AND item_size = ?";
+        $params[] = $size;
+    }
+
+    // Sorting
+    $sql .= " ORDER BY price $order";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +61,7 @@
 </head>
 <body>
     <header>
-        <div class="top-bar">
+    <div class="top-bar">
             <input type="text" placeholder="Search" class="search-bar">
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
@@ -30,9 +83,9 @@
     </header>
 
     <main>
-        <nav class="category-bar">
+    <nav class="category-bar">
             <ul>
-                <li class="pink-highlight"><a href="women_section.html">Women</a></li> 
+                <li class="pink-highlight"><a href="women_section.php">Women</a></li> 
                 <li><a href="men_section.html">Men</a></li> 
                 <li><a href="kids_section.html">Kids</a></li> 
                 <li><a href="bags_section.html">Bags</a></li> 
@@ -41,7 +94,7 @@
             </ul>
         </nav> 
 
-        
+
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
             <form id="sorters">
@@ -56,7 +109,7 @@
         
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
-            <form id="filters">
+            <form id="filters" method="GET">
                 <fieldset>
                     <legend>Category</legend>
                     <label><input type="checkbox" value="all" name="category" checked>All</label>
@@ -92,12 +145,11 @@
                 <fieldset>
                     <legend>Size</legend>
                     <div id="size-container">
-                        <label><input type="checkbox" name="size" value="32">32 EU</label>
-                        <label><input type="checkbox" name="size" value="34">34 EU</label>
-                        <label><input type="checkbox" name="size" value="36">36 EU</label>
-                        <label><input type="checkbox" name="size" value="38">38 EU</label>
-                        <label><input type="checkbox" name="size" value="40">40 EU</label>
-                        <label><input type="checkbox" name="size" value="42">42 EU</label>
+                        <label><input type="checkbox" name="size" value="XS">XS</label>
+                        <label><input type="checkbox" name="size" value="S">S</label>
+                        <label><input type="checkbox" name="size" value="M">M</label>
+                        <label><input type="checkbox" name="size" value="L">L</label>
+                        <label><input type="checkbox" name="size" value="XL">XL</label>
                     </div>
                 </fieldset>
         
@@ -105,100 +157,36 @@
                 <label for="price">Price</label>
                 <input type="text" id="price" placeholder="Min Price">
                 <input type="text" id="price" placeholder="Max Price">
+
+                <button type="submit">Apply Filters</button>
             </form>
            
 
         </aside>
+
         <div class="products">
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
+    <?php foreach ($items as $item): ?>
+        <div class="product">
+    <?php
+        $seller_username_query = "SELECT username FROM User WHERE id = :seller_id";
+        $seller_username_stmt = $pdo->prepare($seller_username_query);
+        $seller_username_stmt->execute(array(':seller_id' => $item['seller_id']));
+        $seller_username = $seller_username_stmt->fetchColumn();
+    ?>
+    <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+    <h3><?php echo htmlspecialchars($item['title']); ?></h3>
+    <img src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+    <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+    <p>Size <?php echo htmlspecialchars($item['item_size']); ?></p>
+</div>
 
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
+    <?php endforeach; ?>
+</div>
 
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-            
-        </div>
-
-        <div class="pagination">
-            <button onclick="changePage(-1)">Prev</button>
-            <span id="pageNumber">1</span>
-            <button onclick="changePage(1)">Next</button>
-        </div>
-        
-        
     </main>
 
     <footer>
-        <div class="footer-content">
+    <div class="footer-content">
             <div>
                 <h4>Customer Care</h4>
                 <ul>
@@ -230,12 +218,12 @@
         'dresses': ['Mini', 'Midi', 'Maxi'],
         'coats': ['Winter', 'Summer', 'Raincoat'],
         'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-        'jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut', 'Mom Fit'],
+        'jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
         'skirts': ['Mini', 'Midi', 'Maxi'],
-        'shorts': ['Denim', 'Cotton', 'Linen'],
-        'tops': ['T-shirt', 'Blouse', 'Tank top'],
-        'pants': ['Casual', 'Formal', 'Joggers'],
-        'swimwear': ['Bikini', 'One-piece', 'Trunks']
+        'shorts': ['Short length', 'Mid length'],
+        'tops': ['T-shirts', 'Blouses', 'Crop tops', 'Shirts'],
+        'pants': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
+        'swimwear': ['Bikini', 'One-piece']
     };
 
     var subcategories = new Set();
@@ -317,33 +305,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     function sortProducts() {
-        var sortBy = document.getElementById('sort-price').value;
-        var container = document.querySelector('.products');
-        var products = Array.from(container.querySelectorAll('.product'));
-    
-        products.sort(function(a, b) {
-            // Assume each product's price is contained in an element like <h3>€ 60,00</h3>
-            var priceA = parseInt(a.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
-            var priceB = parseInt(b.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
-    
-            if (sortBy === 'low-to-high') {
-                return priceA - priceB;
-            } else if (sortBy === 'high-to-low') {
-                return priceB - priceA;
-            }
-            return 0;
-        });
-    
-        // Clear existing products
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
+    var sortBy = document.getElementById('sort-price').value;
+    var container = document.querySelector('.products');
+    var products = Array.from(container.querySelectorAll('.product'));
+
+    products.sort(function(a, b) {
+        // Correctly parse prices as floats
+        var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+        var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+
+        if (sortBy === 'low-to-high') {
+            return priceA - priceB;
+        } else if (sortBy === 'high-to-low') {
+            return priceB - priceA;
         }
-    
-        // Append sorted products
-        products.forEach(function(product) {
-            container.appendChild(product);
-        });
+        return 0;
+    });
+
+    // Re-append sorted products
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
     }
+
+    products.forEach(function(product) {
+        container.appendChild(product);
+    });
+}
 
     // Function to toggle the dropdown menu
     function toggleProfileDropdown() {
@@ -367,7 +354,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-
-    
 </body>
 </html>

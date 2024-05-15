@@ -54,7 +54,7 @@ if ($pdo) {
                         </form>
                     </div>
                 </span>
-                <a href="shopping_cart.html">
+                <a href="shopping_cart.php">
                     <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart" class="icon cart-icon">
                 </a>
             </div>

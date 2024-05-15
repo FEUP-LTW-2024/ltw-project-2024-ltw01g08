@@ -1,8 +1,35 @@
 <?php
 declare(strict_types = 1);
 session_start();  // Start session management
-$loggedIn = isset($_SESSION['user_id']);  // Check if user is logged in
+
+// Check if a user is logged in and set $loggedIn accordingly
+$loggedIn = isset($_SESSION['user_id']);
+
+if (!$loggedIn) {
+    header('Location: templates/login.html');  // Adjust the path as necessary
+    exit;
+}
+
+// Database connection setup
+$pdo = new PDO('sqlite:database/database.db');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Fetch user details
+$userId = $_SESSION['user_id'];
+$user = null;
+try {
+    $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Connection error: " . $e->getMessage());
+}
+
+// Assign profile picture or default
+$profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  // Use a default profile picture if none is set
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,13 +44,12 @@ $loggedIn = isset($_SESSION['user_id']);  // Check if user is logged in
 </head>
 <body>
     <header>
-        <div class="top-bar">
-            <span class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
+    <div class="top-bar">
+            <span class="logo"><a href="index.php" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
-                <span>H</span>
                 <?php if ($loggedIn): ?>
                     <span class="profile-dropdown">
-                        <img id="profile-icon" src="images/icons/profile.png" alt="Profile" onclick="toggleProfileDropdown();">
+                        <img id="profile-icon" src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile" onclick="toggleProfileDropdown();">
                         <div id="dropdown-menu" class="dropdown-content">
                             <a href="templates/user_page.php">User Profile</a>
                             <a href="templates/account_info.php">Account Info</a>
@@ -38,12 +64,13 @@ $loggedIn = isset($_SESSION['user_id']);  // Check if user is logged in
                     </span>
                 <?php endif; ?>
                 <span>
-                    <a href="templates/shopping_cart.html">
+                    <a href="templates/shopping_cart.php">
                         <img src="images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
                 </span>
             </div>
         </div>
+        
         <div class="promo-message">
             <span>MAKE THE MOST OUT OF YOUR LUXURY ITEMS</span>
             <a href="<?php echo $loggedIn ? 'templates/user_page.php' : 'templates/login.html'; ?>">
@@ -52,7 +79,7 @@ $loggedIn = isset($_SESSION['user_id']);  // Check if user is logged in
         </div>
         <nav class="category-bar">
             <ul>
-                <li><a href="templates/women_section.html">Women</a></li> 
+                <li><a href="templates/women_section.php">Women</a></li> 
                 <li><a href="templates/men_section.html">Men</a></li> 
                 <li><a href="templates/kids_section.html">Kids</a></li> 
                 <li><a href="templates/bags_section.html">Bags</a></li> 

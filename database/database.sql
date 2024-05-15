@@ -95,13 +95,18 @@ CREATE TABLE Review (
 
 DROP TABLE IF EXISTS Cart;
 
+DROP TABLE IF EXISTS Cart;
+
 CREATE TABLE Cart (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   item_id INTEGER NOT NULL,
+  amount INTEGER NOT NULL DEFAULT 1,
   FOREIGN KEY (user_id) REFERENCES User(id),
   FOREIGN KEY (item_id) REFERENCES Item(id)
 );
+
+
 
 DROP TABLE IF EXISTS PendingOrder;
 
@@ -109,7 +114,7 @@ CREATE TABLE PendingOrder (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL REFERENCES User(id),
     item_id INTEGER NOT NULL REFERENCES Item(id),
-    quantity INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -192,11 +197,11 @@ INSERT INTO Subcategory VALUES(42,'Midi', 128);
 INSERT INTO Subcategory VALUES(43,'Maxi', 128); 
 --For Woman tops
 INSERT INTO Subcategory VALUES(44,'Blouses', 129); 
-INSERT INTO Subcategory VALUES(45,'Crop-tops', 129); 
+INSERT INTO Subcategory VALUES(45,'Crop tops', 129); 
 INSERT INTO Subcategory VALUES(46,'Shirts', 129); 
 INSERT INTO Subcategory VALUES(47,'T-Shirts', 129); 
 --For woman jeans
-INSERT INTO Subcategory VALUES(48,'Lose fit', 130); 
+INSERT INTO Subcategory VALUES(48,'Loose fit', 130); 
 INSERT INTO Subcategory VALUES(49,'Skinny Fit', 130); 
 INSERT INTO Subcategory VALUES(50,'Bootcut fit', 130); 
 -- For woman skirts
@@ -204,17 +209,15 @@ INSERT INTO Subcategory VALUES(51,'Mini', 131);
 INSERT INTO Subcategory VALUES(52,'Midi', 131); 
 INSERT INTO Subcategory VALUES(53,'Maxi', 131); 
 -- For woman shorts
-INSERT INTO Subcategory VALUES(54,'short length', 132); 
-INSERT INTO Subcategory VALUES(55,'longer length', 132); 
+INSERT INTO Subcategory VALUES(54,'Short length', 132); 
+INSERT INTO Subcategory VALUES(55,'Mid length', 132); 
 -- For woman pants
-INSERT INTO Subcategory VALUES(56,'Lose fit', 133); 
+INSERT INTO Subcategory VALUES(56,'Loose fit', 133); 
 INSERT INTO Subcategory VALUES(57,'Skinny fit', 133); 
 INSERT INTO Subcategory VALUES(58,'Bootcut fit', 133); 
 -- For woman Swimwear 
-INSERT INTO Subcategory VALUES(59,'Bikini top', 134); 
-INSERT INTO Subcategory VALUES(60,'Bikini bottom', 134); 
-INSERT INTO Subcategory VALUES(61,'Bikini set', 134); 
-INSERT INTO Subcategory VALUES(62,'Swimsuits', 134); 
+INSERT INTO Subcategory VALUES(59,'Bikini', 134); 
+INSERT INTO Subcategory VALUES(62,'One-Piece', 134); 
 -- For woman coats 
 INSERT INTO Subcategory VALUES(63,'Winter', 135); 
 INSERT INTO Subcategory VALUES(64,'Summer', 135); 
@@ -282,64 +285,64 @@ INSERT INTO Item VALUES (1, 110,
   'beige coat',
   122,135, 63,
   'Gucci', 'L', 'Beige',
-  'Excelent', 400.00,
-  '../images/items/item1.png');
+  'ExcelLent', 400.00,
+  '/Users/franciscafernandes/Desktop/2324/LTW/ltw-project-2024-ltw01g08/images/items/item1_1.png');
 INSERT INTO Item VALUES (2, 112,
   'Jimmy Choo Heels',
   'pink shoes',
   122,136, 68,
   'Jimmy Choo', 'M', 'Pink',
   'Very good', 450.00,
-  '../images/items/item2.png');
+  '../images/items/item2_1.png');
 INSERT INTO Item VALUES (3, 112,
   'Balenciaga Jeans',
   'beautiful jeans',
   122, 130, 48,
   'Balenciaga', 'XS', 'Blue',
   'Very good', 910.00,
-  '../images/items/item3.png');
+  '../images/items/item3_1.png');
 INSERT INTO Item VALUES (4, 117,
   'Dior skirt',
   'beautiful skirt',
   122, 131, 52,
   'Dior', 'L', 'Blue',
   'Very good', 725.00,
-  '../images/items/item4.png');
+  '../images/items/item4_1.png');
 INSERT INTO Item VALUES (5, 117,
   'Burberry Dress',
   'very good quality',
   122,128, 42,
   'Burberry', 'M', 'Brown',
-  'Excelent', 545.00,
-  '../images/items/item5.png');
+  'ExcelLent', 545.00,
+  '../images/items/item5_1.png');
 INSERT INTO Item VALUES (19, 116,
   'Miu Miu Top',
   'Navy blue top',
   122,129, 45,
   'Miu Miu', 'M', 'Blue',
   'Bad', 100.00,
-  '../images/items/item19.png');
+  '../images/items/item19_1.png');
   INSERT INTO Item VALUES (20, 115,
   'Fendi Trousers',
   'Black trousers',
   122,133, 57,
   'Fendi', 'L', 'Black',
   'Excellent', 700.00,
-  '../images/items/item20.png');
+  '../images/items/item20_1.png');
   INSERT INTO Item VALUES (21, 118,
   'Dior Swimsuit',
   'Pink swimsuit',
   122,134, 62,
   'Dior', 'M', 'Pink',
   'Bad', 100.00,
-  '../images/items/item21.png');
+  '../images/items/item21_1.png');
   INSERT INTO Item VALUES (22, 112,
   'Dolce&Gabbana Shorts',
   'Animal print shorts',
   122,132, 54,
   'Dolce&Gabbana', 'L', 'Brown',
   'Bad', 90.00,
-  '../images/items/item22.png');
+  '../images/items/item22_1.png');
 
 --Men Items
 INSERT INTO Item VALUES (6, 113,
