@@ -262,7 +262,7 @@ INSERT INTO Subcategory VALUES(79,'Shorts', 141);
 -- For man coats
 INSERT INTO Subcategory VALUES(80,'Winter', 142); 
 INSERT INTO Subcategory VALUES(81,'Summer', 142); 
-INSERT INTO Subcategory VALUES(82,'Rain Coats', 142); 
+INSERT INTO Subcategory VALUES(82,'Raincoats', 142); 
 -- For man shoes 
 INSERT INTO Subcategory VALUES(83,'Sneakers', 143); 
 INSERT INTO Subcategory VALUES(84,'Boots', 143); 

@@ -211,11 +211,13 @@ try {
     <?php endforeach; ?>
 </div>
 
+    <div class="pagination">
+            <button onclick="changePage(-1)">Prev</button>
+            <span id="pageNumber">1</span>
+            <button onclick="changePage(1)">Next</button>
+    </div>
 
 
-
-
-</div>
 
     </main>
 

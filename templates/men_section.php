@@ -3,11 +3,13 @@ try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // Get parameters and sanitize inputs
     $sort = filter_input(INPUT_GET, 'sort', 513);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
+
     $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);  // Changed to handle an array of sizes
+    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
@@ -15,7 +17,7 @@ try {
     $sql = "SELECT * FROM Item WHERE department_id = 123";
     $params = [];
 
-    // conditions for price
+    // Conditions for price
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
         $params[] = $minPrice;
@@ -27,16 +29,13 @@ try {
     }
 
     // Process categories
-    if (!empty($categories) && !in_array('all', $categories)) {
+    if (!empty($categories)) {
         $placeholders = implode(', ', array_fill(0, count($categories), '?'));
         $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 123)";
         foreach ($categories as $category) {
             $params[] = $category;
         }
     }
-    
-    
-
 
     // Process conditions
     if (!empty($conditions)) {
@@ -56,7 +55,7 @@ try {
         }
     }
 
-    //  sorting
+    // Sorting
     $sql .= " ORDER BY price $order";
 
     $stmt = $pdo->prepare($sql);
@@ -73,7 +72,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Section - Elite Finds</title>
-    <link rel="stylesheet" href="../css/department_sections.css">
+    <link rel="stylesheet" href="../css/women_section.css">
 </head>
 <body>
     <header>
@@ -94,17 +93,15 @@ try {
                         <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
                 </span>
-                
             </div>
         </div>
-
     </header>
 
     <main>
         <nav class="category-bar">
             <ul>
                 <li><a href="women_section.php">Women</a></li> 
-                <li class="pink-highlight"><a href="men_section.html">Men</a></li> 
+                <li class="pink-highlight"><a href="men_section.php">Men</a></li> 
                 <li><a href="kids_section.html">Kids</a></li> 
                 <li><a href="bags_section.html">Bags</a></li> 
                 <li><a href="jewelry_section.html">Jewelry</a></li> 
@@ -112,7 +109,6 @@ try {
             </ul>
         </nav>    
 
-        
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
             <form id="sorters">
@@ -124,87 +120,88 @@ try {
                 </select>
             </form>
         </aside>
-        
+
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
-            <form id="filters">
+            <form id="filters" method="GET" action="men_section.php">
                 <fieldset>
                     <legend>Category</legend>
-                    <label><input type="checkbox" value="all" name="category" checked>All</label>
-                    <label><input type="checkbox" value="coats" name="category">Coats</label>
-                    <label><input type="checkbox" value="shirts" name="category">Shirts</label>
-                    <label><input type="checkbox" value="shoes" name="category">Shoes</label>
-                    <label><input type="checkbox" value="jeans" name="category">Jeans</label>
-                    <label><input type="checkbox" value="pants" name="category">Pants</label>
-                    <label><input type="checkbox" value="shorts" name="category">Shorts</label>
-                    <label><input type="checkbox" value="swimwear" name="category">Swimwear</label>
+                    <label><input type="checkbox" value="Coats" name="category[]">Coats</label>
+                    <label><input type="checkbox" value="Shirts" name="category[]">Shirts</label>
+                    <label><input type="checkbox" value="Shoes" name="category[]">Shoes</label>
+                    <label><input type="checkbox" value="Jeans" name="category[]">Jeans</label>
+                    <label><input type="checkbox" value="Pants" name="category[]">Pants</label>
+                    <label><input type="checkbox" value="Shorts" name="category[]">Shorts</label>
+                    <label><input type="checkbox" value="Swimwear" name="category[]">Swimwear</label>
                 </fieldset>
-    
-                <label for="subcategory">Subcategory</label>
-                <select id="subcategory">
-                </select>
-    
-                <label for="condition">Condition</label>
-                <select id="condition">
-                    <option value="default">All</option>
-                    <option value="Excelent">Excelent</option>
-                    <option value="Very good">Very good</option>
-                    <option value="Good">Good</option>
-                    <option value="Bad">Bad</option>
-                </select>
-    
-                <label for="size">Size</label>
-                <select id="size">
-                    <option value="all">All</option>
-                    <option value="32">32 EU</option>
-                    <option value="34">36 EU</option>
-                    <option value="36">36 EU</option>
-                    <option value="38">38 EU</option>
-                    <option value="40">40 EU</option>
-                    <option value="42">42 EU</option>
-                </select>
-    
-                <label for="price">Price</label>
-                <input type="text" id="price" placeholder="Min Price">
-                <input type="text" id="price" placeholder="Max Price">
-            </form>
-           
 
+                <fieldset>
+                    <legend>Subcategory</legend>
+                    <div id="subcategory-container">
+                        <!-- Subcategories will be populated here -->
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Condition</legend>
+                    <div id="condition-container">
+                        <label><input type="checkbox" name="condition[]" value="Excellent">Excellent</label>
+                        <label><input type="checkbox" name="condition[]" value="Very good">Very good</label>
+                        <label><input type="checkbox" name="condition[]" value="Good">Good</label>
+                        <label><input type="checkbox" name="condition[]" value="Bad">Bad</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Size</legend>
+                    <label><input type="checkbox" name="size[]" value="XS">XS</label>
+                    <label><input type="checkbox" name="size[]" value="S">S</label>
+                    <label><input type="checkbox" name="size[]" value="M">M</label>
+                    <label><input type="checkbox" name="size[]" value="L">L</label>
+                    <label><input type="checkbox" name="size[]" value="XL">XL</label>
+                </fieldset>
+
+                <label for="min-price">Min Price:</label>
+                <input type="text" id="min-price" name="min_price" placeholder="Min Price">
+
+                <label for="max-price">Max Price:</label>
+                <input type="text" id="max-price" name="max_price" placeholder="Max Price">
+
+                <button type="button" class="reset" onclick="resetFilters()">Reset Filters</button>
+                <button type="submit">Apply Filters</button>
+            </form>
         </aside>
 
-    <div class="products">
-    <?php foreach ($items as $item):
-        // Assuming you have a seller_id and need to fetch the seller's username for each item
-        $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
-        $seller_username_stmt->execute([$item['seller_id']]);
-        $seller_username = $seller_username_stmt->fetchColumn();
+        <div class="products">
+        <?php foreach ($items as $item):
+            // Assuming you have a seller_id and need to fetch the seller's username for each item
+            $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
+            $seller_username_stmt->execute([$item['seller_id']]);
+            $seller_username = $seller_username_stmt->fetchColumn();
 
-        // If no username was found, use a placeholder or empty string
-        $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
-        $image_url = "../images/items/item{$item['id']}_1.png";
-    ?>
-        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
-            <div class="product">
-                <p>@<?php echo htmlspecialchars($seller_username); ?></p>
-                <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
-                <div class="image-container">
-                    <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+            // If no username was found, use a placeholder or empty string
+            $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
+            $image_url = "../images/items/item{$item['id']}_1.png";
+        ?>
+            <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
+                <div class="product">
+                    <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+                    <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                    <div class="image-container">
+                        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                    </div>
+                    <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                    <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                 </div>
-                <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
-            </div>
-        </a>
-    <?php endforeach; ?>
-    </div>
-        
+            </a>
+        <?php endforeach; ?>
+        </div>
 
         <div class="pagination">
             <button onclick="changePage(-1)">Prev</button>
             <span id="pageNumber">1</span>
             <button onclick="changePage(1)">Next</button>
         </div>
-        
-        
     </main>
 
     <footer>
@@ -229,167 +226,119 @@ try {
             </div>
         </div>
     </footer>
+
     <script>
-function updateSubcategories() {
-    var categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
-    var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
-    var subcategory = document.getElementById('subcategory');
-    subcategory.innerHTML = '';
+        function updateSubcategories() {
+        var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:checked');
+        var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
+        var subcategoryContainer = document.getElementById('subcategory-container');
+        subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
 
-    var options = {
-        'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
-                'jeans': ['Lose Fit','Skinny Fit'],
-                'pants': ['Lose Fit','Skinny Fit'],
-                'shorts': ['Jeans','Other Materials'],
-                'swimwear': ['Neutral', 'Patterns'],
-                'coats': ['Winter', 'Summer', 'Raincoat'],
-                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
-    };
+        var options = {
+                'Shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
+                'Jeans': ['Loose Fit','Skinny Fit'],
+                'Pants': ['Loose Fit','Skinny Fit'],
+                'Shorts': ['Denim','Fabric'],
+                'Swimwear': ['Shorts'],
+                'Coats': ['Winter', 'Summer', 'Raincoats'],
+                'Shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers']
+            };
 
-    var subcategories = new Set();
     selectedCategories.forEach(category => {
         if (options[category]) {
-            options[category].forEach(sub => subcategories.add(sub));
+            options[category].forEach(sub => {
+                var label = document.createElement('label');
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = sub;
+                checkbox.name = 'subcategory[]';
+                label.appendChild(checkbox);
+                label.append(sub);
+                subcategoryContainer.appendChild(label);
+            });
         }
     });
-
-    subcategories.forEach(sub => {
-        var newOption = document.createElement('option');
-        newOption.value = sub.toLowerCase();
-        newOption.textContent = sub;
-        subcategory.appendChild(newOption);
-    });
 }
-
 document.addEventListener('DOMContentLoaded', function() {
-    var categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+    var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]');
     categoryCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateSubcategories);
     });
-    updateSubcategories();
 });
 
 
-    
-           
-    
-      
-</script>
-        <script>
-            const productsPerPage = 9;
-            let currentPage = 1;
-        
-            function paginateProducts() {
-                const products = document.querySelectorAll('.product');
-                const totalProducts = products.length;
-                const totalPages = Math.ceil(totalProducts / productsPerPage);
-        
-                products.forEach(product => {
-                    product.style.display = 'none';
-                });
-        
-                
-                const startIndex = (currentPage - 1) * productsPerPage;
-                const endIndex = startIndex + productsPerPage;
-        
-                
-                for (let i = startIndex; i < endIndex && i < totalProducts; i++) {
-                    products[i].style.display = 'block';
-                }
-        
-                // Mostra o número correto da página
-                document.getElementById('pageNumber').textContent = `${currentPage} / ${totalPages}`;
-            }
-        
-            function changePage(step) {
-                const products = document.querySelectorAll('.product');
-                const totalProducts = products.length;
-                const totalPages = Math.ceil(totalProducts / productsPerPage);
-        
-                // Atualiza página
-                currentPage += step;
-                if (currentPage < 1) {
-                    currentPage = 1;
-                } else if (currentPage > totalPages) {
-                    currentPage = totalPages;
-                }
-        
-                paginateProducts();
-            }
-        
-            document.addEventListener('DOMContentLoaded', function() {
-                updateSubcategories();
-                paginateProducts(); 
+
+        function resetFilters() {
+            // Uncheck all checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
             });
-        </script>
 
-<script>
+            // Clear text inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
 
-function resetFilters() {
-    // Uncheck all checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    // Clear text inputs
-    document.querySelectorAll('input[type="text"]').forEach(input => {
-        input.value = '';
-    });
-
-    // Submit the form
-    document.getElementById('filters').submit();
-}
-
-
-    function sortProducts() {
-    var sortBy = document.getElementById('sort-price').value;
-    var container = document.querySelector('.products');
-    var products = Array.from(container.querySelectorAll('.product'));
-
-    products.sort(function(a, b) {
-        // Correctly parse prices as floats
-        var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
-        var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
-
-        if (sortBy === 'low-to-high') {
-            return priceA - priceB;
-        } else if (sortBy === 'high-to-low') {
-            return priceB - priceA;
+            // Submit the form
+            document.getElementById('filters').submit();
         }
-        return 0;
-    });
 
-    // Re-append sorted products
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
+        function sortProducts() {
+            var sortBy = document.getElementById('sort-price').value;
+            var container = document.querySelector('.products');
+            var products = Array.from(container.querySelectorAll('.product'));
 
-    products.forEach(function(product) {
-        container.appendChild(product);
-    });
-}
+            products.sort(function(a, b) {
+                // Correctly parse prices as floats
+                var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+                var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
 
-    // Function to toggle the dropdown menu
-    function toggleProfileDropdown() {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
-            dropdownContainer.classList.toggle('show');
-    }
+                if (sortBy === 'low-to-high') {
+                    return priceA - priceB;
+                } else if (sortBy === 'high-to-low') {
+                    return priceB - priceA;
+                }
+                return 0;
+            });
 
-        // Event listener for clicking the profile icon
-    document.getElementById('profile-icon').addEventListener('click', function (event) {
-            event.stopPropagation(); 
-            toggleProfileDropdown();
-    });
-
-        // Event listener for clicking outside the dropdown to close it
-    window.addEventListener('click', function () {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
-            if (dropdownContainer.classList.contains('show')) {
-                dropdownContainer.classList.remove('show');
+            // Re-append sorted products
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
-    });
 
-</script>
+            products.forEach(function(product) {
+                container.appendChild(product);
+            });
+        }
 
+        const productsPerPage = 9;
+        let currentPage = 1;
+
+        function paginateProducts() {
+            const products = document.querySelectorAll('.product');
+            const totalProducts = products.length;
+            const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+            products.forEach((product, index) => {
+                product.style.display = (index >= (currentPage - 1) * productsPerPage && index < currentPage * productsPerPage) ? 'block' : 'none';
+            });
+
+            document.getElementById('pageNumber').textContent = `${currentPage} / ${totalPages}`;
+        }
+
+        function changePage(step) {
+            const products = document.querySelectorAll('.product');
+            const totalProducts = products.length;
+            const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+            currentPage = Math.max(1, Math.min(totalPages, currentPage + step));
+            paginateProducts();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSubcategories();
+            paginateProducts(); 
+        });
+    </script>
 </body>
 </html>
