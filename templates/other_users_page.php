@@ -62,18 +62,22 @@
             <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
         </div>
-        <div id="items" class="tab-content" style="display:block;">
+        <div id="products">
             <?php if (empty($items)): ?>
                 <p>No items for sale.</p>
             <?php else: ?>
                 <?php foreach ($items as $item): ?>
-                    <a href="product_page.php?product_id=<?php echo $item['id']; ?>" class="product-link">
+                    <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
                         <div class="product">
-                            <img src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                            <h3><?php echo htmlspecialchars($item['title']); ?></h3>
-                            <p>€<?php echo number_format($item['price'], 2); ?></p>
+                            <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                            <div class="image-container">
+                                <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                            </div>
+                            <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                            <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                         </div>
                     </a>
+
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

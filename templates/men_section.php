@@ -1,3 +1,72 @@
+<?php
+try {
+    $pdo = new PDO('sqlite:../database/database.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sort = filter_input(INPUT_GET, 'sort', 513);
+    $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
+    $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);  // Changed to handle an array of sizes
+    $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
+    $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
+
+    // Initialize the SQL query
+    $sql = "SELECT * FROM Item WHERE department_id = 123";
+    $params = [];
+
+    // conditions for price
+    if ($minPrice !== false && $minPrice != null) {
+        $sql .= " AND price >= ?";
+        $params[] = $minPrice;
+    }
+
+    if ($maxPrice !== false && $maxPrice != null) {
+        $sql .= " AND price <= ?";
+        $params[] = $maxPrice;
+    }
+
+    // Process categories
+    if (!empty($categories) && !in_array('all', $categories)) {
+        $placeholders = implode(', ', array_fill(0, count($categories), '?'));
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 123)";
+        foreach ($categories as $category) {
+            $params[] = $category;
+        }
+    }
+    
+    
+
+
+    // Process conditions
+    if (!empty($conditions)) {
+        $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
+        $sql .= " AND condition IN ($conditionPlaceholders)";
+        foreach ($conditions as $condition) {
+            $params[] = $condition;
+        }
+    }
+
+    // Process sizes
+    if (!empty($sizes)) {
+        $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
+        $sql .= " AND item_size IN ($sizePlaceholders)";
+        foreach ($sizes as $size) {
+            $params[] = $size;
+        }
+    }
+
+    //  sorting
+    $sql .= " ORDER BY price $order";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,13 +79,13 @@
     <header>
         <div class="top-bar">
             <input type="text" placeholder="Search" class="search-bar">
-            <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
+            <span class="logo"><a href="../index.php" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <span>H</span>
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">
-                        <a href="../templates/user_page.php">User Profile</a>
+                        <a href="../templates/user_page.html">User Profile</a>
                         <a href="../templates/account_info.html">Account Info</a>
                     </div>
                 </span>
@@ -24,22 +93,24 @@
                     <a href="shopping_cart.php">
                         <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
-                </span> 
+                </span>
+                
             </div>
         </div>
+
     </header>
 
     <main>
         <nav class="category-bar">
             <ul>
-                <li class="pink-highlight"><a href="women_section.php">Women</a></li> 
-                <li><a href="men_section.php">Men</a></li> 
+                <li><a href="women_section.php">Women</a></li> 
+                <li class="pink-highlight"><a href="men_section.html">Men</a></li> 
                 <li><a href="kids_section.html">Kids</a></li> 
                 <li><a href="bags_section.html">Bags</a></li> 
                 <li><a href="jewelry_section.html">Jewelry</a></li> 
                 <li><a href="accessories_section.html">Accessories</a></li> 
             </ul>
-        </nav> 
+        </nav>    
 
         
         <aside class="sorter-sidebar">
@@ -60,47 +131,38 @@
                 <fieldset>
                     <legend>Category</legend>
                     <label><input type="checkbox" value="all" name="category" checked>All</label>
-                    <label><input type="checkbox" value="dresses" name="category">Dresses</label>
                     <label><input type="checkbox" value="coats" name="category">Coats</label>
+                    <label><input type="checkbox" value="shirts" name="category">Shirts</label>
                     <label><input type="checkbox" value="shoes" name="category">Shoes</label>
                     <label><input type="checkbox" value="jeans" name="category">Jeans</label>
                     <label><input type="checkbox" value="pants" name="category">Pants</label>
                     <label><input type="checkbox" value="shorts" name="category">Shorts</label>
-                    <label><input type="checkbox" value="skirts" name="category">Skirts</label>
                     <label><input type="checkbox" value="swimwear" name="category">Swimwear</label>
-                    <label><input type="checkbox" value="tops" name="category">Tops</label>
                 </fieldset>
-            
     
-                <fieldset>
-                    <legend>Subcategory</legend>
-                    <div id="subcategory-container">
-                        <!-- Subcategories will be populated here -->
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Condition</legend>
-                    <div id="condition-container">
-                        <label><input type="checkbox" name="condition" value="Excellent">Excellent</label>
-                        <label><input type="checkbox" name="condition" value="Very good">Very good</label>
-                        <label><input type="checkbox" name="condition" value="Good">Good</label>
-                        <label><input type="checkbox" name="condition" value="Bad">Bad</label>
-                    </div>
-                </fieldset>
-        
-                <fieldset>
-                    <legend>Size</legend>
-                    <div id="size-container">
-                        <label><input type="checkbox" name="size" value="32">32 EU</label>
-                        <label><input type="checkbox" name="size" value="34">34 EU</label>
-                        <label><input type="checkbox" name="size" value="36">36 EU</label>
-                        <label><input type="checkbox" name="size" value="38">38 EU</label>
-                        <label><input type="checkbox" name="size" value="40">40 EU</label>
-                        <label><input type="checkbox" name="size" value="42">42 EU</label>
-                    </div>
-                </fieldset>
-        
+                <label for="subcategory">Subcategory</label>
+                <select id="subcategory">
+                </select>
+    
+                <label for="condition">Condition</label>
+                <select id="condition">
+                    <option value="default">All</option>
+                    <option value="Excelent">Excelent</option>
+                    <option value="Very good">Very good</option>
+                    <option value="Good">Good</option>
+                    <option value="Bad">Bad</option>
+                </select>
+    
+                <label for="size">Size</label>
+                <select id="size">
+                    <option value="all">All</option>
+                    <option value="32">32 EU</option>
+                    <option value="34">36 EU</option>
+                    <option value="36">36 EU</option>
+                    <option value="38">38 EU</option>
+                    <option value="40">40 EU</option>
+                    <option value="42">42 EU</option>
+                </select>
     
                 <label for="price">Price</label>
                 <input type="text" id="price" placeholder="Min Price">
@@ -109,84 +171,32 @@
            
 
         </aside>
-        <div class="products">
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
 
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
+    <div class="products">
+    <?php foreach ($items as $item):
+        // Assuming you have a seller_id and need to fetch the seller's username for each item
+        $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
+        $seller_username_stmt->execute([$item['seller_id']]);
+        $seller_username = $seller_username_stmt->fetchColumn();
 
+        // If no username was found, use a placeholder or empty string
+        $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
+        $image_url = "../images/items/item{$item['id']}_1.png";
+    ?>
+        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
             <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
+                <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+                <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                <div class="image-container">
+                    <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                </div>
+                <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
             </div>
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-
-            <div class="product">
-                <img src="../images/items/item20_1.png" alt="Vintage Gucci Dress">
-                <p>@ronaysmith</p>
-                <h3>Vintage Gucci Dress € 60,00</h3>
-                <p>Size EU 36</p>
-            </div>
-            
-        </div>
+        </a>
+    <?php endforeach; ?>
+    </div>
+        
 
         <div class="pagination">
             <button onclick="changePage(-1)">Prev</button>
@@ -220,22 +230,20 @@
         </div>
     </footer>
     <script>
-       function updateSubcategories() {
+function updateSubcategories() {
     var categoryCheckboxes = document.querySelectorAll('input[name="category"]:checked');
     var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
-    var subcategoryContainer = document.getElementById('subcategory-container');
-    subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
+    var subcategory = document.getElementById('subcategory');
+    subcategory.innerHTML = '';
 
     var options = {
-        'dresses': ['Mini', 'Midi', 'Maxi'],
-        'coats': ['Winter', 'Summer', 'Raincoat'],
-        'shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-        'jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut', 'Mom Fit'],
-        'skirts': ['Mini', 'Midi', 'Maxi'],
-        'shorts': ['Denim', 'Cotton', 'Linen'],
-        'tops': ['T-shirt', 'Blouse', 'Tank top'],
-        'pants': ['Casual', 'Formal', 'Joggers'],
-        'swimwear': ['Bikini', 'One-piece', 'Trunks']
+        'shirts': ['Long Sleeve', 'Short Sleeve', 'Mid Sleeve'],
+                'jeans': ['Lose Fit','Skinny Fit'],
+                'pants': ['Lose Fit','Skinny Fit'],
+                'shorts': ['Jeans','Other Materials'],
+                'swimwear': ['Neutral', 'Patterns'],
+                'coats': ['Winter', 'Summer', 'Raincoat'],
+                'shoes': ['Sneakers', 'Boots', 'Sandals', 'Loafers'],
     };
 
     var subcategories = new Set();
@@ -246,14 +254,10 @@
     });
 
     subcategories.forEach(sub => {
-        var label = document.createElement('label');
-        var checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = sub.toLowerCase();
-        checkbox.name = 'subcategory';
-        label.appendChild(checkbox);
-        label.append(sub);
-        subcategoryContainer.appendChild(label);
+        var newOption = document.createElement('option');
+        newOption.value = sub.toLowerCase();
+        newOption.textContent = sub;
+        subcategory.appendChild(newOption);
     });
 }
 
@@ -266,7 +270,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-        </script>
+    
+           
+    
+      
+</script>
         <script>
             const productsPerPage = 9;
             let currentPage = 1;
@@ -316,34 +324,50 @@ document.addEventListener('DOMContentLoaded', function() {
         </script>
 
 <script>
+
+function resetFilters() {
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Clear text inputs
+    document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+    });
+
+    // Submit the form
+    document.getElementById('filters').submit();
+}
+
+
     function sortProducts() {
-        var sortBy = document.getElementById('sort-price').value;
-        var container = document.querySelector('.products');
-        var products = Array.from(container.querySelectorAll('.product'));
-    
-        products.sort(function(a, b) {
-            // Assume each product's price is contained in an element like <h3>€ 60,00</h3>
-            var priceA = parseInt(a.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
-            var priceB = parseInt(b.querySelector('h3').textContent.replace(/[^\d,]/g, '').replace(',', '.'), 10);
-    
-            if (sortBy === 'low-to-high') {
-                return priceA - priceB;
-            } else if (sortBy === 'high-to-low') {
-                return priceB - priceA;
-            }
-            return 0;
-        });
-    
-        // Clear existing products
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
+    var sortBy = document.getElementById('sort-price').value;
+    var container = document.querySelector('.products');
+    var products = Array.from(container.querySelectorAll('.product'));
+
+    products.sort(function(a, b) {
+        // Correctly parse prices as floats
+        var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+        var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+
+        if (sortBy === 'low-to-high') {
+            return priceA - priceB;
+        } else if (sortBy === 'high-to-low') {
+            return priceB - priceA;
         }
-    
-        // Append sorted products
-        products.forEach(function(product) {
-            container.appendChild(product);
-        });
+        return 0;
+    });
+
+    // Re-append sorted products
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
     }
+
+    products.forEach(function(product) {
+        container.appendChild(product);
+    });
+}
 
     // Function to toggle the dropdown menu
     function toggleProfileDropdown() {
@@ -367,7 +391,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-
-    
 </body>
 </html>
