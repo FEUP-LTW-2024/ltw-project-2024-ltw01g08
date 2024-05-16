@@ -50,21 +50,25 @@ $total = 0;
     <h1>Shopping cart</h1>
     <?php foreach ($cartItems as $item): ?>
         <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['item_id']); ?>" class="product-link">
-            <div class="cart-item">
-            <img src="../images/items/<?php echo htmlspecialchars("item{$item['item_id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                <div class="item-details">
-                    <h3><?php echo htmlspecialchars($item['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($item['item_size']); ?></p>
-                    <p>Seller: <?php 
+        <div class="cart-item">
+    <img src="../images/items/<?php echo htmlspecialchars("item{$item['item_id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+    <div class="item-info">
+        <div class="item-details">
+            <h3><?php echo htmlspecialchars($item['title']); ?></h3>
+            <p>Size: <?php echo htmlspecialchars($item['item_size']); ?></p>
+            <p>Seller: <?php 
                         $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
                         $seller_username_stmt->execute([$item['seller_id']]);
                         $seller_username = $seller_username_stmt->fetchColumn();
                         echo htmlspecialchars($seller_username ? '@' . $seller_username : 'Unknown');
                     ?></p>
-                    <span class="item-price">€ <?php echo number_format($item['price'], 2); ?></span>
-                </div>
-                <a href="remove_from_cart.php?item_id=<?php echo $item['item_id']; ?>" class="remove-item">🗑 Remove</a>
-            </div>
+        </div>
+        <div class="item-price-action">
+            <span class="item-price">€ <?php echo number_format($item['price'], 2); ?></span>
+            <a href="remove_from_cart.php?item_id=<?php echo $item['item_id']; ?>" class="remove-item">🗑 Remove</a>
+        </div>
+    </div>
+</div>      
         </a>
         <?php 
         $total += $item['price'];
