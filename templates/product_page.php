@@ -8,12 +8,10 @@
 </head>
 <body>
     <?php
-    // Start the session
     session_start();
 
-    $loggedIn = isset($_SESSION['user_id']);  // Check if the user is logged in
+    $loggedIn = isset($_SESSION['user_id']);  
 
-    // Database connection
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -80,24 +78,31 @@
 
             </div>
 
-            <!-- Product Details Section -->
-            <div class="product-details">
-                <h2>€ <?php echo number_format($product['price'], 2); ?></h2>
-                <h3><?php echo htmlspecialchars($product['title']); ?></h3>
-                <ul>
-                    <li><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand']); ?></li>
-                    <li><strong>Size:</strong> <?php echo htmlspecialchars($product['item_size']); ?></li>
-                    <li><strong>Color:</strong> <?php echo htmlspecialchars($product['color']); ?></li>
-                    <li><strong>Condition:</strong> <?php echo htmlspecialchars($product['condition']); ?></li>
-                </ul>
-                <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
-                <button class="add-to-cart">Add to cart</button>
-                <button class="add-to-favorites">Add to favourites</button>
-                <button class="make-offer" onclick="window.location.href='chat.php?seller_id=<?php echo $product['seller_id']; ?>&product_id=<?php echo $product['id']; ?>'">Make an offer</button>
-                <div class="seller-info">
-                    <p><strong>Seller:</strong> <a href="other_users_page.php?user_id=<?php echo $product['seller_id']; ?>"><?php echo htmlspecialchars($product['seller_username']); ?></a></p>
-                </div>
-            </div>
+<div class="product-details">
+    <h2>€ <?php echo number_format($product['price'], 2); ?></h2>
+    <h3><?php echo htmlspecialchars($product['title']); ?></h3>
+    <ul>
+        <li><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand']); ?></li>
+        <li><strong>Size:</strong> <?php echo htmlspecialchars($product['item_size']); ?></li>
+        <li><strong>Color:</strong> <?php echo htmlspecialchars($product['color']); ?></li>
+        <li><strong>Condition:</strong> <?php echo htmlspecialchars($product['condition']); ?></li>
+    </ul>
+    <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
+
+    <!-- Add to Cart Form -->
+    <form method="POST" action="add_to_cart.php">
+        <input type="hidden" name="item_id" value="<?php echo $product['id']; ?>">
+        <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+        <button type="submit" class="add-to-cart">Add to cart</button>
+    </form>
+
+    <button class="add-to-favorites">Add to favourites</button>
+    <button class="make-offer" onclick="window.location.href='chat.php?seller_id=<?php echo $product['seller_id']; ?>&product_id=<?php echo $product['id']; ?>'">Make an offer</button>
+    <div class="seller-info">
+        <p><strong>Seller:</strong> <a href="other_users_page.php?user_id=<?php echo $product['seller_id']; ?>"><?php echo htmlspecialchars($product['seller_username']); ?></a></p>
+    </div>
+</div>
+
         </div>
     </main>
 
@@ -121,7 +126,6 @@
     </footer>
 
     <script>
-        // Function to open a modal with the clicked image
         function openImageModal(imageSrc) {
             const modal = document.createElement('div');
             modal.classList.add('modal');
@@ -133,7 +137,6 @@
             `;
             document.body.appendChild(modal);
 
-            // Close modal when clicking on the close button
             modal.querySelector('.close-modal').addEventListener('click', function() {
                 document.body.removeChild(modal);
             });
@@ -142,7 +145,6 @@
         document.addEventListener('DOMContentLoaded', function() {
         const additionalImages = document.querySelectorAll('.additional-images img');
 
-        // Add click event listeners to each additional image
         additionalImages.forEach(function(image, index) {
             image.addEventListener('click', function() {
                 const imageSrc = image.getAttribute('src');
