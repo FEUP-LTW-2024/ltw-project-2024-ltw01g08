@@ -34,6 +34,7 @@ try {
     </header>
     <main>
     <h1>Checkout</h1>
+    <a href="shopping_cart.php" class="back-to-cart-btn">Return to Shopping Cart</a> <!-- Adding return link -->
     <div class="order-summary">
         <h2>Order Summary</h2>
         <?php foreach ($cartItems as $item): ?>

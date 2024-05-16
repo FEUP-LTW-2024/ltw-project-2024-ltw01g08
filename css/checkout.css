@@ -127,3 +127,20 @@ footer {
     background-color: var(--lightpink);
     color: var(--white);
 }
+
+.back-to-cart-btn {
+    display: inline-block;
+    margin: 20px 0;
+    background-color: var(--darkerpink);
+    color: var(--white);
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+.back-to-cart-btn:hover {
+    background-color: var(--lightpink);
+}
+
