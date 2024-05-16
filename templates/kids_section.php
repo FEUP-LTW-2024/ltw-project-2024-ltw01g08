@@ -114,7 +114,7 @@ try {
                 <li class="pink-highlight"><a href="kids_section.php">Kids</a></li> 
                 <li><a href="bags_section.php">Bags</a></li> 
                 <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.html">Accessories</a></li> 
+                <li><a href="accessories_section.php">Accessories</a></li> 
             </ul>
         </nav>     
 

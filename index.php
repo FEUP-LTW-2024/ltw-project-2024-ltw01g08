@@ -84,7 +84,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
                 <li><a href="templates/kids_section.php">Kids</a></li> 
                 <li><a href="templates/bags_section.php">Bags</a></li> 
                 <li><a href="templates/jewelry_section.php">Jewelry</a></li> 
-                <li><a href="templates/accessories_section.html">Accessories</a></li> 
+                <li><a href="templates/accessories_section.php">Accessories</a></li> 
             </ul>
         </nav>
         <div class="main-bar">

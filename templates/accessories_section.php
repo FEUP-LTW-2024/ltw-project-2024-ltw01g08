@@ -11,7 +11,7 @@ try {
     $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
-    $sql = "SELECT * FROM Item WHERE department_id = 126";
+    $sql = "SELECT * FROM Item WHERE department_id = 127";
     $params = [];
 
     if ($minPrice !== false && $minPrice != null) {
@@ -26,7 +26,7 @@ try {
 
     if (!empty($categories)) {
         $placeholders = implode(', ', array_fill(0, count($categories), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 126)";
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 127)";
         foreach ($categories as $category) {
             $params[] = $category;
         }
@@ -60,7 +60,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bags Section - Elite Finds</title>
+    <title>Women's Section - Elite Finds</title>
     <link rel="stylesheet" href="../css/women_section.css">
 </head>
 <body>
@@ -82,6 +82,7 @@ try {
                         <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
                 </span>
+                
             </div>
         </div>
     </header>
@@ -89,15 +90,16 @@ try {
     <main>
         <nav class="category-bar">
             <ul>
-                <li><a href="women_section.php">Women</a></li>
-                <li><a href="men_section.php">Men</a></li>
-                <li><a href="kids_section.php">Kids</a></li>
-                <li class="pink-highlight"><a href="bags_section.php">Bags</a></li>
-                <li><a href="jewelry_section.php">Jewelry</a></li>
-                <li><a href="accessories_section.php">Accessories</a></li>
+                <li><a href="women_section.php">Women</a></li> 
+                <li><a href="men_section.php">Men</a></li> 
+                <li><a href="kids_section.php">Kids</a></li> 
+                <li><a href="bags_section.php">Bags</a></li> 
+                <li><a href="jewelry_section.php">Jewelry</a></li> 
+                <li class="pink-highlight"><a href="accessories_section.php">Accessories</a></li> 
             </ul>
-        </nav>
+        </nav>     
 
+        
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
             <form id="sorters">
@@ -109,19 +111,19 @@ try {
                 </select>
             </form>
         </aside>
-
+        
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
-            <form id="filters" method="GET" action="bags_section.php">
+            <form id="filters" method="GET" action="accesories_section.php">
                 <fieldset>
                     <legend>Category</legend>
-                    <label><input type="checkbox" value="Shoulder Bags" name="category[]">Shoulder Bags</label>
-                    <label><input type="checkbox" value="Handbags" name="category[]">Handbags</label>
-                    <label><input type="checkbox" value="Crossbody Bags" name="category[]">Crossbody Bags</label>
-                    <label><input type="checkbox" value="Clutch Bags" name="category[]">Clutch Bags</label>
+                    <label><input type="checkbox" value="Belts" name="category[]">Belts</label>
+                    <label><input type="checkbox" value="Sunglasses" name="category[]">Sunglasses</label>
+                    <label><input type="checkbox" value="Hats" name="category[]">Hats</label>
+                    <label><input type="checkbox" value="Scarfs" name="category[]">Scarfs</label>
+                    <label><input type="checkbox" value="Wallets" name="category[]">Wallets</label>
+                    <label><input type="checkbox" value="Watches" name="category[]">Watches</label>
                 </fieldset>
-
-                
 
                 <fieldset>
                     <legend>Condition</legend>
@@ -133,7 +135,15 @@ try {
                     </div>
                 </fieldset>
 
-                
+                <fieldset>
+                    <legend>Size</legend>
+                    <label><input type="checkbox" name="size[]" value="XS">XS</label>
+                    <label><input type="checkbox" name="size[]" value="S">S</label>
+                    <label><input type="checkbox" name="size[]" value="M">M</label>
+                    <label><input type="checkbox" name="size[]" value="L">L</label>
+                    <label><input type="checkbox" name="size[]" value="XL">XL</label>
+                </fieldset>
+
                 <label for="min-price">Min Price:</label>
                 <input type="text" id="min-price" name="min_price" placeholder="Min Price">
 
@@ -144,7 +154,6 @@ try {
                 <button type="submit">Apply Filters</button>
             </form>
         </aside>
-
         <div class="products">
             <?php foreach ($items as $item):
                 $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
@@ -167,36 +176,37 @@ try {
         </div>
 
         <div class="pagination">
-                <button onclick="changePage(-1)">Prev</button>
-                <span id="pageNumber">1</span>
-                <button onclick="changePage(1)">Next</button>
-            </div>
-        </main>
+            <button onclick="changePage(-1)">Prev</button>
+            <span id="pageNumber">1</span>
+            <button onclick="changePage(1)">Next</button>
+        </div>
+        
+        
+    </main>
 
-        <footer>
-            <div class="footer-content">
-                <div>
-                    <h4>Customer Care</h4>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Refer a friend</a></li>
-                        <li><a href="#">Shipping info</a></li>
-                        <li><a href="#">Returns policy</a></li>
-                        <li><a href="#">Contact us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">How to sell</a></li>
-                        <li><a href="#">Terms of service</a></li>
-                    </ul>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h4>Customer Care</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Refer a friend</a></li>
+                    <li><a href="#">Shipping info</a></li>
+                    <li><a href="#">Returns policy</a></li>
+                    <li><a href="#">Contact us</a></li>
+                </ul>
             </div>
-        </footer>
-
-        <script>
+            <div>
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">How to sell</a></li>
+                    <li><a href="#">Terms of service</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script>
             
 
             function resetFilters() {
