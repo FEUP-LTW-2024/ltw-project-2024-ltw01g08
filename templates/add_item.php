@@ -19,22 +19,27 @@
                 <textarea id="description" name="description" rows="3" required></textarea>
             </div>
             <div class="form-row">
-                <label for="department">Department</label>
-                <select id="department" name="department" required>
+            <label for="department">Department</label>
+                <select id="department" name="department" required onchange="updateCategories()">
                     <option value="" disabled selected>Select Department</option>
                     <?php
-                    $deptStmt = $pdo->query("SELECT * FROM Department");
+                    $deptStmt = $pdo->query("SELECT id, d_name FROM Department");
                     while ($row = $deptStmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
+                        echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['d_name']) . "</option>";
                     }
                     ?>
                 </select>
             </div>
             <div class="form-row">
                 <label for="category">Category</label>
-                <select id="category" name="category" required>
+                <select id="category" name="category" required onchange="updateSubcategories()">
                     <option value="" disabled selected>Select Category</option>
-                    <!-- fazer -->
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="subcategory">Subcategory</label>
+                <select id="subcategory" name="subcategory" required>
+                    <option value="" disabled selected>Select Subcategory</option>
                 </select>
             </div>
             <div class="form-row">
@@ -105,6 +110,37 @@
                 dropdownContainer.classList.remove('show');
             }
         });
+
+
+        document.getElementById('department').addEventListener('change', updateCategories);
+        document.getElementById('category').addEventListener('change', updateSubcategories);
+
+        function updateCategories() {
+            const deptId = document.getElementById('department').value;
+            fetch(`get_categories.php?deptId=${deptId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const categorySelect = document.getElementById('category');
+                    categorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
+                    data.forEach(cat => {
+                        categorySelect.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+                    });
+                });
+        }
+
+        function updateSubcategories() {
+            const categoryId = document.getElementById('category').value;
+            fetch(`get_subcategories.php?categoryId=${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const subcategorySelect = document.getElementById('subcategory');
+                    subcategorySelect.innerHTML = '<option value="" disabled selected>Select Subcategory</option>';
+                    data.forEach(sub => {
+                        subcategorySelect.innerHTML += `<option value="${sub.id}">${sub.name}</option>`;
+                    });
+                });
+        }
+
     </script>
 </body>
 </html>
