@@ -17,12 +17,10 @@ $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
 $profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png';
 
-// Fetch user details
 $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Fetch favorite items
 $favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favourite ON Item.id = Favourite.item_id WHERE Favourite.user_id = ? AND Favourite.is_active = 1");
 $favStmt->execute([$userId]);
 $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -77,12 +75,12 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div id="items" class="tab-content" style="display:block;">
-            <!-- Content for Items for Sale -->
+            <!-- conteudo de Items for Sale -->
         </div>
 
         <div id="reviews" class="tab-content" style="display:none;">
             <div class="review-container">
-                <!-- Reviews will be dynamically populated here -->
+                <!-- Reviews vêm para aqui -->
             </div>
         </div>
 
@@ -116,10 +114,9 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
        
 
 
-        <div id="add-item" class="tab-content" style="display: none;">
-            <!-- Content for Add Item -->
-        </div>
-
+<div id="add-item" class="tab-content" style="display:none;">
+    <?php include 'add_item.php'; ?>
+</div>
     </main>
 
     <footer>
