@@ -199,7 +199,7 @@ try {
         $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
         $image_url = "../images/items/item{$item['id']}_1.png";
     ?>
-        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
+        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
             <div class="product">
                 <p>@<?php echo htmlspecialchars($seller_username); ?></p>
                 <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
@@ -363,7 +363,19 @@ function resetFilters() {
 }
 
 
-    function sortProducts() {
+document.addEventListener('DOMContentLoaded', function() {
+    const productLinks = document.querySelectorAll('.product-link');
+    productLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            window.location.href = `product_page.php?product_id=${productId}`;
+        });
+    });
+});
+
+
+function sortProducts() {
     var sortBy = document.getElementById('sort-price').value;
     var container = document.querySelector('.products');
     var products = Array.from(container.querySelectorAll('.product'));
