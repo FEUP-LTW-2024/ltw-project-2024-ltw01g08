@@ -79,7 +79,9 @@ $total = 0;
             <p class="subtotal">SUBTOTAL: <span>€ <?php echo number_format($total, 2); ?></span></p>
             <p class="shipping">SHIPPING: <span>€ 10,00</span></p>
             <p class="total">TOTAL: <span>€ <?php echo number_format($total + 10, 2); ?></span></p>
-            <button class="checkout-btn">CHECKOUT</button>
+            <form action="checkout_page.php" method="post">
+                 <button type="submit" class="checkout-btn">CHECKOUT</button>
+            </form>
         </div>
     </main>
     <footer>
