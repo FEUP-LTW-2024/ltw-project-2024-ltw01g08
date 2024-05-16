@@ -1,16 +1,11 @@
 <?php
 session_start();
 
-// Check if user is not logged in, redirect to login page
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../php/login.php');
     exit;
 }
 
-session_regenerate_id(true);
-
-// Database connection setup
-$pdo = null;
 try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,14 +15,18 @@ try {
 
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
-$profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png'; // Default image 
+$profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png';
 
-$user = [];
-if ($pdo) {
-    $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
-    $stmt->execute([$userId]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+// Fetch user details
+$stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Fetch favorite items
+$favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favourite ON Item.id = Favourite.item_id WHERE Favourite.user_id = ? AND Favourite.is_active = 1");
+$favStmt->execute([$userId]);
+$favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -69,21 +68,58 @@ if ($pdo) {
                 <p>@<?php echo $username; ?></p>
             </div>
         </div>
+
         <div class="tabs">
-            <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
+            <button class="tab-link active" onclick="openTab(event, 'items')">Items for Sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
-            <button class="add-item-button" onclick="openAddItemPage()">Add Item</button>
+            <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
         </div>
+
         <div id="items" class="tab-content" style="display:block;">
-            <div class="products"></div>
+            <!-- Content for Items for Sale -->
         </div>
+
         <div id="reviews" class="tab-content" style="display:none;">
-            <div class="review-container"></div>
+            <div class="review-container">
+                <!-- Reviews will be dynamically populated here -->
+            </div>
         </div>
+
+
         <div id="favorites" class="tab-content" style="display:none;">
-            <div class="products"></div>
+    <div class="products">
+        <?php foreach ($favorites as $item): ?>
+            <div class="product">
+                <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
+                    <img src="../images/items/<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+                    <h4><?php echo htmlspecialchars($item['title']); ?></h4>
+                    <p>€<?php echo number_format($item['price'], 2); ?></p>
+                    <p>Added on: <?php echo date('j F Y', strtotime($item['added_at'])); ?></p>
+                </a>
+                <form onsubmit="removeFavorite(event, <?php echo $item['id']; ?>)">
+                    <button type="submit" class="remove-btn">Remove</button>
+                </form>
+
+                <form onsubmit="addToCart(event, <?php echo $item['id']; ?>)">
+                    <button type="submit" class="addcart-btn">Add to cart</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+        <?php if (empty($favorites)): ?>
+            <p>No favorites yet.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
+
+       
+
+
+        <div id="add-item" class="tab-content" style="display: none;">
+            <!-- Content for Add Item -->
         </div>
+
     </main>
 
     <footer>
@@ -107,104 +143,77 @@ if ($pdo) {
     </footer>
 
     <script>
-        function openAddItemPage() {
-            window.location.href = "../templates/add_item.html"; 
-        }
-
-        const itemsPerPage = 6;
-        const currentPage = {
-            items: 1,
-            favorites: 1,
-            reviews: 1
-        };
-        const products = []; // populate from server or via AJAX TODO
-        const reviews = []; // populate from server or via AJAX TODO
-        const favoriteProducts = []; // populate from server or via AJAX TODO
-
-        function displayProducts(category) {
-            const page = currentPage[category];
-            const data = (category === 'favorites' ? favoriteProducts : products);
-            const start = (page - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const productsToShow = data.slice(start, end);
-
-            const container = document.querySelector(`#${category} .products`);
-            if (data.length === 0) {
-                container.innerHTML = `<p>No ${category} yet.</p>`;
-                return;
-            }
-            container.innerHTML = productsToShow.map(product => `
-                <div class="product">
-                    <img src="${product.img}" alt="${product.title}">
-                    <p>${product.title} - ${product.price}</p>
-                    <p>${product.size}</p>
-                </div>
-            `).join('');
-
-            document.getElementById(`${category}-page-number`).textContent = page;
-        }
-
-        function displayReviews() {
-            const reviewContainer = document.querySelector('#reviews .review-container');
-            if (reviews.length === 0) {
-                reviewContainer.innerHTML = '<p>No reviews yet.</p>';
-                return;
-            }
-
-            reviewContainer.innerHTML = reviews.map(review => `
-                <div class="review">
-                    <p class="review-date">${review.date}</p>
-                    <p class="review-rating">Rating: ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
-                    <p class="review-user">@${review.user}</p>
-                    <p class="review-comment">${review.comment}</p>
-                </div>
-            `).join('');
-        }
-
         function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
+            var tabcontent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
-            tablinks = document.getElementsByClassName("tab-link");
-            for (i = 0; i < tablinks.length; i++) {
+
+            var tablinks = document.getElementsByClassName("tab-link");
+            for (var i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
+
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
-            if (!currentPage[tabName]) { 
-                currentPage[tabName] = 1; 
-            }
-            if (tabName === 'reviews') {
-                displayReviews();
-            } else {
-                displayProducts(tabName);
-            }
         }
 
-        function toggleProfileDropdown() {
+        document.getElementById('profile-icon').addEventListener('click', function(event) {
+            event.stopPropagation();
             const dropdownContainer = document.querySelector('.profile-dropdown');
             dropdownContainer.classList.toggle('show');
-        }
-
-        document.getElementById('profile-icon').addEventListener('click', function (event) {
-            event.stopPropagation(); 
-            toggleProfileDropdown();
         });
 
-        window.addEventListener('click', function (event) {
+        window.addEventListener('click', function(event) {
             const dropdownContainer = document.querySelector('.profile-dropdown');
             if (dropdownContainer.classList.contains('show')) {
                 dropdownContainer.classList.remove('show');
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            displayProducts('items');
-            displayProducts('favorites');
-            displayReviews();
+        document.addEventListener('DOMContentLoaded', function() {
+            openTab(event, 'items'); 
         });
+
+
+        function removeFavorite(event, itemId) {
+    event.preventDefault();  
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "remove_favorite.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        if (this.status === 200 && this.responseText.trim() === "Success") {
+            var productDiv = document.getElementById('product-' + itemId);
+            if (productDiv) {
+                productDiv.parentNode.removeChild(productDiv);
+            }
+            alert('Favorite removed successfully!');
+        } else {
+            alert('Error removing favorite item: ' + this.responseText);
+        }
+    };
+    xhr.send("item_id=" + itemId);
+}
+
+
+        function addToCart(event, itemId) {
+    event.preventDefault(); 
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "add_to_cart.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        if (this.status == 200) {
+            alert('Item added to cart successfully!');
+        } else {
+            alert('Error adding item to cart.');
+        }
+    };
+    xhr.send("item_id=" + itemId + "&user_id=" + <?php echo json_encode($_SESSION['user_id']); ?>);
+}
+
+
+
     </script>
 </body>
 </html>

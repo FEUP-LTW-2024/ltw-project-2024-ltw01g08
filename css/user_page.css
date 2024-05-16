@@ -271,3 +271,29 @@ header, footer {
     }
 }
 
+.remove-btn {
+    padding: 5px 10px;
+    background-color: var(--lightpink);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: var(--darkerpink);
+}
+
+
+.addcart-btn{
+    padding: 5px 10px;
+    background-color: var(--lightpink);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.addcart-btn {
+    background-color: var(--darkerpink);
+}

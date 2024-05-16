@@ -9,9 +9,7 @@
 <body>
     <?php
     session_start();
-
     $loggedIn = isset($_SESSION['user_id']);  
-
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -69,40 +67,42 @@
 
         <div class="product-container">
             <div class="product-images">
-                <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_1.png"); ?>" alt="Main Image" onclick="openImageModal(this, 0)">
+                <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_1.png"); ?>" alt="Main Image" onclick="openImageModal(this.src)">
 
                 <div class="additional-images">
-                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_2.png"); ?>" alt="Other Image 1" onclick="openImageModal(this, 1)">
-                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_3.png"); ?>" alt="Other Image 2" onclick="openImageModal(this, 2)">
+                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_2.png"); ?>" alt="Other Image 1" onclick="openImageModal(this.src)">
+                    <img src="<?php echo htmlspecialchars("../images/items/item{$product['id']}_3.png"); ?>" alt="Other Image 2" onclick="openImageModal(this.src)">
                 </div>
-
             </div>
 
-<div class="product-details">
-    <h2>€ <?php echo number_format($product['price'], 2); ?></h2>
-    <h3><?php echo htmlspecialchars($product['title']); ?></h3>
-    <ul>
-        <li><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand']); ?></li>
-        <li><strong>Size:</strong> <?php echo htmlspecialchars($product['item_size']); ?></li>
-        <li><strong>Color:</strong> <?php echo htmlspecialchars($product['color']); ?></li>
-        <li><strong>Condition:</strong> <?php echo htmlspecialchars($product['condition']); ?></li>
-    </ul>
-    <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
+            <div class="product-details">
+                <h2>€ <?php echo number_format($product['price'], 2); ?></h2>
+                <h3><?php echo htmlspecialchars($product['title']); ?></h3>
+                <ul>
+                    <li><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand']); ?></li>
+                    <li><strong>Size:</strong> <?php echo htmlspecialchars($product['item_size']); ?></li>
+                    <li><strong>Color:</strong> <?php echo htmlspecialchars($product['color']); ?></li>
+                    <li><strong>Condition:</strong> <?php echo htmlspecialchars($product['condition']); ?></li>
+                </ul>
+                <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
 
-    <!-- Add to Cart Form -->
-    <form method="POST" action="add_to_cart.php">
-        <input type="hidden" name="item_id" value="<?php echo $product['id']; ?>">
-        <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-        <button type="submit" class="add-to-cart">Add to cart</button>
-    </form>
+                <!-- Add to Cart Form -->
+                <form method="POST" action="add_to_cart.php">
+                    <input type="hidden" name="item_id" value="<?php echo $product['id']; ?>">
+                    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                    <button type="submit" class="add-to-cart">Add to cart</button>
+                </form>
 
-    <button class="add-to-favorites">Add to favourites</button>
-    <button class="make-offer" onclick="window.location.href='chat.php?seller_id=<?php echo $product['seller_id']; ?>&product_id=<?php echo $product['id']; ?>'">Make an offer</button>
-    <div class="seller-info">
-        <p><strong>Seller:</strong> <a href="other_users_page.php?user_id=<?php echo $product['seller_id']; ?>"><?php echo htmlspecialchars($product['seller_username']); ?></a></p>
-    </div>
-</div>
-
+                <!-- Add to Favorites Form -->
+                <form id="addToFavoritesForm">
+                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    <button type="submit" class="add-to-favorites">Add to favourites</button>
+                </form>
+                <button class="make-offer" onclick="window.location.href='chat.php?seller_id=<?php echo $product['seller_id']; ?>&product_id=<?php echo $product['id']; ?>'">Make an offer</button>
+                <div class="seller-info">
+                    <p><strong>Seller:</strong> <a href="other_users_page.php?user_id=<?php echo $product['seller_id']; ?>"><?php echo htmlspecialchars($product['seller_username']); ?></a></p>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -143,16 +143,26 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-        const additionalImages = document.querySelectorAll('.additional-images img');
+            document.getElementById('addToFavoritesForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                const formData = new FormData(this); // Use 'this' to refer to the form itself
 
-        additionalImages.forEach(function(image, index) {
-            image.addEventListener('click', function() {
-                const imageSrc = image.getAttribute('src');
-                openImageModal(imageSrc);
+                fetch('add_to_favorites.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
             });
         });
-    })
-</script>
+    </script>
 
 </body>
 </html>
