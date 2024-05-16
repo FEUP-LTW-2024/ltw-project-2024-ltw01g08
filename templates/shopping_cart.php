@@ -51,7 +51,7 @@ $total = 0;
     <?php foreach ($cartItems as $item): ?>
         <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['item_id']); ?>" class="product-link">
             <div class="cart-item">
-                <img src="../images/items/<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+            <img src="../images/items/<?php echo htmlspecialchars("item{$item['item_id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
                 <div class="item-details">
                     <h3><?php echo htmlspecialchars($item['title']); ?></h3>
                     <p><?php echo htmlspecialchars($item['item_size']); ?></p>

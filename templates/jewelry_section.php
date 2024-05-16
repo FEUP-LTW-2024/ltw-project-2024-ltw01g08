@@ -26,7 +26,7 @@ try {
 
     if (!empty($categories)) {
         $placeholders = implode(', ', array_fill(0, count($categories), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 126)";
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 125)";
         foreach ($categories as $category) {
             $params[] = $category;
         }
@@ -51,6 +51,7 @@ try {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +70,7 @@ try {
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">
-                        <a href="../templates/user_page.html">User Profile</a>
+                        <a href="../templates/user_page.php">User Profile</a>
                         <a href="../templates/account_info.html">Account Info</a>
                     </div>
                 </span>
@@ -89,7 +90,7 @@ try {
                 <li><a href="men_section.php">Men</a></li> 
                 <li><a href="kids_section.php">Kids</a></li> 
                 <li><a href="bags_section.php">Bags</a></li> 
-                <li><a href="jewelry_section.php">Jewelry</a></li> 
+                <li class="pink-highlight"><a href="jewelry_section.php">Jewelry</a></li> 
                 <li><a href="accessories_section.php">Accessories</a></li> 
             </ul>
         </nav>    
@@ -99,7 +100,7 @@ try {
             <h2>Sort By</h2>
             <form id="sorters">
                 <label for="sort-price">Price:</label>
-                <select id="sort-price" onchange="sortProducts();">
+                <select id="sort-price" name="sort" onchange="document.getElementById('filters').submit();">
                     <option value="default">--</option>
                     <option value="low-to-high">Low to High</option>
                     <option value="high-to-low">High to Low</option>
