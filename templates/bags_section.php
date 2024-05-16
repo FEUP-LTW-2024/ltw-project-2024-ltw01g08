@@ -73,8 +73,8 @@ try {
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">
-                        <a href="../templates/user_page.html">User Profile</a>
-                        <a href="../templates/account_info.html">Account Info</a>
+                        <a href="../templates/user_page.php">User Profile</a>
+                        <a href="../templates/account_info.php">Account Info</a>
                     </div>
                 </span>
                 <span>

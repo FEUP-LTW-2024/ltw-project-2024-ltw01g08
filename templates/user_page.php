@@ -90,7 +90,7 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($favorites as $item): ?>
             <div class="product">
                 <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
-                    <img src="../images/items/<?php echo htmlspecialchars("item{$item['item_id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+                    <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
                     <h4><?php echo htmlspecialchars($item['title']); ?></h4>
                     <p>€<?php echo number_format($item['price'], 2); ?></p>
                     <p>Added on: <?php echo date('j F Y', strtotime($item['added_at'])); ?></p>

@@ -71,7 +71,7 @@ try {
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">
                         <a href="../templates/user_page.php">User Profile</a>
-                        <a href="../templates/account_info.html">Account Info</a>
+                        <a href="../templates/account_info.php">Account Info</a>
                     </div>
                 </span>
                 <span>
@@ -100,7 +100,7 @@ try {
             <h2>Sort By</h2>
             <form id="sorters">
                 <label for="sort-price">Price:</label>
-                <select id="sort-price" name="sort" onchange="document.getElementById('filters').submit();">
+                <select id="sort-price" onchange="sortProducts();">
                     <option value="default">--</option>
                     <option value="low-to-high">Low to High</option>
                     <option value="high-to-low">High to Low</option>
@@ -139,6 +139,7 @@ try {
                 <button type="submit">Apply Filters</button>
             </form>
         </aside>
+        
         <div class="products">
         <?php foreach ($items as $item):
             $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
