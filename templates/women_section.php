@@ -83,7 +83,9 @@ try {
             <input type="text" placeholder="Search" class="search-bar">
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
-                <span>H</span>
+            <a href="all_chats.php">
+                <span>M</span>
+            </a>
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">

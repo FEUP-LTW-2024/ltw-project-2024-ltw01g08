@@ -9,6 +9,19 @@
 <body>
     <div class="form-signup">
         <h2>Create an account</h2>
+        <?php session_start(); ?>
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger">
+                <?php echo $_SESSION['error_message']; ?>
+                <?php unset($_SESSION['error_message']); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <?php echo $_SESSION['success_message']; ?>
+                <?php unset($_SESSION['success_message']); ?>
+            </div>
+        <?php endif; ?>
         <form action="../php/signup.php" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="fname">First Name:</label>

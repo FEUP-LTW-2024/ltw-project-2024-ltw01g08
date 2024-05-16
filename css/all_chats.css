@@ -1,0 +1,83 @@
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+    --gray: #666;
+    --light-gray: #ccc;
+}
+
+/* Basic Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif; /* Consistent font usage */
+    background-color: var(--white); /* Using defined white color */
+}
+
+/* Container Styling */
+.chat-list-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--white); /* Background color as per theme */
+    border: 1px solid var(--light-gray); /* Light gray border */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Header Styling */
+h1 {
+    font-size: 24px;
+    color: var(--black); /* Text color for headers */
+    text-align: center;
+}
+
+/* List Styling */
+.chat-list {
+    list-style: none;
+    padding: 0;
+}
+
+.chat-list li {
+    border-bottom: 1px solid var(--light-gray); /* Light gray for separation */
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-list li:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+
+/* Link Styling */
+.chat-list li a {
+    text-decoration: none;
+    color: var(--darkerpink); /* Use darker pink for links */
+    font-weight: bold; /* Maintaining bold weight for emphasis */
+}
+
+.chat-list li a:hover {
+    text-decoration: underline; /* Underline on hover for better UX */
+    color: var(--lightpink); /* Lighter pink on hover */
+}
+
+/* Span Styling for Timestamp */
+span {
+    font-size: 12px;
+    color: var(--gray); /* Using gray for less emphasis */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-list-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px; /* Smaller font size for smaller screens */
+    }
+}
