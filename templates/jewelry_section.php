@@ -3,22 +3,17 @@ try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Get parameters and sanitize inputs
-    $sort = filter_input(INPUT_GET, 'sort', 513);
+    $sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
 
     $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $subcategories = filter_input(INPUT_GET, 'subcategory', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
-    // Initialize the SQL query
-    $sql = "SELECT * FROM Item WHERE department_id = 124";
+    $sql = "SELECT * FROM Item WHERE department_id = 125";
     $params = [];
 
-    // Conditions for price
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
         $params[] = $minPrice;
@@ -29,21 +24,11 @@ try {
         $params[] = $maxPrice;
     }
 
-    // Process categories
     if (!empty($categories)) {
         $placeholders = implode(', ', array_fill(0, count($categories), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 124)";
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 126)";
         foreach ($categories as $category) {
             $params[] = $category;
-        }
-    }
-
-    // Process subcategories
-    if (!empty($subcategories)) {
-        $placeholders = implode(', ', array_fill(0, count($subcategories), '?'));
-        $sql .= " AND subcategory_id IN ($placeholders)";
-        foreach ($subcategories as $subcategory) {
-            $params[] = $subcategory;
         }
     }
 
@@ -52,14 +37,6 @@ try {
         $sql .= " AND condition IN ($conditionPlaceholders)";
         foreach ($conditions as $condition) {
             $params[] = $condition;
-        }
-    }
-
-    if (!empty($sizes)) {
-        $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
-        $sql .= " AND item_size IN ($sizePlaceholders)";
-        foreach ($sizes as $size) {
-            $params[] = $size;
         }
     }
 
@@ -74,13 +51,12 @@ try {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kids' Section - Elite Finds</title>
+    <title>Jewelry Section - Elite Finds</title>
     <link rel="stylesheet" href="../css/women_section.css">
 </head>
 <body>
@@ -111,13 +87,14 @@ try {
             <ul>
                 <li><a href="women_section.php">Women</a></li> 
                 <li><a href="men_section.php">Men</a></li> 
-                <li class="pink-highlight"><a href="kids_section.php">Kids</a></li> 
+                <li><a href="kids_section.php">Kids</a></li> 
                 <li><a href="bags_section.php">Bags</a></li> 
                 <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.html">Accessories</a></li> 
+                <li><a href="accessories_section.php">Accessories</a></li> 
             </ul>
-        </nav>     
+        </nav>    
 
+        
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
             <form id="sorters">
@@ -129,21 +106,16 @@ try {
                 </select>
             </form>
         </aside>
-
+        
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
-            <form id="filters" method="GET" action="kids_section.php">
+            <form id="filters" method="GET" action="jewelry_section.php">
                 <fieldset>
                     <legend>Category</legend>
-                    <label><input type="checkbox" value="Girl" name="category[]">Girl</label>
-                    <label><input type="checkbox" value="Boy" name="category[]">Boy</label>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Subcategory</legend>
-                    <div id="subcategory-container">
-                        <!-- Subcategories will be populated here -->
-                    </div>
+                    <label><input type="checkbox" value="Rings" name="category[]">Rings</label>
+                    <label><input type="checkbox" value="Necklaces" name="category[]">Necklaces</label>
+                    <label><input type="checkbox" value="Earrings" name="category[]">Earrings</label>
+                    <label><input type="checkbox" value="Bracelets" name="category[]">Bracelets</label>
                 </fieldset>
 
                 <fieldset>
@@ -156,15 +128,6 @@ try {
                     </div>
                 </fieldset>
 
-                <fieldset>
-                    <legend>Size</legend>
-                    <label><input type="checkbox" name="size[]" value="XS">XS</label>
-                    <label><input type="checkbox" name="size[]" value="S">S</label>
-                    <label><input type="checkbox" name="size[]" value="M">M</label>
-                    <label><input type="checkbox" name="size[]" value="L">L</label>
-                    <label><input type="checkbox" name="size[]" value="XL">XL</label>
-                </fieldset>
-
                 <label for="min-price">Min Price:</label>
                 <input type="text" id="min-price" name="min_price" placeholder="Min Price">
 
@@ -175,16 +138,12 @@ try {
                 <button type="submit">Apply Filters</button>
             </form>
         </aside>
-
         <div class="products">
         <?php foreach ($items as $item):
-            // Assuming you have a seller_id and need to fetch the seller's username for each item
             $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
             $seller_username_stmt->execute([$item['seller_id']]);
             $seller_username = $seller_username_stmt->fetchColumn();
-
-            // If no username was found, use a placeholder or empty string
-            $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
+            $seller_username = $seller_username ?: 'Unknown';
             $image_url = "../images/items/item{$item['id']}_1.png";
         ?>
             <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link">
@@ -195,7 +154,6 @@ try {
                         <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
                     </div>
                     <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                    <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                 </div>
             </a>
         <?php endforeach; ?>
@@ -232,40 +190,6 @@ try {
     </footer>
 
     <script>
-        function updateSubcategories() {
-            var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:checked');
-            var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
-            var subcategoryContainer = document.getElementById('subcategory-container');
-            subcategoryContainer.innerHTML = '';
-
-            var options = {
-                'Girl': ['Dresses', 'Tops', 'Jeans', 'Skirts', 'Shorts', 'Pants', 'Swimwear', 'Coats', 'Shoes'],
-                'Boy': ['Tops', 'Jeans', 'Shorts', 'Pants', 'Swimwear', 'Coats', 'Shoes']
-            };
-
-            selectedCategories.forEach(category => {
-        if (options[category]) {
-            options[category].forEach(sub => {
-                var label = document.createElement('label');
-                var checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = sub;
-                checkbox.name = 'subcategory[]';
-                label.appendChild(checkbox);
-                label.append(sub);
-                subcategoryContainer.appendChild(label);
-            });
-        }
-    });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]');
-            categoryCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateSubcategories);
-            });
-        });
-
         function resetFilters() {
             document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
@@ -284,8 +208,8 @@ try {
             var products = Array.from(container.querySelectorAll('.product'));
 
             products.sort(function(a, b) {
-                var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
-                var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+                var priceA = parseFloat(a.querySelector('p:last-child').textContent.replace(/[^\d.]/g, ''));
+                var priceB = parseFloat(b.querySelector('p:last-child').textContent.replace(/[^\d.]/g, ''));
 
                 if (sortBy === 'low-to-high') {
                     return priceA - priceB;
@@ -295,6 +219,7 @@ try {
                 return 0;
             });
 
+            // Re-append sorted products
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
             }
@@ -304,9 +229,9 @@ try {
             });
         }
 
+
         const productsPerPage = 9;
         let currentPage = 1;
-
 
         function paginateProducts() {
             const products = document.querySelectorAll('.product');
@@ -330,8 +255,24 @@ try {
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            updateSubcategories();
-            paginateProducts(); 
+            paginateProducts();
+        });
+
+        function toggleProfileDropdown() {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            dropdownContainer.classList.toggle('show');
+        }
+
+        document.getElementById('profile-icon').addEventListener('click', function (event) {
+            event.stopPropagation();
+            toggleProfileDropdown();
+        });
+
+        window.addEventListener('click', function () {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            if (dropdownContainer.classList.contains('show')) {
+                dropdownContainer.classList.remove('show');
+            }
         });
     </script>
 </body>
