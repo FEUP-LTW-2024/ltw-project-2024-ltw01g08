@@ -82,7 +82,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
                 <li><a href="templates/women_section.php">Women</a></li> 
                 <li><a href="templates/men_section.php">Men</a></li> 
                 <li><a href="templates/kids_section.php">Kids</a></li> 
-                <li><a href="templates/bags_section.html">Bags</a></li> 
+                <li><a href="templates/bags_section.php">Bags</a></li> 
                 <li><a href="templates/jewelry_section.html">Jewelry</a></li> 
                 <li><a href="templates/accessories_section.html">Accessories</a></li> 
             </ul>

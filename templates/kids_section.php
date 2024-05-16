@@ -112,7 +112,7 @@ try {
                 <li><a href="women_section.php">Women</a></li> 
                 <li><a href="men_section.php">Men</a></li> 
                 <li class="pink-highlight"><a href="kids_section.php">Kids</a></li> 
-                <li><a href="bags_section.html">Bags</a></li> 
+                <li><a href="bags_section.php">Bags</a></li> 
                 <li><a href="jewelry_section.html">Jewelry</a></li> 
                 <li><a href="accessories_section.html">Accessories</a></li> 
             </ul>
