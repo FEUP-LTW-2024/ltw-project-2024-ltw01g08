@@ -34,33 +34,27 @@ main {
     padding: 20px;
 }
 
-
-
-
-
-
-
 .item-details h3 {
-    margin: 0; /* Removes default margin */
+    margin: 0; 
     font-size: 16px;
-    flex-grow: 1; /* Allows the title to take up any extra space */
+    flex-grow: 1; 
 }
 
 .item-details p {
-    margin: 0 10px 0 0; /* Only right margin */
+    margin: 0 10px 0 0; 
     color: #666;
 }
 
 .item-price {
     font-size: 16px;
     font-weight: bold;
-    margin-left: auto; /* Pushes the price to the right */
+    margin-left: auto; 
 }
 
 .cart-summary {
     text-align: right;
     padding: 20px 0;
-    position: relative; /* Needed for absolute positioning of the line */
+    position: relative; 
 }
 
 .cart-summary .line {
@@ -68,7 +62,7 @@ main {
     left: 0;
     right: 0;
     top: 0;
-    border-top: 1px solid #ccc; /* Light gray line */
+    border-top: 1px solid #ccc; 
 }
 
 .cart-summary p {
@@ -78,7 +72,7 @@ main {
 }
 
 .cart-summary p span {
-    font-weight: bold; /* Makes the price bold */
+    font-weight: bold; 
 }
 
 .checkout-btn {
@@ -88,11 +82,10 @@ main {
     border: none;
     cursor: pointer;
     font-size: 16px;
-    width: 100%; /* Full width button */
-    margin-top: 10px; /* Space above the button */
+    width: 100%; 
+    margin-top: 10px; 
 }
 
-/* Additional styles to ensure everything aligns nicely */
 .main {
     padding: 20px;
 }
@@ -100,7 +93,7 @@ main {
 
 
 .cart-item img {
-    width: 100px; /* Fixed width for the image */
+    width: 100px; 
     height: auto;
     margin-right: 20px;
 }
@@ -108,18 +101,18 @@ main {
 
 
 .item-details h3, .item-details p {
-    margin: 0; /* Removes default margin */
+    margin: 0; 
 }
 
 .item-price {
     font-size: 16px;
     font-weight: bold;
-    margin-left: auto; /* Pushes the price to the right */
+    margin-left: auto; 
 }
 
 .footer-section {
     padding: 10px 0;
-    background-color: #eee; /* Footer background */
+    background-color: #eee; 
 }
 
 .top-bar {
@@ -150,13 +143,11 @@ main {
 }
 
 
-/* Dropdown Container */
 .profile-dropdown {
     position: relative;
     display: inline-block;
 }
 
-/* Dropdown Content: Initially Hidden */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -169,7 +160,6 @@ main {
 }
 
 
-/* Links in the Dropdown */
 .dropdown-content a {
     color: var(--black);
     padding: 8px 12px;
@@ -182,7 +172,6 @@ main {
     background-color: var(--lightpink);
 }
 
-/* Toggling Visibility: Make Dropdown Visible */
 .profile-dropdown.show .dropdown-content {
     display: block;
 }
@@ -190,27 +179,74 @@ main {
 
 
 .remove-item {
-    color: red;
-    cursor: pointer;
     text-decoration: none;
-    margin-left: 10px; /* space from the price */
-    font-size: 16px;
+    color: red; 
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    margin-top: 10px; 
 }
+
+.remove-item:hover {
+    text-decoration: underline; 
+}
+
+
 
 .cart-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px;
-    border-bottom: 1px solid #ccc; /* Add a subtle line between items */
+    border-bottom: 1px solid #ccc;
+}
+
+
+.cart-item img {
+    width: 100px; 
+    height: auto;
+    margin-right: 20px;
+}
+
+
+.cart-item a {
+    text-decoration: none; 
+    color: inherit; 
+    font-weight: bold; 
+}
+
+
+.item-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .item-details {
-    flex-grow: 1;
-    padding: 0 15px; /* Give some spacing around the text */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.item-price-action {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.cart-item h3 {
+    margin: 0; 
+    font-size: 16px; 
+}
+
+.cart-item p {
+    margin: 5px 0; 
+    font-size: 14px; 
 }
 
 .item-price {
+    font-size: 16px;
     font-weight: bold;
-    margin-right: 10px; /* Space before the remove link */
+    color: #000; 
 }
