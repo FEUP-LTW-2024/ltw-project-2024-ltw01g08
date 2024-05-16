@@ -1,22 +1,41 @@
-/*NOT DONE. Foi só para testar o chat*/
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+    --gray: #666;
+    --light-gray: #ccc;
 }
 
+/* Base Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--white);
+    color: var(--black);
+}
+
+/* Chat Container */
 .chat-container {
     width: 80%;
     margin: auto;
     padding: 20px;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px var(--light-gray);
+    background-color: #fff; /* Adds a background color to make the chat stand out */
+    border-radius: 10px; /* Rounded corners for modern look */
 }
 
+/* Messages Container */
 .messages {
     height: 300px;
     overflow-y: scroll;
-    border: 1px solid #ccc;
+    border: 1px solid var(--light-gray);
     padding: 10px;
+    background-color: var(--white); /* Ensure background consistency */
 }
 
+/* Individual Messages */
 .message {
     padding: 5px;
     margin-bottom: 10px;
@@ -25,32 +44,60 @@ body {
 
 .sent {
     text-align: right;
-    background-color: #dff0d8;
+    background-color: var(--darkerpink); /* Theme color for sent messages */
+    color: var(--white); /* White text for contrast */
 }
 
 .received {
     text-align: left;
-    background-color: #f2f2f2;
+    background-color: #f2f2f2; /* Lighter for received messages */
 }
 
+/* Message Details */
 .details {
     font-size: 0.8em;
     opacity: 0.6;
+    color: var(--gray); /* Use theme gray for details */
 }
 
+/* Textarea for Message Input */
 textarea {
     width: 100%;
     height: 50px;
     margin-top: 10px;
     padding: 10px;
     box-sizing: border-box;
+    border: 2px solid var(--light-gray);
+    border-radius: 5px;
 }
 
+/* Send Button */
 button {
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--darkerpink); /* Theme color */
+    color: var(--white);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    display: block;
+    margin-top: 10px; /* Adjust margin */
+    width: auto; /* Adjust width to content */
+}
+
+/* Styling for Links (if any) and hover effects */
+a {
+    color: var(--darkerpink); /* Link color matching the theme */
+    text-decoration: none; /* No underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover for better UX */
+}
+
+/* Responsive Design Considerations */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 95%; /* More screen-responsive */
+        padding: 10px;
+    }
 }
