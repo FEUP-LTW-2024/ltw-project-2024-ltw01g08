@@ -4,7 +4,8 @@
     $sql_dep = "SELECT * FROM Department";
     $params_dep = [];
 
-
+    $sql_cat = "SELECT * FROM Department";
+    $params_cat = [];
 
     $stmt = $pdo->prepare($sql_dep);
     $stmt->execute($params_dep);
@@ -29,7 +30,7 @@
         <form id="editForm" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <label for="editOption">Select Option to Add:</label>
-                <select id="editOption" name="editOption" onchange="toggleDepartmentSelect(); toggleCategorySelect(this.value);">
+                <select id="editOption" name="editOption" onchange="toggleDepartmentSelect()">
                     <option value="" disabled selected>Select Option</option>
                     <option value="category">Add Category</option>
                     <option value="subcategory">Add Subcategory</option>
@@ -39,23 +40,32 @@
             </div>
 
             <div id="departmentSelect" class="form-row" style="display: none;">
-                <label for="department">Select Department to Edit:</label>
+            <label for="department">Select Department to Edit:</label>
                 <select id="department" name="department">
                     <option value="" disabled selected>Select Option</option>
-                    <?php foreach ($departments_ as $department): ?>
-                        <option value="<?php echo $department['id']; ?>"> 
-                            <?php echo htmlspecialchars($department['d_name']); ?>
-                        </option>
-                    <?php endforeach; ?>
+                        <?php foreach ($departments_ as $department): ?>
+                            <option value="department"> 
+                                <?php echo htmlspecialchars($department['d_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
                 </select>
+            </label>
+
             </div>
 
+
             <div id="categorySelect" class="form-row" style="display: none;">
-                <label for="category">Select Category to Edit:</label>
+            <label for="category">Select Category to Edit:</label>
                 <select id="category" name="category">
                     <option value="" disabled selected>Select Option</option>
-                    <!-- Categories will be populated dynamically based on the selected department -->
+                        <?php foreach ($categories_ as $category_): ?>
+                            <option value="category"> 
+                                <?php echo htmlspecialchars($category_['c_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
                 </select>
+            </label>
+
             </div>
 
             <div class="form-row">
@@ -97,58 +107,17 @@
                 departmentSelect.style.display = "none";
             }
         }
-        function toggleCategorySelect(editOption) {
-            var categorySelect = document.getElementById("categorySelect");
+
+        function toggleCategorySelect() {
+            var editOption = document.getElementById("editOption").value;
+            var departmentSelect = document.getElementById("categorySelect");
 
             if (editOption === "subcategory") {
-                categorySelect.style.display = "block";
-                var departmentId = document.getElementById("department").value;
-                // Call a function to fetch categories based on the selected department
-                fetchCategories(departmentId);
+                departmentSelect.style.display = "block";
             } else {
-                categorySelect.style.display = "none";
+                departmentSelect.style.display = "none";
             }
         }
-
-        function fetchCategories(departmentId) {
-    // Make an AJAX request to fetch categories
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_categories.php?departmentId=' + departmentId, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Parse the JSON response
-            var categories = JSON.parse(xhr.responseText);
-
-            // Get the category select element
-            var categorySelect = document.getElementById('category');
-
-            // Clear existing options
-            categorySelect.innerHTML = '';
-
-            // Add a default option
-            var defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Select Category';
-            categorySelect.appendChild(defaultOption);
-
-            // Populate select options with categories
-            categories.forEach(function(category) {
-                var option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.c_name;
-                categorySelect.appendChild(option);
-            });
-        }
-    };
-    xhr.send();
-}
-
-document.getElementById('department').addEventListener('change', function() {
-    var departmentId = this.value;
-    if (departmentId) {
-        fetchCategories(departmentId);
-    }
-});
     </script>
 </body>
 </html>

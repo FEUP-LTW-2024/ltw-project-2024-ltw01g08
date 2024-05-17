@@ -85,7 +85,7 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
           
-            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
+                <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
             
 
         </div>
