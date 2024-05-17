@@ -21,6 +21,13 @@ $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$isAdmin = false;
+$adminStmt = $pdo->prepare("SELECT * FROM Admin WHERE user_id = ?");
+$adminStmt->execute([$userId]);
+if ($adminStmt->rowCount() > 0) {
+    $isAdmin = true;
+}
+
 $favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favourite ON Item.id = Favourite.item_id WHERE Favourite.user_id = ? AND Favourite.is_active = 1");
 $favStmt->execute([$userId]);
 $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -62,7 +69,12 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="user-profile">
             <img src="<?php echo $profilePic; ?>" alt="User's Profile" class="profile-photo">
             <div class="user-details">
-                <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h1>
+                <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?>
+                <?php if ($isAdmin) { ?>
+                    (Admin User)
+                   <?php } else {?>
+                    (NOT Admin User)
+                    <?php } ?></h1>
                 <p>@<?php echo $username; ?></p>
             </div>
         </div>
@@ -72,6 +84,10 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
+          
+            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
+            
+
         </div>
 
         <div id="items" class="tab-content" style="display:block;">
@@ -116,6 +132,9 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div id="add-item" class="tab-content" style="display:none;">
     <?php include 'add_item.php'; ?>
+</div>
+<div id="edit_site" class="tab-content" style="display:none;">
+    <?php include 'edit_site.php'; ?>
 </div>
     </main>
 

@@ -17,6 +17,9 @@ try {
     $sql = "SELECT * FROM Item WHERE department_id = 123";
     $params = [];
 
+    $sql_category = "SELECT * FROM Category WHERE department_id = 123";
+    $params_category = [];
+
     // Conditions for price
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
@@ -61,6 +64,10 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare($sql_category);
+    $stmt->execute($params_category);
+    $categories_=$stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -124,16 +131,15 @@ try {
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters" method="GET" action="men_section.php">
-                <fieldset>
-                    <legend>Category</legend>
-                    <label><input type="checkbox" value="Coats" name="category[]">Coats</label>
-                    <label><input type="checkbox" value="Shirts" name="category[]">Shirts</label>
-                    <label><input type="checkbox" value="Shoes" name="category[]">Shoes</label>
-                    <label><input type="checkbox" value="Jeans" name="category[]">Jeans</label>
-                    <label><input type="checkbox" value="Pants" name="category[]">Pants</label>
-                    <label><input type="checkbox" value="Shorts" name="category[]">Shorts</label>
-                    <label><input type="checkbox" value="Swimwear" name="category[]">Swimwear</label>
-                </fieldset>
+            <fieldset>
+                <legend>Category</legend>
+                <?php foreach ($categories_ as $category): ?>
+                    <label>
+                        <input type="checkbox" value="<?php echo htmlspecialchars($category['c_name']); ?>" name="category[]">
+                        <?php echo htmlspecialchars($category['c_name']); ?>
+                    </label>
+                <?php endforeach; ?>
+            </fieldset>
 
                 <fieldset>
                     <legend>Subcategory</legend>

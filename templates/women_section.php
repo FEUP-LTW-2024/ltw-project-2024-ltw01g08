@@ -11,9 +11,14 @@ try {
     $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
+
+
     // Initialize the SQL query
     $sql = "SELECT * FROM Item WHERE department_id = 122";
     $params = [];
+
+    $sql_category = "SELECT * FROM Category WHERE department_id = 122";
+    $params_category = [];
 
     // conditions for price
     if ($minPrice !== false && $minPrice != null) {
@@ -61,7 +66,13 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
+
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    $stmt = $pdo->prepare($sql_category);
+    $stmt->execute($params_category);
+    $categories_=$stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -131,20 +142,17 @@ try {
             <h2>Filter By</h2>
             <form id="filters" method="GET">
     
-    <fieldset>
-        <legend>Category</legend>
-        <label><input type="checkbox" value="Dresses" name="category[]">Dresses</label>
-        <label><input type="checkbox" value="Coats" name="category[]">Coats</label>
-        <label><input type="checkbox" value="Shoes" name="category[]">Shoes</label>
-        <label><input type="checkbox" value="Jeans" name="category[]">Jeans</label>
-        <label><input type="checkbox" value="Pants" name="category[]">Pants</label>
-        <label><input type="checkbox" value="Shorts" name="category[]">Shorts</label>
-        <label><input type="checkbox" value="Skirts" name="category[]">Skirts</label>
-        <label><input type="checkbox" value="Swimwear" name="category[]">Swimwear</label>
-        <label><input type="checkbox" value="Tops" name="category[]">Tops</label>
-    </fieldset>
+            <fieldset>
+                <legend>Category</legend>
+                <?php foreach ($categories_ as $category): ?>
+                    <label>
+                        <input type="checkbox" value="<?php echo htmlspecialchars($category['c_name']); ?>" name="category[]">
+                        <?php echo htmlspecialchars($category['c_name']); ?>
+                    </label>
+                <?php endforeach; ?>
+            </fieldset>
 
-            
+        
     
                 <fieldset>
                     <legend>Subcategory</legend>

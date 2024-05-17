@@ -15,6 +15,9 @@ try {
     $sql = "SELECT * FROM Item WHERE department_id = 127";
     $params = [];
 
+    $sql_category = "SELECT * FROM Category WHERE department_id = 127";
+    $params_category = [];
+
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
         $params[] = $minPrice;
@@ -48,6 +51,10 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare($sql_category);
+    $stmt->execute($params_category);
+    $categories_=$stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -114,13 +121,13 @@ try {
             <h2>Filter By</h2>
             <form id="filters" method="GET" action="accessories_section.php">
                 <fieldset>
-                    <legend>Category</legend>
-                    <label><input type="checkbox" value="Belts" name="category[]">Belts</label>
-                    <label><input type="checkbox" value="Sunglasses" name="category[]">Sunglasses</label>
-                    <label><input type="checkbox" value="Hats" name="category[]">Hats</label>
-                    <label><input type="checkbox" value="Scarfs" name="category[]">Scarfs</label>
-                    <label><input type="checkbox" value="Wallets" name="category[]">Wallets</label>
-                    <label><input type="checkbox" value="Watches" name="category[]">Watches</label>
+                        <legend>Category</legend>
+                        <?php foreach ($categories_ as $category): ?>
+                            <label>
+                                <input type="checkbox" value="<?php echo htmlspecialchars($category['c_name']); ?>" name="category[]">
+                                <?php echo htmlspecialchars($category['c_name']); ?>
+                            </label>
+                        <?php endforeach; ?>
                 </fieldset>
 
                 <fieldset>
