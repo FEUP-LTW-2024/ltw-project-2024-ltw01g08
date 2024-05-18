@@ -104,7 +104,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
         </div>
 
         <div class="search-bar">
-            <form action="search_results.php" method="get">
+            <form action="templates/search_results.php" method="get">
                 <input type="text" name="query" placeholder="Search for items">
                 <button type="submit">Search</button>
             </form>
