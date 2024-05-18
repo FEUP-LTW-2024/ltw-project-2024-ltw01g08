@@ -9,6 +9,7 @@
 - [x] Log in and out
 - [x] Edit their profile, including their name, username, password, and email.
 - [x] Browse items using filters like category, price, and condition.
+- [x] Browse items using input.
 - [x] Engage with sellers to ask questions or negotiate prices.
 - [x] Add items to a wishlist or shopping cart.
 - [ ] Proceed to checkout with their shopping cart (simulate payment process).

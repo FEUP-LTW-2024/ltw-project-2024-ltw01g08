@@ -131,7 +131,7 @@ try {
     <main>
         <nav class="category-bar">
             <ul>
-                <li class="pink-highlight"><a href="women_section.php">Women</a></li> 
+                <li><a href="women_section.php">Women</a></li> 
                 <li><a href="men_section.php">Men</a></li> 
                 <li><a href="kids_section.php">Kids</a></li> 
                 <li><a href="bags_section.php">Bags</a></li> 
