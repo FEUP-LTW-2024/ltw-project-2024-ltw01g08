@@ -1,26 +1,27 @@
 <?php
-try {
-    // Establish database connection
-    $pdo = new PDO('sqlite:../database/database.db');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// fetch_categories.php
+if (isset($_GET['departmentId'])) {
+    $departmentId = $_GET['departmentId'];
 
-    // Check if departmentId is set in the GET request
-    if (isset($_GET['departmentId'])) {
-        $departmentId = $_GET['departmentId'];
+    try {
+        $pdo = new PDO('sqlite:../database/database.db');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Prepare the SQL statement to fetch categories based on department ID
-        $sql_cat = "SELECT * FROM Category WHERE department_id = :department_id";
-        $stmt = $pdo->prepare($sql_cat);
-        $stmt->bindParam(':department_id', $departmentId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Fetch all categories and return as JSON
+        $sql = "SELECT id, c_name FROM Category WHERE department_id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$departmentId]);
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($categories);
-    } else {
-        echo json_encode([]);
+
+        if ($categories) {
+            foreach ($categories as $category) {
+                echo '<option value="' . $category['id'] . '">' . htmlspecialchars($category['c_name']) . '</option>';
+            }
+        } else {
+            echo '<option value="" disabled>No Categories Found</option>';
+        }
+    } catch (PDOException $e) {
+        echo '<option value="" disabled>Error fetching categories</option>';
     }
-} catch (PDOException $e) {
-    echo 'Connection failed: ' . $e->getMessage();
 }
 ?>
+
