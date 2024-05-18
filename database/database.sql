@@ -16,8 +16,8 @@ CREATE TABLE User (
 DROP TABLE IF EXISTS Admin;
 
 CREATE TABLE Admin (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER PRIMARY KEY REFERENCES User(id)
+  user_id INTEGER PRIMARY KEY,
+  FOREIGN KEY (user_id) REFERENCES User(id) ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Department;
@@ -32,79 +32,140 @@ DROP TABLE IF EXISTS Category;
 CREATE TABLE Category (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   c_name TEXT NOT NULL,
-  department_id INTEGER NOT NULL REFERENCES Department(id)
+  department_id INTEGER NOT NULL,
+  FOREIGN KEY (department_id) REFERENCES Department(id) ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Subcategory;
-
 CREATE TABLE Subcategory (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   subc_name TEXT NOT NULL,
-  category_id INTEGER NOT NULL REFERENCES Category(id)
+  category_id INTEGER NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES Category(id) ON UPDATE CASCADE
 );
+
+
+
+DROP TABLE IF EXISTS ItemConditions;
+
+CREATE TABLE ItemConditions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    condition_description TEXT NOT NULL UNIQUE
+);
+
+INSERT INTO ItemConditions (id, condition_description) VALUES (178, 'Excellent');
+INSERT INTO ItemConditions (id, condition_description) VALUES (179, 'Very Good');
+INSERT INTO ItemConditions (id, condition_description) VALUES (180, 'Good');
+INSERT INTO ItemConditions (id, condition_description) VALUES (181, 'Bad');
+
+
+
+DROP TABLE IF EXISTS ItemSizes;
+
+CREATE TABLE ItemSizes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    size_description TEXT NOT NULL UNIQUE
+);
+
+INSERT INTO ItemSizes (id, size_description) VALUES (160, 'XS');
+INSERT INTO ItemSizes (id, size_description) VALUES (161, 'S');
+INSERT INTO ItemSizes (id, size_description) VALUES (162, 'M');
+INSERT INTO ItemSizes (id, size_description) VALUES (163, 'L');
+INSERT INTO ItemSizes (id, size_description) VALUES (164, 'XL');
+INSERT INTO ItemSizes (id, size_description) VALUES (165, 'XXL');
+INSERT INTO ItemSizes (id, size_description) VALUES (166, 'XXXL');
+INSERT INTO ItemSizes (id, size_description) VALUES (167, '36');
+INSERT INTO ItemSizes (id, size_description) VALUES (168, '37');
+INSERT INTO ItemSizes (id, size_description) VALUES (169, '38');
+INSERT INTO ItemSizes (id, size_description) VALUES (170, '39');
+INSERT INTO ItemSizes (id, size_description) VALUES (171, '40');
+INSERT INTO ItemSizes (id, size_description) VALUES (172, '41');
+INSERT INTO ItemSizes (id, size_description) VALUES (173, '42');
+INSERT INTO ItemSizes (id, size_description) VALUES (174, '43');
+INSERT INTO ItemSizes (id, size_description) VALUES (175, '44');
+INSERT INTO ItemSizes (id, size_description) VALUES (176, '45');
+
+
 
 DROP TABLE IF EXISTS Item;
 
 CREATE TABLE Item (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  seller_id INTEGER NOT NULL REFERENCES User(id),
-  title TEXT NOT NULL,
-  item_description TEXT NOT NULL,
-  department_id INTEGER NOT NULL REFERENCES Department(id),
-  category_id INTEGER NOT NULL REFERENCES Category(id),
-  subcategory_id INTEGER REFERENCES Subcategory(id),
-  brand TEXT NOT NULL,
-  item_size TEXT NOT NULL,
-  color TEXT NOT NULL,
-  condition TEXT NOT NULL,
-  price DECIMAL(10, 2),
-  image_url TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    seller_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    item_description TEXT NOT NULL,
+    department_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    subcategory_id INTEGER,
+    brand TEXT NOT NULL,
+    item_size INTEGER,
+    color TEXT NOT NULL,
+    condition INTEGER NOT NULL, 
+    price DECIMAL(10, 2),
+    image_url TEXT,
+    FOREIGN KEY (seller_id) REFERENCES User(id) ON UPDATE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES Department(id) ON UPDATE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Category(id) ON UPDATE CASCADE,
+    FOREIGN KEY (subcategory_id) REFERENCES Subcategory(id) ON UPDATE CASCADE,
+    FOREIGN KEY (item_size) REFERENCES ItemSizes(id) ON UPDATE CASCADE,
+    FOREIGN KEY (condition) REFERENCES ItemConditions(id) ON UPDATE CASCADE
 );
+
+
+
 
 DROP TABLE IF EXISTS "Transaction";
 
 CREATE TABLE "Transaction" (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    buyer_id INTEGER NOT NULL REFERENCES User(id),
-    seller_id INTEGER NOT NULL REFERENCES User(id),
-    item_id INTEGER NOT NULL REFERENCES Item(id),
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    price DECIMAL(10, 2)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  buyer_id INTEGER NOT NULL,
+  seller_id INTEGER NOT NULL,
+  item_id INTEGER NOT NULL,
+  transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  price DECIMAL(10, 2),
+  FOREIGN KEY (buyer_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (seller_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Favourite;
 
 CREATE TABLE Favourite (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL REFERENCES User(id),
-  item_id INTEGER NOT NULL REFERENCES Item(id),
+  user_id INTEGER NOT NULL,
+  item_id INTEGER NOT NULL,
   added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  is_active BOOLEAN DEFAULT TRUE
+  is_active BOOLEAN DEFAULT TRUE,
+  FOREIGN KEY (user_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS Review;
 
 CREATE TABLE Review (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  seller_id INTEGER NOT NULL REFERENCES User(id),
-  reviewer_id INTEGER NOT NULL REFERENCES User(id),
-  item_id INTEGER NOT NULL REFERENCES Item(id),
+  seller_id INTEGER NOT NULL,
+  reviewer_id INTEGER NOT NULL,
+  item_id INTEGER NOT NULL,
   rating DECIMAL(2,1) CHECK (rating >= 0 AND rating <= 5),
   comment TEXT,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (seller_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (reviewer_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS Cart;
 
 DROP TABLE IF EXISTS Cart;
+
 
 CREATE TABLE Cart (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   item_id INTEGER NOT NULL,
   amount INTEGER NOT NULL DEFAULT 1,
-  FOREIGN KEY (user_id) REFERENCES User(id),
-  FOREIGN KEY (item_id) REFERENCES Item(id)
+  FOREIGN KEY (user_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
 
@@ -112,24 +173,26 @@ CREATE TABLE Cart (
 DROP TABLE IF EXISTS PendingOrder;
 
 CREATE TABLE PendingOrder (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES User(id),
-    item_id INTEGER NOT NULL REFERENCES Item(id),
-    amount INTEGER NOT NULL,
-    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  item_id INTEGER NOT NULL,
+  amount INTEGER NOT NULL,
+  added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    from_user_id INTEGER NOT NULL,
-    to_user_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (from_user_id) REFERENCES User(id),
-    FOREIGN KEY (to_user_id) REFERENCES User(id),
-    FOREIGN KEY (product_id) REFERENCES Item(id)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  from_user_id INTEGER NOT NULL,
+  to_user_id INTEGER NOT NULL,
+  product_id INTEGER NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (from_user_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (to_user_id) REFERENCES User(id) ON UPDATE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES Item(id) ON UPDATE CASCADE
 );
 
 
@@ -294,260 +357,59 @@ INSERT INTO Subcategory VALUES(102,'Shoes', 16);
 
 
 
---Women Items
-INSERT INTO Item VALUES (1, 110,
-  'Gucci Coat',
-  'beige coat',
-  122,135, 63,
-  'Gucci', 'L', 'Beige',
-  'ExcelLent', 400.00,
-  '../images/items/item1_1.png');
-INSERT INTO Item VALUES (2, 112,
-  'Jimmy Choo Heels',
-  'pink shoes',
-  122,136, 68,
-  'Jimmy Choo', 'M', 'Pink',
-  'Very good', 450.00,
-  '../images/items/item2_1.png');
-INSERT INTO Item VALUES (3, 112,
-  'Balenciaga Jeans',
-  'beautiful jeans',
-  122, 130, 48,
-  'Balenciaga', 'XS', 'Blue',
-  'Very good', 910.00,
-  '../images/items/item3_1.png');
-INSERT INTO Item VALUES (4, 117,
-  'Dior skirt',
-  'beautiful skirt',
-  122, 131, 52,
-  'Dior', 'L', 'Blue',
-  'Very good', 725.00,
-  '../images/items/item4_1.png');
-INSERT INTO Item VALUES (5, 117,
-  'Burberry Dress',
-  'very good quality',
-  122,128, 42,
-  'Burberry', 'M', 'Brown',
-  'ExcelLent', 545.00,
-  '../images/items/item5_1.png');
-INSERT INTO Item VALUES (19, 116,
-  'Miu Miu Top',
-  'Navy blue top',
-  122,129, 45,
-  'Miu Miu', 'M', 'Blue',
-  'Bad', 100.00,
-  '../images/items/item19_1.png');
-  INSERT INTO Item VALUES (20, 115,
-  'Fendi Trousers',
-  'Black trousers',
-  122,133, 57,
-  'Fendi', 'L', 'Black',
-  'Excellent', 700.00,
-  '../images/items/item20_1.png');
-  INSERT INTO Item VALUES (21, 118,
-  'Dior Swimsuit',
-  'Pink swimsuit',
-  122,134, 62,
-  'Dior', 'M', 'Pink',
-  'Bad', 100.00,
-  '../images/items/item21_1.png');
-  INSERT INTO Item VALUES (22, 112,
-  'Dolce&Gabbana Shorts',
-  'Animal print shorts',
-  122,132, 54,
-  'Dolce&Gabbana', 'L', 'Brown',
-  'Bad', 90.00,
-  '../images/items/item22_1.png');
+-- Women Items
+INSERT INTO Item VALUES (1, 110, 'Gucci Coat', 'beige coat', 122, 135, 63, 'Gucci', 163, 'Beige', 178, 400.00, '../images/items/item1_1.png');
+INSERT INTO Item VALUES (2, 112, 'Jimmy Choo Heels', 'pink shoes', 122, 136, 68, 'Jimmy Choo', 162, 'Pink', 179, 450.00, '../images/items/item2_1.png');
+INSERT INTO Item VALUES (3, 112, 'Balenciaga Jeans', 'beautiful jeans', 122, 130, 48, 'Balenciaga', 160, 'Blue', 179, 910.00, '../images/items/item3_1.png');
+INSERT INTO Item VALUES (4, 117, 'Dior skirt', 'beautiful skirt', 122, 131, 52, 'Dior', 163, 'Blue', 179, 725.00, '../images/items/item4_1.png');
+INSERT INTO Item VALUES (5, 117, 'Burberry Dress', 'very good quality', 122, 128, 42, 'Burberry', 162, 'Brown', 178, 545.00, '../images/items/item5_1.png');
+INSERT INTO Item VALUES (19, 116, 'Miu Miu Top', 'Navy blue top', 122, 129, 45, 'Miu Miu', 162, 'Blue', 181, 100.00, '../images/items/item19_1.png');
+INSERT INTO Item VALUES (20, 115, 'Fendi Trousers', 'Black trousers', 122, 133, 57, 'Fendi', 163, 'Black', 178, 700.00, '../images/items/item20_1.png');
+INSERT INTO Item VALUES (21, 118, 'Dior Swimsuit', 'Pink swimsuit', 122, 134, 62, 'Dior', 162, 'Pink', 181, 100.00, '../images/items/item21_1.png');
+INSERT INTO Item VALUES (22, 112, 'Dolce&Gabbana Shorts', 'Animal print shorts', 122, 132, 54, 'Dolce&Gabbana', 163, 'Brown', 181, 90.00, '../images/items/item22_1.png');
 
 --Men Items
-INSERT INTO Item VALUES (6, 113,
-  'Prada Jacket',
-  'green jacket',
-  123, 142, 82,
-  'Prada', 'S', 'Green',
-  'Very Good', 550.00,
-  '../images/items/item6_1.png');
-INSERT INTO Item VALUES (7, 114,
-  'Louis Vuitton Sneakers',
-  'white sneakers',
-  123, 143, 83,
-  'Louis Vuitton', '43', 'White',
-  'Good', 500.00,
-  '../images/items/item7_1.png');
-INSERT INTO Item VALUES (8, 114,
-  'Gucci Shirt',
-  'white shirt',
-  123, 137, 70,
-  'Gucci', 'M', 'White',
-  'Bad', 150.00,
-  '../images/items/item8_1.png');
-INSERT INTO Item VALUES (23, 111,
-  'Gucci Jeans',
-  'Light jeans',
-  123, 138, 73,
-  'Gucci', 'XL', 'Blue',
-  'Very good', 300.00,
-  '../images/items/item23_1.png');
-INSERT INTO Item VALUES (24, 110,
-  'Jacquemus Trousers',
-  'Grey Trousers',
-  123, 139, 75,
-  'Jacquemus', 'XS', 'Grey',
-  'Very good', 415.00,
-  '../images/items/item24_1.png');
-INSERT INTO Item VALUES (25, 110,
-  'Armani Shorts',
-  'Beige shorts',
-  123, 140, 78,
-  'Armani', 'S', 'Beige',
-  'Good', 95.00,
-  '../images/items/item25_1.png');
-INSERT INTO Item VALUES (26, 118,
-  'Prada Swim Shorts',
-  'Green shorts',
-  123, 141, 79,
-  'Prada', 'S', 'Green',
-  'Good', 95.00,
-  '../images/items/item26_1.png');
+
+INSERT INTO Item VALUES (6, 113, 'Prada Jacket', 'green jacket', 123, 142, 82, 'Prada', 161, 'Green', 179, 550.00, '../images/items/item6_1.png');
+INSERT INTO Item VALUES (7, 114, 'Louis Vuitton Sneakers', 'white sneakers', 123, 143, 83, 'Louis Vuitton', 175, 'White', 180, 500.00, '../images/items/item7_1.png');
+INSERT INTO Item VALUES (8, 114, 'Gucci Shirt', 'white shirt', 123, 137, 70, 'Gucci', 162, 'White', 181, 150.00, '../images/items/item8_1.png');
+INSERT INTO Item VALUES (23, 111, 'Gucci Jeans', 'Light jeans', 123, 138, 73, 'Gucci', 164, 'Blue', 179, 300.00, '../images/items/item23_1.png');
+INSERT INTO Item VALUES (24, 110, 'Jacquemus Trousers', 'Grey Trousers', 123, 139, 75, 'Jacquemus', 160, 'Grey', 179, 415.00, '../images/items/item24_1.png');
+INSERT INTO Item VALUES (25, 110, 'Armani Shorts', 'Beige shorts', 123, 140, 78, 'Armani', 161, 'Beige', 180, 95.00, '../images/items/item25_1.png');
+INSERT INTO Item VALUES (26, 118, 'Prada Swim Shorts', 'Green shorts', 123, 141, 79, 'Prada', 161, 'Green', 180, 95.00, '../images/items/item26_1.png');
+
+
+
 --Kids Items
-INSERT INTO Item VALUES (9, 114,
-  'Blouse Burberry',
-  'White top',
-  124, 15, 88,
-  'Burberry', 'S', 'White',
-  'Good', 510.00,
-  '../images/items/item9_1.png');
-INSERT INTO Item VALUES (10, 113,
-  'Moncler Jacket',
-  'pink jacket',
-  124, 15, 94,
-  'Moncler', 'S', 'Pink',
-  'Good', 120.00,
-  '../images/items/item10_1.png');
-INSERT INTO Item VALUES (27, 116,
-  'Gucci dress',
-  'pink dress',
-  124, 15, 87,
-  'Gucci', 'L', 'Pink',
-  'Very good', 700.00,
-  '../images/items/item27_1.png');
+INSERT INTO Item VALUES (9, 114, 'Blouse Burberry', 'White top', 124, 15, 88, 'Burberry', 161, 'White', 180, 510.00, '../images/items/item9_1.png');
+INSERT INTO Item VALUES (10, 113, 'Moncler Jacket', 'pink jacket', 124, 15, 94, 'Moncler', 161, 'Pink', 180, 120.00, '../images/items/item10_1.png');
+INSERT INTO Item VALUES (27, 116, 'Gucci dress', 'pink dress', 124, 15, 87, 'Gucci', 163, 'Pink', 179, 700.00, '../images/items/item27_1.png');
+
+
 --Jewerly Items
-INSERT INTO Item VALUES (11, 115,
-  'Swarovski Necklace',
-  'diamond necklace',
-  125, 24, NULL,
-  'Swarovski', 'S', 'Silver',
-  'Very Good', 2500.00,
-  '../images/items/item11_1.png');
-INSERT INTO Item VALUES (12, 115,
-  'Cartier Ring',
-  'gold ring',
-  125, 23, NULL ,
-  'Cartier', '17', 'Gold',
-  'Good', 1000.00,
-  '../images/items/item12_1.png');
-INSERT INTO Item VALUES (28, 111,
-  'Tiffany&Co Earrings',
-  'gold earrings',
-  125, 25, NULL,
-  'Tiffany&Co', '-', 'Gold',
-  'Good', 900.00,
-  '../images/items/item28_1.png');
-INSERT INTO Item VALUES (29, 112,
-  'Van Cleef Bracelet',
-  'gold gorgeous bracelet',
-  125, 26, NULL,
-  'Van Cleef', '-', 'Gold',
-  'Excellent', 2300.00,
-  '../images/items/item29_1.png');
-INSERT INTO Item VALUES (30, 117,
-  'Cartier Bracelet',
-  'silver bracelet',
-  125, 26, NULL,
-  'Cartier', '-', 'Silver',
-  'Bad', 900.00,
-  '../images/items/item30_1.png');
+INSERT INTO Item VALUES (11, 115, 'Swarovski Necklace', 'diamond necklace', 125, 24, NULL, 'Swarovski', 161, 'Silver', 179, 2500.00, '../images/items/item11_1.png');
+INSERT INTO Item VALUES (12, 115, 'Cartier Ring', 'gold ring', 125, 23, NULL, 'Cartier', NULL, 'Gold', 180, 1000.00, '../images/items/item12_1.png');
+INSERT INTO Item VALUES (28, 111, 'Tiffany&Co Earrings', 'gold earrings', 125, 25, NULL, 'Tiffany&Co', NULL, 'Gold', 180, 900.00, '../images/items/item28_1.png');
+INSERT INTO Item VALUES (29, 112, 'Van Cleef Bracelet', 'gold gorgeous bracelet', 125, 26, NULL, 'Van Cleef', NULL, 'Gold', 178, 2300.00, '../images/items/item29_1.png');
+INSERT INTO Item VALUES (30, 117, 'Cartier Bracelet', 'silver bracelet', 125, 26, NULL, 'Cartier', NULL, 'Silver', 181, 900.00, '../images/items/item30_1.png');
+
 
 --Bags 
-INSERT INTO Item VALUES (13, 115,
-  'Prada Purse',
-  'black purse',
-  126, 21, NULL,
-  'Prada', 'S', 'Black',
-  'Excelent', 870.00,
-  '../images/items/item13_1.png');
-INSERT INTO Item VALUES (14, 116,
-  'Hermes Birkin Bag',
-  'Birkin bag',
-  126, 22, NULL,
-  'Hermes', 'Medium', 'Orange',
-  'Good', 10000.00,
-  '../images/items/item14_1.png');
-INSERT INTO Item VALUES (15, 112,
-  'Chanel Purse',
-  'pink purse',
-  126, 22, NULL,
-  'Chanel', 'Large', 'Pink',
-  'Very good', 800.00,
-  '../images/items/item15_1.png');
-INSERT INTO Item VALUES (31, 111,
-  'Chloé Clutch',
-  'Gold purse',
-  126, 24, NULL,
-  'Chanel', 'Small', 'Gold',
-  'Bad', 500.00,
-  '../images/items/item31_1.png');
+INSERT INTO Item VALUES (13, 115, 'Prada Purse', 'black purse', 126, 21, NULL, 'Prada', 161, 'Black', 178, 870.00, '../images/items/item13_1.png');
+INSERT INTO Item VALUES (14, 116, 'Hermes Birkin Bag', 'Birkin bag', 126, 22, NULL, 'Hermes', 162, 'Orange', 180, 10000.00, '../images/items/item14_1.png');
+INSERT INTO Item VALUES (15, 112, 'Chanel Purse', 'pink purse', 126, 22, NULL, 'Chanel', 163, 'Pink', 179, 800.00, '../images/items/item15_1.png');
+INSERT INTO Item VALUES (31, 111, 'Chloé Clutch', 'Gold purse', 126, 24, NULL, 'Chanel', 161, 'Gold', 181, 500.00, '../images/items/item31_1.png');
+
 
 --Accessories
-INSERT INTO Item VALUES (16, 113,
-  'Rolex Watch',
-  'stylish rolex watch',
-  127, 30, NULL,
-  'Rolex', '6', 'Silver',
-  'Very Good', 25000.00,
-  '../images/items/item16_1.png');
-INSERT INTO Item VALUES (17, 113,
-  'YSL Sunglasses',
-  'beautiful sunglasses',
-  127, 26, NULL,
-  'Yves Saint Laurent', 'S', 'Black',
-  'Good', 300.00,
-  '../images/items/item17_1.png');
-INSERT INTO Item VALUES (32, 114,
-  'Polo Ralph Lauren hat',
-  'Blue hat',
-  127, 27, NULL,
-  'Polo Ralph Lauren', 'S', 'Blue',
-  'Good', 150.00,
-  '../images/items/item32_1.png');
-INSERT INTO Item VALUES (18, 117,
-  'Burberry Scarf',
-  'very good quality scarf',
-  127,28, NULL,
-  'Burberry', 'M', 'Brown',
-  'Excelent', 260.00,
-  '../images/items/item18_1.png');
-INSERT INTO Item VALUES (33, 112,
-  'Louis Vuitton wallet',
-  'Black small wallet',
-  127,29, NULL,
-  'Louis Vuitton', 'Small', 'Black',
-  'Very good', 110.00,
-  '../images/items/item33_1.png');
-INSERT INTO Item VALUES (34, 110,
-  'Jacquemus belt',
-  'Black simple belt',
-  127,25, NULL,
-  'Jacquemus', '-', 'Black',
-  'Good', 120.00,
-  '../images/items/item34_1.png');
-INSERT INTO Item VALUES (35, 111,
-  'Acne studios wool',
-  'Pink wool scarf',
-  127,28, NULL,
-  'Acne Studios', '-', 'Pink',
-  'Good', 128.00,
-  '../images/items/item35_1.png');
+INSERT INTO Item VALUES (16, 113, 'Rolex Watch', 'stylish rolex watch', 127, 30, NULL, 'Rolex', NULL, 'Silver', 179, 25000.00, '../images/items/item16_1.png');
+INSERT INTO Item VALUES (17, 113, 'YSL Sunglasses', 'beautiful sunglasses', 127, 26, NULL, 'Yves Saint Laurent', 161, 'Black', 180, 300.00, '../images/items/item17_1.png');
+INSERT INTO Item VALUES (32, 114, 'Polo Ralph Lauren hat', 'Blue hat', 127, 27, NULL, 'Polo Ralph Lauren', 161, 'Blue', 180, 150.00, '../images/items/item32_1.png');
+INSERT INTO Item VALUES (18, 117, 'Burberry Scarf', 'very good quality scarf', 127, 28, NULL, 'Burberry', NULL, 'Brown', 178, 260.00, '../images/items/item18_1.png');
+INSERT INTO Item VALUES (33, 112, 'Louis Vuitton wallet', 'Black small wallet', 127, 29, NULL, 'Louis Vuitton', 161, 'Black', 179, 110.00, '../images/items/item33_1.png');
+INSERT INTO Item VALUES (34, 110, 'Jacquemus belt', 'Black simple belt', 127, 25, NULL, 'Jacquemus', 162, 'Black', 180, 120.00, '../images/items/item34_1.png');
+INSERT INTO Item VALUES (35, 111, 'Acne studios wool', 'Pink wool scarf', 127, 28, NULL, 'Acne Studios', NULL, 'Pink', 180, 128.00, '../images/items/item35_1.png');
+
 
 
   
