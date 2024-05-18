@@ -9,7 +9,12 @@ $stmt->execute();
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch categories
-$sql_cat = "SELECT * FROM Category";
+// Fetch categories with their respective departments
+$sql_cat = "
+    SELECT Category.id, Category.c_name, Department.d_name 
+    FROM Category 
+    JOIN Department ON Category.department_id = Department.id
+";
 $stmt = $pdo->prepare($sql_cat);
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -90,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="" disabled selected>Select Category</option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?php echo $category['id']; ?>">
-                            <?php echo htmlspecialchars($category['c_name']); ?>
+                            <?php echo htmlspecialchars($category['c_name']) . " (" . htmlspecialchars($category['d_name']) . ")"; ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

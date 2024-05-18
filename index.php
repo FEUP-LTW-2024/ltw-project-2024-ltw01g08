@@ -14,6 +14,11 @@ if (!$loggedIn) {
 $pdo = new PDO('sqlite:database/database.db');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+$sql_departments = "SELECT * FROM Department";
+$stmt = $pdo->prepare($sql_departments);
+$stmt->execute();
+$departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Fetch user details
 $userId = $_SESSION['user_id'];
 $user = null;
@@ -28,6 +33,7 @@ try {
 // Assign profile picture or default
 $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  // Use a default profile picture if none is set
 ?>
+
 
 
 
@@ -79,12 +85,13 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
         </div>
         <nav class="category-bar">
             <ul>
-                <li><a href="templates/women_section.php">Women</a></li> 
-                <li><a href="templates/men_section.php">Men</a></li> 
-                <li><a href="templates/kids_section.php">Kids</a></li> 
-                <li><a href="templates/bags_section.php">Bags</a></li> 
-                <li><a href="templates/jewelry_section.php">Jewelry</a></li> 
-                <li><a href="templates/accessories_section.php">Accessories</a></li> 
+            <?php foreach ($departments as $department): ?>
+                    <li>
+                        <a href="templates/<?php echo strtolower(str_replace(' ', '_', htmlspecialchars($department['d_name']))); ?>_section.php">
+                            <?php echo htmlspecialchars($department['d_name']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </nav>
         <div class="main-bar">
@@ -97,7 +104,10 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
         </div>
 
         <div class="search-bar">
-            <input type="text" placeholder="Search">
+            <form action="search_results.php" method="get">
+                <input type="text" name="query" placeholder="Search for items">
+                <button type="submit">Search</button>
+            </form>
         </div>
 
     </header>
