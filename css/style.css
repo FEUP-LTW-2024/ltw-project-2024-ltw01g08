@@ -292,3 +292,19 @@ footer {
         margin: 1.5em auto; 
     }
 }
+
+.search-bar button {
+    background-color: var(--black);  /* Button color */
+    color: var(--white);  /* Text color */
+    border: none;  /* Remove border */
+    padding: 12px 20px;  /* Padding for better sizing */
+    font-family: 'Lexend Mega', sans-serif;  /* Consistent font */
+    font-weight: bold;  /* Bold text */
+    font-size: 1rem;  /* Size of the text */
+    cursor: pointer;  /* Cursor indicates clickable */
+    transition: background-color 0.3s ease;  /* Smooth transition for hover effect */
+}
+
+.search-bar button:hover {
+    background-color: var(--darkerpink);  /* Darker on hover */
+}

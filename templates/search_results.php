@@ -15,10 +15,10 @@ try {
     $stmt_category->execute();
     $categories_ = $stmt_category->fetchAll(PDO::FETCH_ASSOC);
 
-    $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
+    $sort = filter_input(INPUT_GET, 'sort', 513);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
 
-    $searchQuery = filter_input(INPUT_GET, 'query', FILTER_SANITIZE_STRING);  // Corrected to use 'query'
+    $searchQuery = filter_input(INPUT_GET, 'query', 513);  // Corrected to use 'query'
     $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
