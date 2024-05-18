@@ -23,7 +23,7 @@
 - [ ] Item Swapping: A feature allowing users to exchange items instead of monetary transactions.
 - [ ] API Integration: Develop a robust API to allow third-party applications to interact with the platform.
 - [ ] Dynamic Promotions: Implement a system for time-limited discounts, bundle deals (e.g., buy two, get one free), and quantity-based discounts (e.g., 10% off on purchases over a certain amount).
-- [ ] User Preferences: Allow users to set and filter searches based on personal preferences such as size, condition, gender-specific items, etc.
-- [ ] Shipping Costs: Calculate shipping costs depending on location (crude estimate).
-- [ ] Real-Time Messaging System: A secure and efficient communication channel for buyers and sellers.
+- [x] User Preferences: Allow users to set and filter searches based on personal preferences such as size, condition, gender-specific items, etc.
+- [x] Shipping Costs: Calculate shipping costs depending on location (crude estimate).
+- [x] Real-Time Messaging System: A secure and efficient communication channel for buyers and sellers.
 
