@@ -73,8 +73,6 @@ if (isset($_POST['district'])) {
         <form action="" method="post" class="payment-form">
             <fieldset>
                 <legend>Address Details</legend>
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required>
                 <label for="district">District:</label>
                 <select id="district" name="district" required onchange="this.form.submit()">
                     <option value="" disabled selected>Select District</option>
@@ -84,6 +82,9 @@ if (isset($_POST['district'])) {
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+                
                 <label for="city">City:</label>
                 <input type="text" id="city" name="city" required>
             </fieldset>
