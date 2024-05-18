@@ -216,6 +216,7 @@ try {
         </aside>
 
         <div class="products">
+        <p>Search result for "<?php echo $searchQuery; ?>"</p>
             <?php foreach ($items as $item):
                 // Fetch seller's username
                 $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
