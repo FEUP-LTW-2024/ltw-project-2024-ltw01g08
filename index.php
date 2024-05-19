@@ -86,9 +86,9 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';
         </div>
         <nav class="category-bar">
             <ul>
-            <?php foreach ($departments as $department): ?>
+                <?php foreach ($departments as $department): ?>
                     <li>
-                        <a href="templates/departments.php">
+                        <a href="departments.php?department_id=<?php echo htmlspecialchars($department['id']); ?>">
                             <?php echo htmlspecialchars($department['d_name']); ?>
                         </a>
                     </li>

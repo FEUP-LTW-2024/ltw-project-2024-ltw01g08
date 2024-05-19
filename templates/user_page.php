@@ -14,6 +14,7 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
+
 // Retrieve user data
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
