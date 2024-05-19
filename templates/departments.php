@@ -200,13 +200,9 @@ try {
     </main>
 
     <footer>
-        <ul class="footer-list">
-            <li><a href="shipping.html">Shipping</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="our_story.html">Our Story</a></li>
-            <li><a href="returns.html">Returns</a></li>
-            <li><a href="contact_us.html">Contact Us</a></li>
-        </ul>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
     </footer>
 
 

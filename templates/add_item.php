@@ -102,24 +102,10 @@
 </div>
 
 <footer>
-    <div class="footer-section">
-        <p>Customer Care</p>
-        <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Shipping info</a></li>
-            <li><a href="#">Returns policy</a></li>
-            <li><a href="#">Contact us</a></li>
-        </ul>
-    </div>
-    <div class="footer-section">
-        <p>Company</p>
-        <ul>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">How to sell</a></li>
-            <li><a href="#">Terms of service</a></li>
-        </ul>
-    </div>
-</footer>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
+    </footer>
 
 <script>
     document.getElementById('department').addEventListener('change', updateCategories);

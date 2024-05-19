@@ -64,5 +64,10 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit">Send</button>
         </form>
     </div>
+    <footer>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
+    </footer>
 </body>
 </html>

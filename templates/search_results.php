@@ -250,25 +250,8 @@ try {
     </main>
 
     <footer>
-        <div class="footer-content">
-            <div>
-                <h4>Customer Care</h4>
-                <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Refer a friend</a></li>
-                    <li><a href="#">Shipping info</a></li>
-                    <li><a href="#">Returns policy</a></li>
-                    <li><a href="#">Contact us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">How to sell</a></li>
-                    <li><a href="#">Terms of service</a></li>
-                </ul>
-            </div>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
         </div>
     </footer>
     
