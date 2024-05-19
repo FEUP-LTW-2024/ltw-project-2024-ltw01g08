@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Lexend+Mega:wght@100..900&display=swap');
+
+:root {
+    --lightpink: #ECBFBF;
+    --darkerpink: #D5A8A8; 
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+body {
+    background-color: var(--darkerpink);
+    font-family: 'League Spartan', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50em;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-weight: 500;
+    font-size: 1.5em;
+    color: var(--black);
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1em;
+    color: var(--black);
+    margin-bottom: 10px;
+}
+
+.form-thank-you {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.logo-thank-you {
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.logo-thank-you .main-logo {
+    color: var(--black);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo-thank-you .tagline {
+    font-family: 'Lexend Mega';
+    font-size: 0.8em;
+    color: var(--black);
+}
+
+.continue-shopping-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--lightpink);
+    color: var(--black);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.continue-shopping-btn:hover {
+    background-color: var(--darkerpink);
+}
