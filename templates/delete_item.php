@@ -16,12 +16,19 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
     $itemId = $_POST['item_id'];
     $userId = $_SESSION['user_id'];
+    $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM Item WHERE id = ? AND seller_id = ?");
+    $checkStmt->execute([$itemId, $userId]);
+    $itemExists = $checkStmt->fetchColumn() > 0;
 
-    $stmt = $pdo->prepare("DELETE FROM Item WHERE id = ? AND seller_id = ?");
-    $stmt->execute([$itemId, $userId]);
+    if ($itemExists) {
+        // Prepare and execute the DELETE statement
+        $stmt = $pdo->prepare("DELETE FROM Item WHERE id = ? AND seller_id = ?");
+        $stmt->execute([$itemId, $userId]);
 
-    if ($stmt->rowCount() > 0) {
-        echo "Success";
+        // Redirect to user_page.php if deletion was successful
+        header('Location: user_page.php');
+        echo "Success.";
+        exit;
     } else {
         echo "Failed to delete item.";
     }

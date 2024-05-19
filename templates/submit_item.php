@@ -46,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Bind uploaded image path to the statement
         $image_path = $image_paths[0]; // Store only the first image in the database
         if ($stmt->execute([$seller_id, $title, $description, $department_id, $category_id, $subcategory_id, $brand, $item_size, $color, $condition, $price, $image_path])) {
+            header('Location: user_page.php');
             echo "Item added successfully!";
+            exit;
         } else {
             echo "Error adding item.";
         }
