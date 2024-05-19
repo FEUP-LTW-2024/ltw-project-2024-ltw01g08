@@ -15,76 +15,42 @@ try {
         $current_department_id = $departments[0]['id'];
     }
 
-    // Fetch categories for the current department
+    // Fetch categories and subcategories
     $sql_categories = "SELECT * FROM Category WHERE department_id = ?";
     $stmt_categories = $pdo->prepare($sql_categories);
     $stmt_categories->execute([$current_department_id]);
     $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 
     $sql_subcategories = "SELECT Subcategory.id, Subcategory.subc_name FROM Subcategory 
-    INNER JOIN Category ON Subcategory.category_id = Category.id 
-    ";
-
+                          INNER JOIN Category ON Subcategory.category_id = Category.id";
     $stmt_subcategories = $pdo->prepare($sql_subcategories);
     $stmt_subcategories->execute();
     $subcategories = $stmt_subcategories->fetchAll(PDO::FETCH_ASSOC);
 
-
-    // Fetch items for the current department with filtering and sorting
-    $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
+    // Initialize the SQL query for items
+    $sort = filter_input(INPUT_GET, 'sort');
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
-    $categories_filter = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
-    $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
+    $sql = "SELECT Item.*, ItemSizes.size_description FROM Item
+            LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id
+            WHERE department_id = ?";
 
-    // Initialize the SQL query
-    $sql = "SELECT * FROM Item WHERE department_id = ?";
-    $params = [$current_department_id];
+    $params = [$current_department_id]; // parameters for SQL execution
 
-    // Apply filters
-    if ($minPrice !== false && $minPrice != null) {
-        $sql .= " AND price >= ?";
-        $params[] = $minPrice;
-    }
-
-    if ($maxPrice !== false && $maxPrice != null) {
-        $sql .= " AND price <= ?";
-        $params[] = $maxPrice;
-    }
-
-    if (!empty($categories_filter) && !in_array('all', $categories_filter)) {
-        $placeholders = implode(', ', array_fill(0, count($categories_filter), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = ?)";
-        foreach ($categories_filter as $category) {
-            $params[] = $category;
-        }
-        $params[] = $current_department_id;
-    }
-
-    if (!empty($conditions)) {
-        $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
-        $sql .= " AND condition IN ($conditionPlaceholders)";
-        foreach ($conditions as $condition) {
-            $params[] = $condition;
-        }
-    }
-
-    if (!empty($sizes)) {
-        $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
-        $sql .= " AND item_size IN ($sizePlaceholders)";
-        foreach ($sizes as $size) {
-            $params[] = $size;
-        }
-    }
-
-    // Sorting
-    $sql = "SELECT Item.*, ItemSizes.size_description FROM Item LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id WHERE department_id = ?";
-
+    // Execute SQL query
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // If sorting is requested, reorder the items array
+    if ($sort) {
+        usort($items, function ($item1, $item2) use ($order) {
+            if ($order === "DESC") {
+                return $item2['price'] <=> $item1['price'];
+            } else {
+                return $item1['price'] <=> $item2['price'];
+            }
+        });
+    }
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -210,29 +176,27 @@ try {
         </aside>
 
         <div class="products">
-            <?php foreach ($items as $item):
-                $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
-                $seller_username_stmt->execute([$item['seller_id']]);
-                $seller_username = $seller_username_stmt->fetchColumn();
-                $seller_username = $seller_username ?: 'Unknown';
-                $image_url = "../images/items/item{$item['id']}_1.png";
+    <?php foreach ($items as $item):
+        $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
+        $seller_username_stmt->execute([$item['seller_id']]);
+        $seller_username = $seller_username_stmt->fetchColumn();
+        $seller_username = $seller_username ?: 'Unknown';
+        $image_url = "../images/items/item{$item['id']}_1.png";
+    ?>
+        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
+            <div class="product">
+                <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+                <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                <div class="image-container">
+                    <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                </div>
+                <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                <p>Size <?php echo htmlspecialchars($item['size_description'] ?? 'N/A'); ?></p>
+            </div>
+        </a>
+    <?php endforeach; ?>
+</div>
 
-
-                $size_display = $size_name ?: 'N/A';
-            ?>
-                <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
-                    <div class="product">
-                        <p>@<?php echo htmlspecialchars($seller_username); ?></p>
-                        <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
-                        <div class="image-container">
-                            <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
-                        </div>
-                        <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                        <p>Size <?php echo htmlspecialchars($item['size_description']?? 'N/A'); ?></p>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
     </main>
 
     <footer>
@@ -296,22 +260,11 @@ try {
         </script>
 
 <script>
-
 function resetFilters() {
-    // Uncheck all checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    // Clear text inputs
-    document.querySelectorAll('input[type="text"]').forEach(input => {
-        input.value = '';
-    });
-
-    // Submit the form
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+    document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
     document.getElementById('filters').submit();
 }
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const productLinks = document.querySelectorAll('.product-link');
@@ -324,55 +277,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 function sortProducts() {
-    var sortBy = document.getElementById('sort-price').value;
-    var container = document.querySelector('.products');
-    var products = Array.from(container.querySelectorAll('.product'));
+    const sortBy = document.getElementById('sort-price').value;
+    const container = document.querySelector('.products');
+    const productLinks = Array.from(container.querySelectorAll('.product-link'));
 
-    products.sort(function(a, b) {
-        // Correctly parse prices as floats
-        var priceA = parseFloat(a.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
-        var priceB = parseFloat(b.querySelector('p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+    productLinks.sort((a, b) => {
+        const priceA = parseFloat(a.querySelector('.product p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
+        const priceB = parseFloat(b.querySelector('.product p:nth-last-child(2)').textContent.replace(/[^\d,.]/g, '').replace(',', '.'));
 
-        if (sortBy === 'low-to-high') {
-            return priceA - priceB;
-        } else if (sortBy === 'high-to-low') {
-            return priceB - priceA;
-        }
-        return 0;
+        return sortBy === 'low-to-high' ? priceA - priceB : priceB - priceA;
     });
 
-    // Re-append sorted products
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
-
-    products.forEach(function(product) {
-        container.appendChild(product);
-    });
+    productLinks.forEach(link => container.appendChild(link));
 }
 
-    // Function to toggle the dropdown menu
-    function toggleProfileDropdown() {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
-            dropdownContainer.classList.toggle('show');
+function toggleProfileDropdown() {
+    const dropdownContainer = document.querySelector('.profile-dropdown');
+    dropdownContainer.classList.toggle('show');
+}
+
+document.getElementById('profile-icon').addEventListener('click', function(event) {
+    event.stopPropagation();
+    toggleProfileDropdown();
+});
+
+window.addEventListener('click', function() {
+    const dropdownContainer = document.querySelector('.profile-dropdown');
+    if (dropdownContainer.classList.contains('show')) {
+        dropdownContainer.classList.remove('show');
     }
-
-        // Event listener for clicking the profile icon
-    document.getElementById('profile-icon').addEventListener('click', function (event) {
-            event.stopPropagation(); 
-            toggleProfileDropdown();
-    });
-
-        // Event listener for clicking outside the dropdown to close it
-    window.addEventListener('click', function () {
-            const dropdownContainer = document.querySelector('.profile-dropdown');
-            if (dropdownContainer.classList.contains('show')) {
-                dropdownContainer.classList.remove('show');
-            }
-    });
-
+});
 </script>
 
 </body>
