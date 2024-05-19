@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
 
         // Redirect to user_page.php if deletion was successful
         header('Location: user_page.php');
-        echo "Success.";
+        echo "Success";
         exit;
     } else {
         echo "Failed to delete item.";

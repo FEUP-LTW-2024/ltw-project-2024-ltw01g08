@@ -38,8 +38,6 @@ $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
                     </div>
                     <p>€<?php echo number_format($item['price'], 2); ?></p>
-                    <p>Brand: <?php echo htmlspecialchars($item['brand']); ?></p>
-                    <p>Condition: <?php echo htmlspecialchars($item['condition']); ?></p>
                     <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                 </a>
                 <form onsubmit="deleteItem(event, <?php echo $item['id']; ?>)">
@@ -53,25 +51,24 @@ $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-    function deleteItem(event, itemId) {
-        event.preventDefault();
+function deleteItem(event, itemId) {
+    event.preventDefault();
 
-        if (confirm('Are you sure you want to delete this item?')) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "delete_item.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onload = function () {
-                if (this.status === 200 && this.responseText.trim() === "Success") {
-                    var productDiv = document.getElementById('product-' + itemId);
-                    if (productDiv) {
-                        productDiv.parentNode.removeChild(productDiv);
-                    }
-                    alert('Item deleted successfully!');
-                } else {
-                    alert('Error deleting item: ' + this.responseText);
-                }
-            };
-            xhr.send("item_id=" + itemId);
-        }
+    if (confirm('Are you sure you want to delete this item?')) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete_item.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onload = function () {
+            if (this.status === 200 && this.responseText.trim() === "Success") {
+                // Reload the user page after successful deletion
+                window.location.href = "user_page.php";
+                alert('Item deleted successfully!');
+            } else {
+                alert('Error deleting item: ' + this.responseText);
+            }
+        };
+        xhr.send("item_id=" + itemId);
     }
+}
+
 </script>
