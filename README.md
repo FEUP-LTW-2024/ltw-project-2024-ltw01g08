@@ -12,16 +12,12 @@
 - [x] Browse items using input.
 - [x] Engage with sellers to ask questions or negotiate prices.
 - [x] Add items to a wishlist or shopping cart.
-- [ ] Proceed to checkout with their shopping cart (simulate payment process).
+- [x] Proceed to checkout with their shopping cart (simulate payment process).
 - [ ] Elevate a user to admin status.
 - [ ] Introduce new item categories, sizes, conditions, and other pertinent entities.
 - [ ] Oversee and ensure the smooth operation of the entire system.
-- [ ] Rating and Review System: A feedback mechanism for users to rate products and sellers.
-- [ ] Promotional Features: Options for sellers to feature their products on the main page through paid promotions.
-- [ ] Analytics Dashboard: A tool for sellers to track performance metrics and sales data.
-- [ ] Multi-Currency Support: A system to handle transactions in various currencies.
-- [ ] Item Swapping: A feature allowing users to exchange items instead of monetary transactions.
-- [ ] API Integration: Develop a robust API to allow third-party applications to interact with the platform.
+- [x] Rating and Review System: A feedback mechanism for users to rate products and sellers.
+- [x] Promotional Features: Options for sellers to feature their products on the main page through paid promotions.
 - [ ] Dynamic Promotions: Implement a system for time-limited discounts, bundle deals (e.g., buy two, get one free), and quantity-based discounts (e.g., 10% off on purchases over a certain amount).
 - [x] User Preferences: Allow users to set and filter searches based on personal preferences such as size, condition, gender-specific items, etc.
 - [x] Shipping Costs: Calculate shipping costs depending on location (crude estimate).

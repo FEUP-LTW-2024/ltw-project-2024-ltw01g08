@@ -57,7 +57,6 @@ $total = 0;
     <div class="item-info">
         <div class="item-details">
             <h3><?php echo htmlspecialchars($item['title']); ?></h3>
-            <p>Size: <?php echo htmlspecialchars($item['item_size']); ?></p>
             <p>Seller: <?php 
                         $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
                         $seller_username_stmt->execute([$item['seller_id']]);
