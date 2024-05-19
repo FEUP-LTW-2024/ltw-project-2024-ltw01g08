@@ -1,15 +1,16 @@
 <?php
-// Check if session has not started
+// Start the session if it hasn't already been started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Redirect to login page if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../php/login.php');
     exit;
 }
 
-// Setup PDO connection
+// Setup PDO connection to the SQLite database
 try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -17,9 +18,10 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
+// Retrieve user ID from session
 $userId = $_SESSION['user_id'];
 
-// Prepare and execute statement to fetch user's items
+// Fetch user's items for sale from the database
 $stmt = $pdo->prepare("SELECT * FROM Item WHERE seller_id = ?");
 $stmt->execute([$userId]);
 $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +31,7 @@ $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (!empty($itemsForSale)): ?>
         <?php foreach ($itemsForSale as $item): ?>
             <div class="item">
-                <a href="item_detail.php?item_id=<?php echo $item['id']; ?>">
+                <a href="product_page.php?product_id=<?php echo $item['id']; ?>">
                     <img src="<?php echo htmlspecialchars("../images/items/" . $item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" style="width:100px; height:100px;">
                     <h4><?php echo htmlspecialchars($item['title']); ?></h4>
                     <p>€<?php echo number_format($item['price'], 2); ?></p>
