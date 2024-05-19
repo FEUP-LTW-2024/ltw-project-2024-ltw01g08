@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Redirect to login if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../php/login.php');
     exit;
@@ -14,7 +13,6 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
-// Retrieve user data
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
 $profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png';
@@ -23,7 +21,6 @@ $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Check if the user is an admin
 $isAdmin = false;
 $adminStmt = $pdo->prepare("SELECT 1 FROM Admin WHERE user_id = ?");
 $adminStmt->execute([$userId]);
@@ -31,22 +28,20 @@ if ($adminStmt->fetch()) {
     $isAdmin = true;
 }
 
-// Favorite items query
 $favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favourite ON Item.id = Favourite.item_id WHERE Favourite.user_id = ? AND Favourite.is_active = 1");
 $favStmt->execute([$userId]);
 $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Sold items query
 $soldStmt = $pdo->prepare("
-    SELECT Item.*, \"Transaction\".transaction_date 
+    SELECT Item.*, \"Transaction\".transaction_date, \"Transaction\".buyer_id, User.first_name AS buyer_first_name, User.last_name AS buyer_last_name, User.user_address AS buyer_address
     FROM Item 
     INNER JOIN \"Transaction\" ON Item.id = \"Transaction\".item_id 
+    INNER JOIN User ON \"Transaction\".buyer_id = User.id
     WHERE \"Transaction\".seller_id = ?
 ");
 $soldStmt->execute([$userId]);
 $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Purchased items query
 $purchasedStmt = $pdo->prepare("
     SELECT Item.*, \"Transaction\".transaction_date, \"Transaction\".seller_id
     FROM Item 
@@ -56,7 +51,6 @@ $purchasedStmt = $pdo->prepare("
 $purchasedStmt->execute([$userId]);
 $purchasedItems = $purchasedStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch reviews received by the user as a seller
 $reviewsStmt = $pdo->prepare("
     SELECT Review.*, Item.title, Item.image_url
     FROM Review
@@ -182,7 +176,13 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
                             <p>€<?php echo number_format($item['price'], 2); ?></p>
                             <p>Sold on: <?php echo date('j F Y', strtotime($item['transaction_date'])); ?></p>
                         </a>
-                        <button type="submit" class="remove-btn">Shipping form</button>
+                        <form action="shipping_form.php" method="post" target="_blank">
+                            <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
+                            <input type="hidden" name="buyer_id" value="<?php echo $item['buyer_id']; ?>">
+                            <input type="hidden" name="buyer_name" value="<?php echo htmlspecialchars($item['buyer_first_name'] . ' ' . $item['buyer_last_name']); ?>">
+                            <input type="hidden" name="buyer_address" value="<?php echo htmlspecialchars($item['buyer_address']); ?>">
+                            <button type="submit" class="shipping-form-btn">Shipping Form</button>
+                        </form>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -237,7 +237,6 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
 
-            // Check if the tab is available before displaying it
             var tab = document.getElementById(tabName);
             if (tab) {
                 tab.style.display = "block";
@@ -259,7 +258,7 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            openTab(event, 'items'); // Automatically open the 'items' tab on page load
+            openTab(event, 'items'); 
         });
 
         function removeFavorite(event, itemId) {
