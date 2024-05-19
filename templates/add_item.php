@@ -39,8 +39,8 @@
         </div>
         <div class="form-row">
             <label for="subcategory">Subcategory</label>
-            <select id="subcategory" name="subcategory" required>
-                <option value="" disabled selected>Select Subcategory</option>
+            <select id="subcategory" name="subcategory">
+                <option value="" selected>No Subcategory</option>
             </select>
         </div>
         <div class="form-row">
@@ -83,10 +83,20 @@
             <label for="price">Price (€)</label>
             <input type="number" step="0.01" id="price" name="price" required>
         </div>
+
         <div class="form-row">
-            <label for="image">Image Upload</label>
-            <input type="file" id="image" name="image" required>
+            <label for="image1">Image 1 Upload</label>
+            <input type="file" id="image1" name="image1" required>
         </div>
+        <div class="form-row">
+            <label for="image2">Image 2 Upload</label>
+            <input type="file" id="image2" name="image2" required>
+        </div>
+        <div class="form-row">
+            <label for="image3">Image 3 Upload</label>
+            <input type="file" id="image3" name="image3" required>
+        </div>
+
         <button type="submit">Add Item</button>
     </form>
 </div>

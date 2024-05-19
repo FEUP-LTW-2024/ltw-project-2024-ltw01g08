@@ -87,58 +87,58 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
           
-                <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
+            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
             
 
         </div>
 
-        <div id="items" class="tab-content" style="display:block;">
-    <?php include 'items_for_sale_user.php'; ?>
-</div>
+        <div id="items" class="tab-content" >
+            <?php include 'items_for_sale_user.php'; ?>
+        </div>
 
 
-        <div id="reviews" class="tab-content" style="display:none;">
+        <div id="reviews" class="tab-content"">
             <div class="review-container">
                 <!-- Reviews vêm para aqui -->
             </div>
         </div>
 
 
-        <div id="favorites" class="tab-content" style="display:none;">
-    <div class="products">
-        <?php foreach ($favorites as $item): ?>
-            <div class="product">
-                <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
-                    <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                    <h4><?php echo htmlspecialchars($item['title']); ?></h4>
-                    <p>€<?php echo number_format($item['price'], 2); ?></p>
-                    <p>Added on: <?php echo date('j F Y', strtotime($item['added_at'])); ?></p>
-                </a>
-                <form onsubmit="removeFavorite(event, <?php echo $item['id']; ?>)">
-                    <button type="submit" class="remove-btn">Remove</button>
-                </form>
+        <div id="favorites" class="tab-content">
+            <div class="products">
+                <?php foreach ($favorites as $item): ?>
+                    <div class="product">
+                        <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
+                            <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+                            <h3><?php echo htmlspecialchars($item['title']); ?></h4>
+                            <p>€<?php echo number_format($item['price'], 2); ?></p>
+                            <p>Added on: <?php echo date('j F Y', strtotime($item['added_at'])); ?></p>
+                        </a>
+                        <form onsubmit="removeFavorite(event, <?php echo $item['id']; ?>)">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
 
-                <form onsubmit="addToCart(event, <?php echo $item['id']; ?>)">
-                    <button type="submit" class="addcart-btn">Add to cart</button>
-                </form>
+                        <form onsubmit="addToCart(event, <?php echo $item['id']; ?>)">
+                            <button type="submit" class="addcart-btn">Add to cart</button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+                <?php if (empty($favorites)): ?>
+                    <p>No favorites yet.</p>
+                <?php endif; ?>
             </div>
-        <?php endforeach; ?>
-        <?php if (empty($favorites)): ?>
-            <p>No favorites yet.</p>
-        <?php endif; ?>
-    </div>
-</div>
+        </div>
 
 
        
 
 
-<div id="add-item" class="tab-content" style="display:none;">
-    <?php include 'add_item.php'; ?>
-</div>
-<div id="edit_site" class="tab-content" style="display:none;">
-    <?php include 'edit_site.php'; ?>
-</div>
+        <div id="add-item" class="tab-content" style="display:none;">
+            <?php include 'add_item.php'; ?>
+        </div>
+        <div id="edit_site" class="tab-content" style="display:none;">
+            <?php include 'edit_site.php'; ?>
+        </div>
     </main>
 
     <footer>

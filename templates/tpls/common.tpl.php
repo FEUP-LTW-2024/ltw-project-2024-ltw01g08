@@ -4,8 +4,36 @@
     $session = new Session();
 ?>
 
-
 <?php function drawHeader(Session $session) { ?>
+    <header>
+        <div class="top-bar">
+            <form action="search_results.php" method="get">
+                <input type="text" name="query" placeholder="Search" class="search-bar" required>
+            </form>
+            <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
+            <div class="actions">
+                <a href="all_chats.php">
+                    <span>M</span>
+                </a>
+                <span class="profile-dropdown">
+                    <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <a href="../templates/user_page.php">User Profile</a>
+                        <a href="../templates/account_info.html">Account Info</a>
+                    </div>
+                </span>
+                <span>
+                    <a href="shopping_cart.php">
+                        <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
+                    </a>
+                </span>
+            </div>
+        </div>
+    </header>
+<?php } ?>
+
+
+<?php function drawMainPageHeader(Session $session) { ?>
     <header>
     <div class="top-bar">
             <input type="text" placeholder="Search" class="search-bar">
@@ -96,17 +124,3 @@
 <?php } ?>
 
 
-
-<?php function drawHeadI(Session $session) { ?>
-    <!DOCTYPE html>
-    <html lang="en-US">
-        <head>
-            <title>Issue Central</title>
-            <meta charset="utf-8">
-            <link rel="stylesheet" href="/../css/style/style.css">
-            <link rel="stylesheet" href="/../css/layout/layout.css">
-            <link rel="stylesheet" href="/../css/responsive.css">
-        </head>
-        <body>
-            <div class="container">
-<?php } ?>

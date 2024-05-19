@@ -51,6 +51,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
 <body>
     <header>
     <div class="top-bar">
+            
             <span class="logo"><a href="index.php" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <?php if ($loggedIn): ?>

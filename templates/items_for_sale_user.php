@@ -27,16 +27,21 @@ $stmt->execute([$userId]);
 $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="items-sale-container">
+
+<div class="products">
     <?php if (!empty($itemsForSale)): ?>
-        <?php foreach ($itemsForSale as $item): ?>
-            <div class="item">
+        <?php foreach ($itemsForSale as $item): 
+                        $image_url = "../images/items/item{$item['id']}_1.png";?>
                 <a href="product_page.php?product_id=<?php echo $item['id']; ?>">
-                    <img src="<?php echo htmlspecialchars("../images/items/" . $item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>" style="width:100px; height:100px;">
-                    <h4><?php echo htmlspecialchars($item['title']); ?></h4>
-                    <p>€<?php echo number_format($item['price'], 2); ?></p>
-                    <p>Brand: <?php echo htmlspecialchars($item['brand']); ?></p>
-                    <p>Condition: <?php echo htmlspecialchars($item['condition']); ?></p>
+                    <div class="product">
+                        <h3><?php echo htmlspecialchars($item['title']); ?></h4>
+                        <div class="image-container">
+                            <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                        </div>
+                        <p>€<?php echo number_format($item['price'], 2); ?></p>
+                        <p>Brand: <?php echo htmlspecialchars($item['brand']); ?></p>
+                        <p>Condition: <?php echo htmlspecialchars($item['condition']); ?></p>
+                        <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                 </a>
             </div>
         <?php endforeach; ?>

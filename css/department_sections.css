@@ -17,7 +17,6 @@ body, html {
 }
 
 header {
-    height: 2em;
     background-color: var(--lightpink);
     padding: 10px 20px;
 }
