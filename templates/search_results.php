@@ -134,14 +134,15 @@ try {
     <main>
         <nav class="category-bar">
             <ul>
-                <li><a href="women_section.php">Women</a></li> 
-                <li><a href="men_section.php">Men</a></li> 
-                <li><a href="kids_section.php">Kids</a></li> 
-                <li><a href="bags_section.php">Bags</a></li> 
-                <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.html">Accessories</a></li> 
+                <?php foreach ($departments as $department): ?>
+                    <li class="<?php echo $current_department_id === $department['id'] ? 'pink-highlight' : ''; ?>">
+                        <a href="?department_id=<?php echo $department['id']; ?>">
+                            <?php echo htmlspecialchars($department['d_name']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
-        </nav> 
+        </nav>
 
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>

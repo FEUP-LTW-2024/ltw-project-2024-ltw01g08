@@ -9,7 +9,6 @@ try {
     $stmt_departments->execute();
     $departments = $stmt_departments->fetchAll(PDO::FETCH_ASSOC);
 
-    // Determine current department
     $current_department_id = filter_input(INPUT_GET, 'department_id', FILTER_VALIDATE_INT);
     if (!$current_department_id) {
         $current_department_id = $departments[0]['id'];

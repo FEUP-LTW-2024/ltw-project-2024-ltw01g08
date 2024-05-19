@@ -163,20 +163,6 @@ footer {
     box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .products {
-        justify-content: center;
-    }
-
-    .product {
-        width: 90%; 
-    }
-    .search-bar {
-        width: 100px; 
-    }
-}
-
 .filter-sidebar {
     width: 200px;  
     float: left;  
@@ -330,4 +316,100 @@ footer {
 /* Toggling Visibility: Make Dropdown Visible */
 .profile-dropdown.show .dropdown-content {
     display: block;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px) {
+
+    .filter-sidebar {
+        width: 100%; /* Take full width on smaller screens */
+        padding: 20px; /* Restore padding */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+    
+    .filter-sidebar label {
+        width: 100%; /* Make labels full width */
+    }
+    
+    .filter-sidebar select,
+    .filter-sidebar input[type="text"] {
+        width: 100%; /* Make inputs full width */
+    }
+
+    .filter-sidebar button[type="submit"],
+    .filter-sidebar button.reset {
+        width: 100%; /* Make buttons full width */
+    }
+
+    .category-bar ul {
+        text-transform: uppercase;
+        display: flex;
+        list-style-type: none;
+        font-size: 0.5em;
+        margin: 0;
+        padding: 0;
+        align-content: center;
+        justify-content: center;
+        background-color: var(--white); 
+    }
+    .category-bar li {
+        margin-top: 3em; 
+        margin-bottom: 0em; 
+        padding: 0 15px;
+        color: var(--black);
+    }
+
+    .top-bar {
+        margin-bottom: 2em;
+    }
+    .products {
+        justify-content: center; 
+    }
+
+    .product {
+        width: calc(50% - 30px); 
+        margin: 10px; 
+    }
+    
+    .search-bar {
+        padding: 8px; 
+        width: 7em;
+    }
+    .top-bar {
+        height: 2.0em;
+    }
+
+    body {
+        font-size: 14px;
+    }
+    .top-bar {
+        font-size: 1em;
+    }
+    .logo {
+        text-align: center;
+    }
+    .top-bar {
+        padding: 5px 10px;
+    }
+    .filter-sidebar,
+    .sorter-sidebar {
+        width: 100%; 
+        margin: 0; 
+        padding: 10px; 
+        box-sizing: border-box;
+    }
+
+    .sorter-sidebar h2,
+    .filter-sidebar h2 {
+        font-size: 12px; /* Adjust the font size as needed */
+    }
+    .filter-sidebar label {
+        font-size: 10px; /* Adjust the font size as needed */
+    }
+
+
+    .menu-toggle {
+        display: none; /* Initially hidden on larger screens */
+        cursor: pointer;
+    }
 }

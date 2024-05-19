@@ -234,9 +234,6 @@ footer {
 }
 
 
-
-
-
 .search-bar button {
     background-color: var(--black);  /* Button color */
     color: var(--white);  /* Text color */
@@ -253,7 +250,7 @@ footer {
     background-color: var(--darkerpink);  /* Darker on hover */
 }
 
-/* Adjustments for smaller screens */
+
 @media only screen and (max-width: 768px) {
     .top-bar {
         align-items: center;
