@@ -32,6 +32,18 @@ $favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favou
 $favStmt->execute([$userId]);
 $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+$soldStmt = $pdo->prepare("
+    SELECT Item.*, \"Transaction\".transaction_date 
+    FROM Item 
+    INNER JOIN \"Transaction\" ON Item.id = \"Transaction\".item_id 
+    WHERE \"Transaction\".seller_id = ?
+");
+
+
+$soldStmt->execute([$userId]);
+$soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -85,8 +97,8 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link active" onclick="openTab(event, 'items')">Items for Sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
+            <button class="tab-link" onclick="openTab(event, 'sold_items')">Sold Items</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
-          
             <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
             
 
@@ -97,7 +109,7 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
 
-        <div id="reviews" class="tab-content"">
+        <div id="reviews" class="tab-content">
             <div class="review-container">
                 <!-- Reviews vêm para aqui -->
             </div>
@@ -129,7 +141,24 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
+        <div id="sold_items" class="tab-content">
+            <div class="products">
+                <?php foreach ($soldItems as $item): ?>
+                    <div class="product">
+                        <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
+                            <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
+                            <h3><?php echo htmlspecialchars($item['title']); ?></h4>
+                            <p>€<?php echo number_format($item['price'], 2); ?></p>
+                        </a>
+                        <button type="submit" class="remove-btn">Shipping form</button>
 
+                    </div>
+                <?php endforeach; ?>
+                <?php if (empty($soldItems)): ?>
+                    <p>No sold items yet.</p>
+                <?php endif; ?>
+            </div>
+        </div>
        
 
 

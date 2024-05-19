@@ -113,7 +113,6 @@ CREATE TABLE Item (
 
 
 
-
 DROP TABLE IF EXISTS "Transaction";
 
 CREATE TABLE "Transaction" (

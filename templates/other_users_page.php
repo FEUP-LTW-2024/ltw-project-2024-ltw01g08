@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta viewport="width=device-width, initial-scale=1.0">
-    <title>Other User's Profile - Elite Finds</title>
-    <link rel="stylesheet" href="../css/user_page.css">
-</head>
-<body>
-    <?php
+<?php
     session_start();
 
     if (!isset($_GET['user_id'])) {
@@ -30,7 +21,11 @@
         }
 
         // Fetch items for sale by the user
-        $itemsStmt = $pdo->prepare("SELECT * FROM Item WHERE seller_id = ?");
+    $itemsStmt = $pdo->prepare("
+        SELECT * FROM Item 
+        WHERE seller_id = ? 
+        AND id NOT IN (SELECT item_id FROM \"Transaction\" WHERE seller_id = ?)
+    ");
         $itemsStmt->execute([$userId]);
         $items = $itemsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -80,6 +75,18 @@
 
                 <?php endforeach; ?>
             <?php endif; ?>
+            
+            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Other User's Profile - Elite Finds</title>
+    <link rel="stylesheet" href="../css/user_page.css">
+</head>
+<body>
+   
         </div>
         <div id="reviews" class="tab-content" style="display:none;">
             <!-- Reviews fetched and displayed here -->

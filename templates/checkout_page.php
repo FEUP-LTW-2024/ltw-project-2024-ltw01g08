@@ -6,8 +6,12 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$pdo = new PDO('sqlite:../database/database.db');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO('sqlite:../database/database.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Connection error: " . $e->getMessage());
+}
 
 $user_id = $_SESSION['user_id'];
 $total = 0;
@@ -34,20 +38,52 @@ $shippingCosts = [
 ];
 
 try {
-    $stmt = $pdo->prepare("SELECT Item.id AS item_id, Item.title, Item.price FROM Cart JOIN Item ON Cart.item_id = Item.id WHERE Cart.user_id = ?");
+    $stmt = $pdo->prepare("
+        SELECT Item.id AS item_id, Item.title, Item.price, Item.seller_id 
+        FROM Cart 
+        JOIN Item ON Cart.item_id = Item.id 
+        WHERE Cart.user_id = ?
+    ");
     $stmt->execute([$user_id]);
     $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error fetching cart items: " . $e->getMessage());
 }
 
-$shippingCost = 0; 
+$shippingCost = 0;
 
 if (isset($_POST['district'])) {
     $userDistrict = $_POST['district'];
-    $shippingCost = $shippingCosts[$userDistrict] ?? 10.00; 
+    $shippingCost = $shippingCosts[$userDistrict] ?? 10.00;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_order'])) {
+    try {
+        $pdo->beginTransaction();
+
+        foreach ($cartItems as $item) {
+            $stmt = $pdo->prepare("
+                INSERT INTO \"Transaction\" (buyer_id, seller_id, item_id, price) 
+                VALUES (?, ?, ?, ?)
+            ");
+            $stmt->execute([$user_id, $item['seller_id'], $item['item_id'], $item['price']]);
+        }
+        
+        $pdo->commit();
+
+        $stmt = $pdo->prepare("DELETE FROM Cart WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+
+        header("Location: purchase.php");
+        exit;
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        die("Error recording transaction: " . $e->getMessage());
+    }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,7 +120,6 @@ if (isset($_POST['district'])) {
                 </select>
                 <label for="address">Address:</label>
                 <input type="text" id="address" name="address" required>
-                
                 <label for="city">City:</label>
                 <input type="text" id="city" name="city" required>
             </fieldset>
@@ -100,8 +135,8 @@ if (isset($_POST['district'])) {
             <?php if (isset($_POST['district'])): ?>
                 <p>Shipping: €<?php echo number_format($shippingCost, 2); ?></p>
                 <p>Total with Shipping: €<?php echo number_format($total + $shippingCost, 2); ?></p>
+                <button type="submit" name="submit_order" class="submit-btn">Submit Order</button>
             <?php endif; ?>
-            <button type="submit" class="submit-btn">Submit Order</button>
         </form>
     </div>
 </main>
