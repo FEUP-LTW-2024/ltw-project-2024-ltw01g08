@@ -29,7 +29,7 @@ General:
 - [x] Log in and out
 - [x] Edit their profile, including their name, username, password, and email.
 
-Buyers:
+Buyers/Sellers:
 - [x] Browse items using filters like category, price, and condition.
 - [x] Browse items using input.
 - [x] Engage with sellers to ask questions or negotiate prices.
@@ -42,7 +42,7 @@ Admins:
 
 Extras:
 - [x] Rating and Review System: A feedback mechanism for users to rate products and sellers.
-- [x] User Preferences: Allow users to set and filter searches based on personal preferences such as size, condition, gender-specific items, etc.
+- [x] Free search
 - [x] Shipping Costs: Calculate shipping costs depending on location (crude estimate).
 - [x] Real-Time Messaging System: A secure and efficient communication channel for buyers and sellers.
 
