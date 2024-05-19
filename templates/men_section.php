@@ -84,7 +84,9 @@ try {
 <body>
     <header>
         <div class="top-bar">
-            <input type="text" placeholder="Search" class="search-bar">
+            <form action="search_results.php" method="get">
+                <input type="text" name="query" placeholder="Search" class="search-bar" required>
+            </form>
             <span class="logo"><a href="../index.php" style="color: inherit; text-decoration: none;">ELITE FINDS</a></span>
             <div class="actions">
                 <span>H</span>

@@ -87,7 +87,9 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
             <ul>
             <?php foreach ($departments as $department): ?>
                     <li>
-                        <a href="templates/<?php echo strtolower(str_replace(' ', '_', htmlspecialchars($department['d_name']))); ?>_section.php">
+                        
+                        <!-- <a href="templates/<?php //echo strtolower(str_replace(' ', '_', htmlspecialchars($department['d_name']))); ?>_section.php"> !-->
+                        <a href="templates/departments.php">
                             <?php echo htmlspecialchars($department['d_name']); ?>
                         </a>
                     </li>

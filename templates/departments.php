@@ -3,24 +3,46 @@ try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sort = filter_input(INPUT_GET, 'sort', 513);
+    // Fetch all departments
+    $sql_departments = "SELECT * FROM Department";
+    $stmt_departments = $pdo->prepare($sql_departments);
+    $stmt_departments->execute();
+    $departments = $stmt_departments->fetchAll(PDO::FETCH_ASSOC);
+
+    // Determine current department
+    $current_department_id = filter_input(INPUT_GET, 'department_id', FILTER_VALIDATE_INT);
+    if (!$current_department_id) {
+        $current_department_id = $departments[0]['id'];
+    }
+
+    // Fetch categories for the current department
+    $sql_categories = "SELECT * FROM Category WHERE department_id = ?";
+    $stmt_categories = $pdo->prepare($sql_categories);
+    $stmt_categories->execute([$current_department_id]);
+    $categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql_subcategories = "SELECT Subcategory.id, Subcategory.subc_name FROM Subcategory 
+    INNER JOIN Category ON Subcategory.category_id = Category.id 
+    ";
+
+    $stmt_subcategories = $pdo->prepare($sql_subcategories);
+    $stmt_subcategories->execute();
+    $subcategories = $stmt_subcategories->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch items for the current department with filtering and sorting
+    $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
-    $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $categories_filter = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);  // Changed to handle an array of sizes
+    $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $minPrice = filter_input(INPUT_GET, 'min_price', FILTER_VALIDATE_FLOAT);
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
 
-
-
     // Initialize the SQL query
-    $sql = "SELECT * FROM Item WHERE department_id = 122";
-    $params = [];
+    $sql = "SELECT * FROM Item WHERE department_id = ?";
+    $params = [$current_department_id];
 
-    $sql_category = "SELECT * FROM Category WHERE department_id = 122";
-    $params_category = [];
-
-    // conditions for price
+    // Apply filters
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
         $params[] = $minPrice;
@@ -31,19 +53,15 @@ try {
         $params[] = $maxPrice;
     }
 
-    // Process categories
-    if (!empty($categories) && !in_array('all', $categories)) {
-        $placeholders = implode(', ', array_fill(0, count($categories), '?'));
-        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = 122)";
-        foreach ($categories as $category) {
+    if (!empty($categories_filter) && !in_array('all', $categories_filter)) {
+        $placeholders = implode(', ', array_fill(0, count($categories_filter), '?'));
+        $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders) AND department_id = ?)";
+        foreach ($categories_filter as $category) {
             $params[] = $category;
         }
+        $params[] = $current_department_id;
     }
-    
-    
 
-
-    // Process conditions
     if (!empty($conditions)) {
         $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
         $sql .= " AND condition IN ($conditionPlaceholders)";
@@ -52,7 +70,6 @@ try {
         }
     }
 
-    // Process sizes
     if (!empty($sizes)) {
         $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
         $sql .= " AND item_size IN ($sizePlaceholders)";
@@ -61,53 +78,36 @@ try {
         }
     }
 
-    //  sorting
+    // Sorting
     $sql .= " ORDER BY price $order";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-    $stmt = $pdo->prepare($sql_category);
-    $stmt->execute($params_category);
-    $categories_=$stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $sql_subcategories = "SELECT Subcategory.id, Subcategory.subc_name FROM Subcategory 
-                      INNER JOIN Category ON Subcategory.category_id = Category.id 
-                      ";
-
-    $stmt_subcategories = $pdo->prepare($sql_subcategories);
-    $stmt_subcategories->execute();
-    $subcategories = $stmt_subcategories->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Section - Elite Finds</title>
+    <title>Department - Elite Finds</title>
     <link rel="stylesheet" href="../css/women_section.css">
 </head>
 <body>
     <header>
-
-    <div class="top-bar">
+        <div class="top-bar">
             <form action="search_results.php" method="get">
                 <input type="text" name="query" placeholder="Search" class="search-bar" required>
             </form>
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
-            <a href="all_chats.php">
-                <span>M</span>
-            </a>
+                <a href="all_chats.php">
+                    <span>M</span>
+                </a>
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">
                     <div id="dropdown-menu" class="dropdown-content">
@@ -119,55 +119,52 @@ try {
                     <a href="shopping_cart.php">
                         <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart">
                     </a>
-                </span> 
+                </span>
             </div>
         </div>
     </header>
 
     <main>
-
-
-    
-    <nav class="category-bar">
+        <nav class="category-bar">
             <ul>
-                <li class="pink-highlight"><a href="women_section.php">Women</a></li> 
-                <li><a href="men_section.php">Men</a></li> 
-                <li><a href="kids_section.php">Kids</a></li> 
-                <li><a href="bags_section.php">Bags</a></li> 
-                <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.html">Accessories</a></li> 
+                <?php foreach ($departments as $department): ?>
+                    <li class="<?php echo $current_department_id === $department['id'] ? 'pink-highlight' : ''; ?>">
+                        <a href="?department_id=<?php echo $department['id']; ?>">
+                            <?php echo htmlspecialchars($department['d_name']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
-        </nav> 
-
+        </nav>
 
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
-            <form id="sorters">
+            <form id="sorters" method="GET">
+                <input type="hidden" name="department_id" value="<?php echo $current_department_id; ?>">
                 <label for="sort-price">Price:</label>
-                <select id="sort-price" onchange="sortProducts();">
+                <select id="sort-price" name="sort" onchange="sortProducts();">
                     <option value="default">--</option>
-                    <option value="low-to-high">Low to High</option>
-                    <option value="high-to-low">High to Low</option>
+                    <option value="low-to-high" <?php if ($sort === 'low-to-high') echo 'selected'; ?>>Low to High</option>
+                    <option value="high-to-low" <?php if ($sort === 'high-to-low') echo 'selected'; ?>>High to Low</option>
                 </select>
             </form>
         </aside>
-        
+
         <aside class="filter-sidebar">
             <h2>Filter By</h2>
             <form id="filters" method="GET">
-    
-            <fieldset>
-                <legend>Category</legend>
-                <?php foreach ($categories_ as $category): ?>
-                    <label>
-                        <input type="checkbox" value="<?php echo htmlspecialchars($category['c_name']); ?>" name="category[]">
-                        <?php echo htmlspecialchars($category['c_name']); ?>
-                    </label>
-                <?php endforeach; ?>
-            </fieldset>
+                <input type="hidden" name="department_id" value="<?php echo $current_department_id; ?>">
+                <fieldset>
+                    <legend>Category</legend>
+                    <?php foreach ($categories as $category): ?>
+                        <label>
+                            <input type="checkbox" value="<?php echo htmlspecialchars($category['c_name']); ?>" name="category[]">
+                            <?php echo htmlspecialchars($category['c_name']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                </fieldset>
 
-        
-            <fieldset>
+                <fieldset>
                 <legend>Subcategory</legend>
                 <div id="subcategory-container">
                     <?php if (!empty($subcategories)): ?>
@@ -181,7 +178,6 @@ try {
                 </div>
             </fieldset>
 
-
                 <fieldset>
                     <legend>Condition</legend>
                     <div id="condition-container">
@@ -192,7 +188,6 @@ try {
                     </div>
                 </fieldset>
 
-        
                 <fieldset>
                     <legend>Size</legend>
                     <label><input type="checkbox" name="size[]" value="XS">XS</label>
@@ -202,8 +197,6 @@ try {
                     <label><input type="checkbox" name="size[]" value="XL">XL</label>
                 </fieldset>
 
-        
-    
                 <label for="min-price">Min Price:</label>
                 <input type="text" id="min-price" name="min_price" placeholder="Min Price">
 
@@ -213,120 +206,44 @@ try {
                 <button type="button" class="reset" onclick="resetFilters()">Reset Filters</button>
                 <button type="submit">Apply Filters</button>
             </form>
-           
-
         </aside>
 
         <div class="products">
-    <?php foreach ($items as $item):
-        // Assuming you have a seller_id and need to fetch the seller's username for each item
-        $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
-        $seller_username_stmt->execute([$item['seller_id']]);
-        $seller_username = $seller_username_stmt->fetchColumn();
-
-        // If no username was found, use a placeholder or empty string
-        $seller_username = $seller_username ?: 'Unknown';  // Default to 'Unknown' if no username is found
-        $image_url = "../images/items/item{$item['id']}_1.png";
-    ?>
-        <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
-            <div class="product">
-                <p>@<?php echo htmlspecialchars($seller_username); ?></p>
-                <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
-                <div class="image-container">
-                    <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
-                </div>
-                <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
-            </div>
-        </a>
-    <?php endforeach; ?>
-</div>
-
-    <div class="pagination">
-            <button onclick="changePage(-1)">Prev</button>
-            <span id="pageNumber">1</span>
-            <button onclick="changePage(1)">Next</button>
-    </div>
-
-
-
+            <?php foreach ($items as $item):
+                $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
+                $seller_username_stmt->execute([$item['seller_id']]);
+                $seller_username = $seller_username_stmt->fetchColumn();
+                $seller_username = $seller_username ?: 'Unknown';
+                $image_url = "../images/items/item{$item['id']}_1.png";
+            ?>
+                <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
+                    <div class="product">
+                        <p>@<?php echo htmlspecialchars($seller_username); ?></p>
+                        <h3><?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?></h3>
+                        <div class="image-container">
+                            <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                        </div>
+                        <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
+                        <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
     </main>
 
     <footer>
-    <div class="footer-content">
-            <div>
-                <h4>Customer Care</h4>
-                <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Refer a friend</a></li>
-                    <li><a href="#">Shipping info</a></li>
-                    <li><a href="#">Returns policy</a></li>
-                    <li><a href="#">Contact us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">How to sell</a></li>
-                    <li><a href="#">Terms of service</a></li>
-                </ul>
-            </div>
-        </div>
+        <ul class="footer-list">
+            <li><a href="shipping.html">Shipping</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="our_story.html">Our Story</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="contact_us.html">Contact Us</a></li>
+        </ul>
     </footer>
+
+
+    
     <script>
-       function updateSubcategories() {
-        var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:checked');
-        var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
-        var subcategoryContainer = document.getElementById('subcategory-container');
-        subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
-
-    var options = {
-        'Dresses': ['Mini', 'Midi', 'Maxi'],
-        'Coats': ['Winter', 'Summer', 'Raincoat'],
-        'Shoes': ['Sneakers', 'Boots', 'Sandals', 'Heels'],
-        'Jeans': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
-        'Skirts': ['Mini', 'Midi', 'Maxi'],
-        'Shorts': ['Short length', 'Mid length'],
-        'Tops': ['T-shirts', 'Blouses', 'Crop tops', 'Shirts'],
-        'Pants': ['Loose Fit', 'Skinny Fit', 'Bootcut'],
-        'Swimwear': ['Bikini', 'One-piece']
-    };
-
-    selectedCategories.forEach(category => {
-        if (options[category]) {
-            options[category].forEach(sub => {
-                var label = document.createElement('label');
-                var checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = sub;
-                checkbox.name = 'subcategory[]';
-                label.appendChild(checkbox);
-                label.append(sub);
-                subcategoryContainer.appendChild(label);
-            });
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]');
-    categoryCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateSubcategories);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var categoryCheckboxes = document.querySelectorAll('input[name="category"]');
-    categoryCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateSubcategories);
-    });
-    updateSubcategories();
-});
-
-
-        </script>
-        <script>
             const productsPerPage = 9;
             let currentPage = 1;
         
