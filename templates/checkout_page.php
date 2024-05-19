@@ -141,7 +141,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_order'])) {
     </div>
 </main>
 <footer>
-    <!-- Footer content  -->
-</footer>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
+    </footer>
 </body>
 </html>

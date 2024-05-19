@@ -9,7 +9,6 @@ try {
     $stmt_departments->execute();
     $departments = $stmt_departments->fetchAll(PDO::FETCH_ASSOC);
 
-    // Determine current department
     $current_department_id = filter_input(INPUT_GET, 'department_id', FILTER_VALIDATE_INT);
     if (!$current_department_id) {
         $current_department_id = $departments[0]['id'];
@@ -254,13 +253,9 @@ try {
     </main>
 
     <footer>
-        <ul class="footer-list">
-            <li><a href="shipping.html">Shipping</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="our_story.html">Our Story</a></li>
-            <li><a href="returns.html">Returns</a></li>
-            <li><a href="contact_us.html">Contact Us</a></li>
-        </ul>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
     </footer>
 
     <script>

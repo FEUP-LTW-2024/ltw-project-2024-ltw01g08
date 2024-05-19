@@ -55,5 +55,10 @@ $chats = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </ul>
     </div>
+    <footer>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
+        </div>
+    </footer>
 </body>
 </html>

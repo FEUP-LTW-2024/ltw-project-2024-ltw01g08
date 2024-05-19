@@ -30,8 +30,8 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
-// Assign profile picture or default
-$profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  // Use a default profile picture if none is set
+
+$profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  
 ?>
 
 
@@ -88,8 +88,6 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
             <ul>
             <?php foreach ($departments as $department): ?>
                     <li>
-                        
-                        <!-- <a href="templates/<?php //echo strtolower(str_replace(' ', '_', htmlspecialchars($department['d_name']))); ?>_section.php"> !-->
                         <a href="templates/departments.php">
                             <?php echo htmlspecialchars($department['d_name']); ?>
                         </a>
@@ -143,19 +141,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  /
 
     <footer>
         <div class="footer-section">
-            <p>Customer Care</p>
-            <ul>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Shipping info</a></li>
-                <li><a href="#">Returns policy</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <p>Company</p>
-            <ul>
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Terms of service</a></li>
-            </ul>
+            <p>&copy;Elite Finds, 2024</p>
         </div>
     </footer>
 

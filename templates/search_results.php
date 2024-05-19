@@ -132,16 +132,17 @@ try {
     </header>
 
     <main>
-        <nav class="category-bar">
+    <nav class="category-bar">
             <ul>
-                <li><a href="women_section.php">Women</a></li> 
-                <li><a href="men_section.php">Men</a></li> 
-                <li><a href="kids_section.php">Kids</a></li> 
-                <li><a href="bags_section.php">Bags</a></li> 
-                <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.html">Accessories</a></li> 
+            <?php foreach ($departments as $department): ?>
+                    <li>
+                        <a href="departments.php">
+                            <?php echo htmlspecialchars($department['d_name']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
-        </nav> 
+        </nav>
 
         <aside class="sorter-sidebar">
             <h2>Sort By</h2>
@@ -250,25 +251,8 @@ try {
     </main>
 
     <footer>
-        <div class="footer-content">
-            <div>
-                <h4>Customer Care</h4>
-                <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Refer a friend</a></li>
-                    <li><a href="#">Shipping info</a></li>
-                    <li><a href="#">Returns policy</a></li>
-                    <li><a href="#">Contact us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">How to sell</a></li>
-                    <li><a href="#">Terms of service</a></li>
-                </ul>
-            </div>
+        <div class="footer-section">
+            <p>&copy;Elite Finds, 2024</p>
         </div>
     </footer>
     
