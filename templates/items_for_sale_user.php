@@ -21,8 +21,16 @@ try {
 // Retrieve user ID from session
 $userId = $_SESSION['user_id'];
 
-// Fetch user's items for sale from the database
-$stmt = $pdo->prepare("SELECT * FROM Item WHERE seller_id = ?");
+// Fetch user's items for sale from the database including detailed information about item sizes
+$stmt = $pdo->prepare("
+    SELECT Item.id, Item.title, Item.price, ItemSizes.size_description AS item_size, Item.color, Category.c_name AS category_name, Department.d_name AS department_name
+    FROM Item
+    JOIN ItemSizes ON Item.item_size = ItemSizes.id
+    JOIN Category ON Item.category_id = Category.id
+    JOIN Department ON Category.department_id = Department.id
+    WHERE Item.seller_id = ?
+    AND Item.id NOT IN (SELECT item_id FROM 'Transaction')
+");
 $stmt->execute([$userId]);
 $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -35,10 +43,13 @@ $itemsForSale = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="product_page.php?product_id=<?php echo $item['id']; ?>">
                     <h3><?php echo htmlspecialchars($item['title']); ?></h3>
                     <div class="image-container">
-                        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
+                        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
                     </div>
                     <p>€<?php echo number_format($item['price'], 2); ?></p>
-                    <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
+                    <p>Size: <?php echo htmlspecialchars($item['item_size']); ?></p>
+                    <p>Color: <?php echo htmlspecialchars($item['color']); ?></p>
+                    <p>Category: <?php echo htmlspecialchars($item['category_name']); ?></p>
+                    <p>Department: <?php echo htmlspecialchars($item['department_name']); ?></p>
                 </a>
                 <form onsubmit="deleteItem(event, <?php echo $item['id']; ?>)">
                     <button type="submit" class="delete-btn">Delete</button>
@@ -70,5 +81,4 @@ function deleteItem(event, itemId) {
         xhr.send("item_id=" + itemId);
     }
 }
-
 </script>
