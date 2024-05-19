@@ -100,13 +100,9 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'sold_items')">Sold Items</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
-<<<<<<< HEAD
-            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
-=======
             <?php if ($isAdmin) { ?>
                 <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
             <?php } ?>
->>>>>>> c9d4c5e88ac35731caba352eb58e1817bf8e02c3
 
         </div>
 
