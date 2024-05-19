@@ -6,27 +6,20 @@
 
 ## Screenshots
 <img width="1508" alt="Screenshot 2024-05-20 at 00 35 17" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/c13bcec9-2de1-4e28-8f47-f5cf2b6e1d91">
-- main page
 
 <img width="1508" alt="Screenshot 2024-05-20 at 00 35 33" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/8c57773f-1b5d-42f7-bbe5-5058e41c02a5">
-- product page
 
 
 <img width="1508" alt="Screenshot 2024-05-20 at 00 36 00" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/4eb442c7-6ecf-40b7-b292-fd2ef330dd7c">
-- add item page
 
 <img width="1512" alt="Screenshot 2024-05-20 at 00 30 55" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/4a314ec4-8f45-49b5-a8a3-ae0ceec884b7">
-- department page
 
 <img width="692" alt="Screenshot 2024-05-19 at 23 32 07" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/15064dde-5c32-4687-972e-3f665612c7a9">
-- sale confirmation
 
 ![sold_items](https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/26b908de-b3d3-4808-adcb-9f4c5efacc8f)
-- items sold
 
 
 <img width="1228" alt="Screenshot 2024-05-20 at 00 34 10" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/5711b283-3206-4d1c-adb7-128be4409fb5">
-- reviews
 
 
 
