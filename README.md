@@ -4,7 +4,7 @@
 - Francisca Santos Fernandes (up202106509)
 - Maria João Oliveira Vieira (up202204802)
 
-##Funcionalidades 
+###Funcionalidades 
 - [x] Register a new account
 - [x] Log in and out
 - [x] Edit their profile, including their name, username, password, and email.
