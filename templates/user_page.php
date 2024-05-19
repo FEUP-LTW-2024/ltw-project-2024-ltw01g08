@@ -77,6 +77,9 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
             </form>
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
+            <a href="all_chats.php">
+                    <span>Chat</span>
+                </a>
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/avatar.png" alt="Profile" class="icon">
                     <div id="dropdown-menu" class="dropdown-content">
