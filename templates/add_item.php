@@ -49,7 +49,17 @@
         </div>
         <div class="form-row">
             <label for="size">Size</label>
-            <input type="text" id="size" name="size" required>
+            <select id="size" name="size" required>
+    <option value="" disabled selected>Select Size</option>
+    <?php
+    // Assuming you have a PDO instance as $pdo
+    $sizeStmt = $pdo->query("SELECT id, size_description FROM ItemSizes ORDER BY id ASC");
+    while ($row = $sizeStmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['size_description']) . "</option>";
+    }
+    ?>
+</select>
+
         </div>
         <div class="form-row">
             <label for="color">Color</label>
@@ -58,9 +68,16 @@
         <div class="form-row">
             <label for="condition">Condition</label>
             <select id="condition" name="condition" required>
-                <option value="" disabled selected>Select Condition</option>
-                <!-- populate this dropdown -->
-            </select>
+    <option value="" disabled selected>Select Condition</option>
+    <?php
+    // Assuming you have a PDO instance as $pdo
+    $stmt = $pdo->query("SELECT id, condition_description FROM ItemConditions ORDER BY id ASC");
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['condition_description']) . "</option>";
+    }
+    ?>
+</select>
+
         </div>
         <div class="form-row">
             <label for="price">Price (€)</label>

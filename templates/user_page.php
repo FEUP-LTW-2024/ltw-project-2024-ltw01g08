@@ -91,8 +91,9 @@ $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div id="items" class="tab-content" style="display:block;">
-            <!-- conteudo de Items for Sale -->
-        </div>
+    <?php include 'items_for_sale_user.php'; ?>
+</div>
+
 
         <div id="reviews" class="tab-content" style="display:none;">
             <div class="review-container">
