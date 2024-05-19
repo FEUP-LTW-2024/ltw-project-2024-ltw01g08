@@ -70,9 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: signup_admin.php');
         exit;
     }
-} else {
-    header('Location: signup_admin.php');
-    exit;
 }
 ?>
 
