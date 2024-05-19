@@ -100,7 +100,6 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'sold_items')">Sold Items</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
             <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
-            
 
         </div>
 
@@ -231,7 +230,7 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
-        function addToCart(event, itemId) {
+    function addToCart(event, itemId) {
     event.preventDefault(); 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "add_to_cart.php", true);
