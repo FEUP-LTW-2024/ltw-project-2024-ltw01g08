@@ -100,9 +100,13 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'sold_items')">Sold Items</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
+<<<<<<< HEAD
+            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
+=======
             <?php if ($isAdmin) { ?>
                 <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
             <?php } ?>
+>>>>>>> c9d4c5e88ac35731caba352eb58e1817bf8e02c3
 
         </div>
 
@@ -228,6 +232,18 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             xhr.send("item_id=" + itemId);
         }
 
+<<<<<<< HEAD
+    function addToCart(event, itemId) {
+    event.preventDefault(); 
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "add_to_cart.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function () {
+        if (this.status == 200) {
+            alert('Item added to cart successfully!');
+        } else {
+            alert('Error adding item to cart.');
+=======
         function addToCart(event, itemId) {
             event.preventDefault(); 
             var xhr = new XMLHttpRequest();
@@ -241,6 +257,7 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             };
             xhr.send("item_id=" + itemId + "&user_id=" + <?php echo json_encode($_SESSION['user_id']); ?>);
+>>>>>>> c9d4c5e88ac35731caba352eb58e1817bf8e02c3
         }
     </script>
 </body>

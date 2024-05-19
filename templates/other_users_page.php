@@ -20,7 +20,7 @@
             die('User not found.');
         }
 
-        // Fetch items for sale by the user
+
     $itemsStmt = $pdo->prepare("
         SELECT * FROM Item 
         WHERE seller_id = ? 
@@ -33,11 +33,35 @@
         die("Connection error: " . $e->getMessage());
     }
     ?>
+    
+            
+            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>User's Profile - Elite Finds</title>
+    <link rel="stylesheet" href="../css/user_page.css">
+</head>
+<body>
     <header>
         <div class="top-bar">
-            <input type="text" placeholder="Search" class="search-bar">
+        <form action="search_results.php" method="get">
+                <input type="text" name="query" placeholder="Search" class="search-bar" required>
+            </form>
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
+                <span class="profile-dropdown">
+                    <img id="profile-icon" src="<?php echo $profilePic; ?>" alt="Profile" class="icon">
+                    <div id="dropdown-menu" class="dropdown-content">
+                        <a href="user_page.php">User Profile</a>
+                        <a href="account_info.php">Account Info</a>
+                        <form action="/../actions/action_logout.php" method="post" class="logout">
+                            <button type="submit">Log Out</button>
+                        </form>
+                    </div>
+                </span>
                 <a href="shopping_cart.php">
                     <img src="../images/icons/shopping_cart_icon.png" alt="Shopping Cart" class="icon cart-icon">
                 </a>
@@ -47,17 +71,19 @@
 
     <main>
         <div class="user-profile">
-            <img src="<?php echo $user['profile_picture'] ?? '../images/icons/avatar.png'; ?>" alt="User's Profile" class="profile-photo">
+            <img src="<?php echo $profilePic; ?>" alt="User's Profile" class="profile-photo">
             <div class="user-details">
                 <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h1>
                 <p>@<?php echo $user['username']; ?></p>
             </div>
         </div>
+
         <div class="tabs">
             <button class="tab-link active" onclick="openTab(event, 'items')">Items for sale</button>
             <button class="tab-link" onclick="openTab(event, 'reviews')">Reviews</button>
         </div>
-        <div id="products">
+
+        <div id="items">
             <?php if (empty($items)): ?>
                 <p>No items for sale.</p>
             <?php else: ?>
@@ -72,24 +98,14 @@
                             <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
                         </div>
                     </a>
-
                 <?php endforeach; ?>
             <?php endif; ?>
-            
-            
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta viewport="width=device-width, initial-scale=1.0">
-    <title>Other User's Profile - Elite Finds</title>
-    <link rel="stylesheet" href="../css/user_page.css">
-</head>
-<body>
-   
         </div>
-        <div id="reviews" class="tab-content" style="display:none;">
-            <!-- Reviews fetched and displayed here -->
+
+        <div id="reviews" class="tab-content">
+        <div class="review-container">
+                <!-- Reviews vêm para aqui -->
+            </div>
         </div>
     </main>
 
@@ -113,6 +129,23 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
+
+        document.getElementById('profile-icon').addEventListener('click', function(event) {
+            event.stopPropagation();
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            dropdownContainer.classList.toggle('show');
+        });
+
+        window.addEventListener('click', function(event) {
+            const dropdownContainer = document.querySelector('.profile-dropdown');
+            if (dropdownContainer.classList.contains('show')) {
+                dropdownContainer.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            openTab(event, 'items'); 
+        });
     </script>
 </body>
 </html>
