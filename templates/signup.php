@@ -9,21 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $confirm_password = filter_input(INPUT_POST, 'confirm-password', FILTER_SANITIZE_STRING);
-    $admin_code = filter_input(INPUT_POST, 'admin-code', FILTER_SANITIZE_STRING);
     $profile_pic = $_FILES['profile-pic'];
 
     // Check if passwords match
     if ($password !== $confirm_password) {
         $_SESSION['error_message'] = "Passwords do not match.";
-        header('Location: signup_admin.php');
-        exit;
-    }
-
-    // Validate the admin code
-    $valid_admin_code = 'iamanadmin2024';
-    if ($admin_code !== $valid_admin_code) {
-        $_SESSION['error_message'] = "Invalid admin code.";
-        header('Location: signup_admin.php');
+        header('Location: signup.php');
         exit;
     }
 
@@ -39,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $profile_pic_url = $target_file;
         } else {
             $_SESSION['error_message'] = "Failed to upload profile picture.";
-            header('Location: signup_admin.php');
+            header('Location: signup.php');
             exit;
         }
     }
@@ -54,25 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$first_name, $last_name, $username, $email, $hashed_password, $address, $profile_pic_url]);
 
-        // Get the user ID of the newly created user
-        $user_id = $pdo->lastInsertId();
-
-        // Insert user into the Admin table
-        $sql_admin = "INSERT INTO Admin (user_id) VALUES (?)";
-        $stmt_admin = $pdo->prepare($sql_admin);
-        $stmt_admin->execute([$user_id]);
-
         $_SESSION['success_message'] = "Account created successfully!";
-        header('Location: signup_admin.php');
+        header('Location: signup.php');
         exit;
     } catch (PDOException $e) {
         $_SESSION['error_message'] = "Error: " . $e->getMessage();
-        header('Location: signup_admin.php');
+        header('Location: signup.php');
         exit;
     }
-} else {
-    header('Location: signup_admin.php');
-    exit;
 }
 ?>
 
@@ -81,12 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up as Admin - Elite Finds</title>
+    <title>Sign Up - Elite Finds</title>
     <link rel="stylesheet" href="../css/signup.css">
 </head>
 <body>
     <div class="form-signup">
-        <h2>Create an admin account</h2>
+        <h2>Create an account</h2>
         <?php if (isset($_SESSION['error_message'])): ?>
             <div class="alert alert-danger">
                 <?php echo $_SESSION['error_message']; ?>
@@ -99,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php unset($_SESSION['success_message']); ?>
             </div>
         <?php endif; ?>
-        <form action="signup_admin.php" method="post" enctype="multipart/form-data">
+        <form action="signup.php" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="fname">First Name:</label>
                 <input type="text" id="fname" name="fname" required>
@@ -131,10 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="profile-pic">Profile Picture:</label>
                 <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label for="admin-code">Admin Code:</label>
-                <input type="text" id="admin-code" name="admin-code" required>
             </div>
             <button type="submit">SIGN UP</button>
         </form>

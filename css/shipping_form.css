@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.shipping-form {
+    margin: 0 auto;
+    width: 50%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.shipping-form p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.shipping-form strong {
+    display: inline-block;
+    width: 150px;
+}
