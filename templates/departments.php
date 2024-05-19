@@ -126,7 +126,7 @@ try {
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
                 <a href="all_chats.php">
-                    <span>M</span>
+                    <span>Chat</span>
                 </a>
                 <span class="profile-dropdown">
                     <img id="profile-icon" src="../images/icons/profile.png" alt="Profile">

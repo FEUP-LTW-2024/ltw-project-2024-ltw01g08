@@ -1,0 +1,28 @@
+Test Case 3: Signup
+Test Case ID: TC_SIGNUP_01
+Description: Test signup functionality with valid data.
+Preconditions: None (besides choosing unique username and mail).
+Steps:
+Open the signup page.
+Enter valid information in all required fields (first name, last name, email, username, password, confirm password, address).
+Click on the "Signup" button.
+Expected Result:
+The user account is created successfully.
+Actual Result:
+The user account is created successfully.
+
+
+
+Test Case 4: Signup with Existing Username
+Test Case ID: TC_SIGNUP_02
+Description: Test signup functionality with an existing username.
+Preconditions: Username must already exist in the system.
+Steps:
+Open the signup page.
+Enter information with an existing username.
+Click on the "Signup" button.
+Expected Result:
+An error message "Username already exists" is displayed.
+The user remains on the signup page.
+Actual Result:
+error message
