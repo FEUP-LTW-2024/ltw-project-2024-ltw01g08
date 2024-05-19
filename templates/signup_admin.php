@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo = new PDO('sqlite:../database/database.db');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->beginTransaction(); // start the transaction
 
         // Insert user into the User table
         $sql = "INSERT INTO User (first_name, last_name, username, email, user_password, user_address, profile_picture) 
@@ -62,10 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_admin = $pdo->prepare($sql_admin);
         $stmt_admin->execute([$user_id]);
 
+        $pdo->commit(); // commit the transaction
+
         $_SESSION['success_message'] = "Account created successfully!";
         header('Location: signup_admin.php');
         exit;
     } catch (PDOException $e) {
+        $pdo->rollBack(); // roll back the transaction if something failed
         $_SESSION['error_message'] = "Error: " . $e->getMessage();
         header('Location: signup_admin.php');
         exit;

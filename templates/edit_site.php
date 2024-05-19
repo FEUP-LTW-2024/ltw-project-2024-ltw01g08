@@ -1,14 +1,24 @@
 <?php
-$pdo = new PDO('sqlite:../database/database.db');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Fetch departments
+// Initialize PDO for database connection
+try {
+    $pdo = new PDO('sqlite:../database/database.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_TIMEOUT, 10); // Set timeout to 10 seconds
+} catch (PDOException $e) {
+    die("Connection error: " . $e->getMessage());
+}
+
+// Fetch all departments
 $sql_dep = "SELECT * FROM Department";
 $stmt = $pdo->prepare($sql_dep);
 $stmt->execute();
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch categories with their respective departments
+// Fetch categories linked with their departments for better context in selection
 $sql_cat = "
     SELECT Category.id, Category.c_name, Department.d_name 
     FROM Category 
@@ -24,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoryId = $_POST['category'] ?? null;
 
     try {
+        $pdo->beginTransaction();
+
         switch ($editOption) {
             case 'department':
                 $stmt = $pdo->prepare("INSERT INTO Department (d_name) VALUES (?)");
@@ -48,11 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
         }
 
-        header("Location: " . $_SERVER['PHP_SELF']); 
-        exit;
+        $pdo->commit();
+        $_SESSION['success_message'] = "Change successful!";
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $pdo->rollBack();
+        $_SESSION['error_message'] = "Database error: " . $e->getMessage();
     }
+
+    header("Location: " . $_SERVER['PHP_SELF']); // Redirect to refresh the form post submission
+    exit;
 }
 ?>
 
@@ -67,6 +83,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="main">
         <h1>Edit Site</h1>
+
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <?php echo $_SESSION['success_message']; ?>
+                <?php unset($_SESSION['success_message']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger">
+                <?php echo $_SESSION['error_message']; ?>
+                <?php unset($_SESSION['error_message']); ?>
+            </div>
+        <?php endif; ?>
+
         <form id="editForm" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <label for="editOption">Select Option to Add:</label>
@@ -112,6 +143,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
+    <script>
+        function toggleSelects() {
+            var editOption = document.getElementById("editOption").value;
+            var departmentSelect = document.getElementById("departmentSelect");
+            var categorySelect = document.getElementById("categorySelect");
+
+            departmentSelect.style.display = (editOption === "category") ? "block" : "none";
+            categorySelect.style.display = (editOption === "subcategory") ? "block" : "none";
+        }
+    </script>
+
     <footer>
         <div class="footer-section">
             <p>Customer Care</p>
@@ -131,16 +173,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </ul>
         </div>
     </footer>
-
-    <script>
-        function toggleSelects() {
-            var editOption = document.getElementById("editOption").value;
-            var departmentSelect = document.getElementById("departmentSelect");
-            var categorySelect = document.getElementById("categorySelect");
-
-            departmentSelect.style.display = (editOption === "category") ? "block" : "none";
-            categorySelect.style.display = (editOption === "subcategory" || editOption === "condition" || editOption === "size") ? "block" : "none";
-        }
-    </script>
 </body>
 </html>

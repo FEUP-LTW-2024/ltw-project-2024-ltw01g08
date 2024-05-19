@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Redirect to login if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../php/login.php');
     exit;
@@ -13,6 +14,7 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
+// Retrieve user data
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? 'No username';  
 $profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png';
@@ -21,29 +23,28 @@ $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Check if the user is an admin
 $isAdmin = false;
-$adminStmt = $pdo->prepare("SELECT * FROM Admin WHERE user_id = ?");
+$adminStmt = $pdo->prepare("SELECT 1 FROM Admin WHERE user_id = ?");
 $adminStmt->execute([$userId]);
-if ($adminStmt->rowCount() > 0) {
+if ($adminStmt->fetch()) {
     $isAdmin = true;
 }
 
+// Favorite items query
 $favStmt = $pdo->prepare("SELECT Item.*, Favourite.added_at FROM Item JOIN Favourite ON Item.id = Favourite.item_id WHERE Favourite.user_id = ? AND Favourite.is_active = 1");
 $favStmt->execute([$userId]);
 $favorites = $favStmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+// Sold items query
 $soldStmt = $pdo->prepare("
     SELECT Item.*, \"Transaction\".transaction_date 
     FROM Item 
     INNER JOIN \"Transaction\" ON Item.id = \"Transaction\".item_id 
     WHERE \"Transaction\".seller_id = ?
 ");
-
-
 $soldStmt->execute([$userId]);
 $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -63,11 +64,11 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
                 <span class="profile-dropdown">
-                    <img id="profile-icon" src="<?php echo $profilePic; ?>" alt="Profile" class="icon">
+                    <img id="profile-icon" src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile" class="icon">
                     <div id="dropdown-menu" class="dropdown-content">
                         <a href="user_page.php">User Profile</a>
                         <a href="account_info.php">Account Info</a>
-                        <form action="/../actions/action_logout.php" method="post" class="logout">
+                        <form action="../actions/action_logout.php" method="post" class="logout">
                             <button type="submit">Log Out</button>
                         </form>
                     </div>
@@ -81,15 +82,15 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main>
         <div class="user-profile">
-            <img src="<?php echo $profilePic; ?>" alt="User's Profile" class="profile-photo">
+            <img src="<?php echo htmlspecialchars($profilePic); ?>" alt="User's Profile" class="profile-photo">
             <div class="user-details">
-                <h1><?php echo $user['first_name'] . ' ' . $user['last_name']; ?>
+                <h1><?php echo htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']); ?>
                 <?php if ($isAdmin) { ?>
                     (Admin User)
-                   <?php } else {?>
+                <?php } else { ?>
                     (NOT Admin User)
-                    <?php } ?></h1>
-                <p>@<?php echo $username; ?></p>
+                <?php } ?></h1>
+                <p>@<?php echo htmlspecialchars($username); ?></p>
             </div>
         </div>
 
@@ -99,22 +100,21 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="tab-link" onclick="openTab(event, 'favorites')">Favorites</button>
             <button class="tab-link" onclick="openTab(event, 'sold_items')">Sold Items</button>
             <button class="tab-link" onclick="openTab(event, 'add-item')">Add Item</button>
-            <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
-            
+            <?php if ($isAdmin) { ?>
+                <button class="tab-link" onclick="openTab(event, 'edit_site')">Add Site Features</button>
+            <?php } ?>
 
         </div>
 
-        <div id="items" class="tab-content" >
+        <div id="items" class="tab-content">
             <?php include 'items_for_sale_user.php'; ?>
         </div>
 
-
         <div id="reviews" class="tab-content">
             <div class="review-container">
-                <!-- Reviews vêm para aqui -->
+                <!-- Reviews come here -->
             </div>
         </div>
-
 
         <div id="favorites" class="tab-content">
             <div class="products">
@@ -122,14 +122,13 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="product">
                         <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
                             <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                            <h3><?php echo htmlspecialchars($item['title']); ?></h4>
+                            <h3><?php echo htmlspecialchars($item['title']); ?></h3>
                             <p>€<?php echo number_format($item['price'], 2); ?></p>
                             <p>Added on: <?php echo date('j F Y', strtotime($item['added_at'])); ?></p>
                         </a>
                         <form onsubmit="removeFavorite(event, <?php echo $item['id']; ?>)">
                             <button type="submit" class="remove-btn">Remove</button>
                         </form>
-
                         <form onsubmit="addToCart(event, <?php echo $item['id']; ?>)">
                             <button type="submit" class="addcart-btn">Add to cart</button>
                         </form>
@@ -147,27 +146,23 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="product">
                         <a href="product_page.php?product_id=<?php echo $item['id']; ?>" style="text-decoration: none; color: inherit;">
                             <img src="<?php echo htmlspecialchars("../images/items/item{$item['id']}_1.png"); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
-                            <h3><?php echo htmlspecialchars($item['title']); ?></h4>
+                            <h3><?php echo htmlspecialchars($item['title']); ?></h3>
                             <p>€<?php echo number_format($item['price'], 2); ?></p>
                         </a>
                         <button type="submit" class="remove-btn">Shipping form</button>
-
                     </div>
                 <?php endforeach; ?>
-                <?php if (empty($soldItems)): ?>
-                    <p>No sold items yet.</p>
-                <?php endif; ?>
             </div>
         </div>
-       
-
 
         <div id="add-item" class="tab-content" style="display:none;">
             <?php include 'add_item.php'; ?>
         </div>
-        <div id="edit_site" class="tab-content" style="display:none;">
-            <?php include 'edit_site.php'; ?>
-        </div>
+        <?php if ($isAdmin) { ?>
+    <div id="edit_site" class="tab-content" style="display:none;">
+        <?php include 'edit_site.php'; ?>
+    </div>
+<?php } ?>
     </main>
 
     <footer>
@@ -192,19 +187,24 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script>
         function openTab(evt, tabName) {
-            var tabcontent = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
+    var tabcontent = document.getElementsByClassName("tab-content");
+    for (var i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
 
-            var tablinks = document.getElementsByClassName("tab-link");
-            for (var i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
+    var tablinks = document.getElementsByClassName("tab-link");
+    for (var i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
 
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
+    // Check if the tab is available before displaying it
+    var tab = document.getElementById(tabName);
+    if (tab) {
+        tab.style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+}
+
 
         document.getElementById('profile-icon').addEventListener('click', function(event) {
             event.stopPropagation();
@@ -220,48 +220,42 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            openTab(event, 'items'); 
+            openTab(event, 'items'); // Automatically open the 'items' tab on page load
         });
 
-
         function removeFavorite(event, itemId) {
-    event.preventDefault();  
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "remove_favorite.php", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onload = function () {
-        if (this.status === 200 && this.responseText.trim() === "Success") {
-            var productDiv = document.getElementById('product-' + itemId);
-            if (productDiv) {
-                productDiv.parentNode.removeChild(productDiv);
-            }
-            alert('Favorite removed successfully!');
-        } else {
-            alert('Error removing favorite item: ' + this.responseText);
+            event.preventDefault();  
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "remove_favorite.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                if (this.status === 200 && this.responseText.trim() === "Success") {
+                    var productDiv = document.getElementById('product-' + itemId);
+                    if (productDiv) {
+                        productDiv.parentNode.removeChild(productDiv);
+                    }
+                    alert('Favorite removed successfully!');
+                } else {
+                    alert('Error removing favorite item: ' + this.responseText);
+                }
+            };
+            xhr.send("item_id=" + itemId);
         }
-    };
-    xhr.send("item_id=" + itemId);
-}
-
 
         function addToCart(event, itemId) {
-    event.preventDefault(); 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "add_to_cart.php", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onload = function () {
-        if (this.status == 200) {
-            alert('Item added to cart successfully!');
-        } else {
-            alert('Error adding item to cart.');
+            event.preventDefault(); 
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "add_to_cart.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                if (this.status == 200) {
+                    alert('Item added to cart successfully!');
+                } else {
+                    alert('Error adding item to cart.');
+                }
+            };
+            xhr.send("item_id=" + itemId + "&user_id=" + <?php echo json_encode($_SESSION['user_id']); ?>);
         }
-    };
-    xhr.send("item_id=" + itemId + "&user_id=" + <?php echo json_encode($_SESSION['user_id']); ?>);
-}
-
-
-
     </script>
 </body>
 </html>
