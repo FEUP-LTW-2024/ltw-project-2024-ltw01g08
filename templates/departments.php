@@ -40,9 +40,11 @@ try {
     // Initialize the SQL query for items
     $sort = filter_input(INPUT_GET, 'sort');
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
-    $sql = "SELECT Item.*, ItemSizes.size_description FROM Item
+    $sql = "SELECT Item.*, ItemSizes.size_description 
+            FROM Item
             LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id
-            WHERE department_id = ?";
+            WHERE department_id = ? 
+            AND Item.id NOT IN (SELECT item_id FROM 'Transaction')";
 
     $params = [$current_department_id]; // parameters for SQL execution
 
