@@ -9,6 +9,8 @@ try {
     $stmt_departments->execute();
     $departments = $stmt_departments->fetchAll(PDO::FETCH_ASSOC);
 
+    
+
     // Fetch categories for department 122 by default
     $sql_category = "SELECT * FROM Category WHERE department_id = 122";
     $stmt_category = $pdo->prepare($sql_category);
@@ -27,7 +29,10 @@ try {
     $departmentsFilter = filter_input(INPUT_GET, 'departments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
     // Initialize the SQL query
-    $sql = "SELECT * FROM Item WHERE 1=1";
+    $sql = "SELECT Item.*, ItemSizes.size_description 
+    FROM Item
+    LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id
+    WHERE Item.id NOT IN (SELECT item_id FROM 'Transaction')";
     $params = [];
 
     // Process search query
@@ -83,8 +88,6 @@ try {
         $params[] = $maxPrice;
     }
 
-    // Sorting
-    $sql .= " ORDER BY price $order";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -237,7 +240,7 @@ try {
                             <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
                         </div>
                         <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                        <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
+                        <p>Size <?php echo htmlspecialchars($item['size_description'] ?? 'N/A'); ?></p>
                     </div>
                 </a>
             <?php endforeach; ?>

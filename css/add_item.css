@@ -154,3 +154,27 @@ button:hover {
 .profile-dropdown.show .dropdown-content {
     display: block;
 }
+
+@media (max-width: 768px) {
+    .main {
+        width: auto;
+        margin: 20px;
+        padding: 20px;
+    }
+
+
+    .search-bar {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+
+
+    .form-row {
+        margin-bottom: 10px;
+    }
+
+    button {
+        margin-top: 10px;
+    }
+}

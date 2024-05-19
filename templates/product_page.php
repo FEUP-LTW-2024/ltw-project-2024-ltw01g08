@@ -1,22 +1,35 @@
 <?php
-    session_start();
-    $loggedIn = isset($_SESSION['user_id']);  
-    $pdo = new PDO('sqlite:../database/database.db');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+session_start();
+$loggedIn = isset($_SESSION['user_id']);
+$pdo = new PDO('sqlite:../database/database.db');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    if (!isset($_GET['product_id'])) {
-        header('Location: error_page.php');
-        exit;
-    }
-    
-    $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
-    $stmt = $pdo->prepare("SELECT Item.*, User.username as seller_username FROM Item JOIN User ON Item.seller_id = User.id WHERE Item.id = ?");
-    $stmt->execute([$product_id]);
-    $product = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$product) {
-        die('Product not found.');
-    }
+if (!isset($_GET['product_id'])) {
+    header('Location: error_page.php');
+    exit;
+}
+
+$sql_departments = "SELECT * FROM Department";
+$stmt_departments = $pdo->prepare($sql_departments);
+$stmt_departments->execute();
+$departments = $stmt_departments->fetchAll(PDO::FETCH_ASSOC);
+
+$product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
+$stmt = $pdo->prepare("
+    SELECT Item.*, User.username as seller_username, ItemSizes.size_description as size, ItemConditions.condition_description as condition
+    FROM Item
+    JOIN User ON Item.seller_id = User.id
+    LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id
+    LEFT JOIN ItemConditions ON Item.condition = ItemConditions.id
+    WHERE Item.id = ?
+");
+$stmt->execute([$product_id]);
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$product) {
+    die('Product not found.');
+}
+
 ?>
     
     
@@ -59,14 +72,15 @@
     <main>
         <nav class="category-bar">
             <ul>
-                <li class="pink-highlight"><a href="women_section.php">Women</a></li> 
-                <li><a href="men_section.php">Men</a></li> 
-                <li><a href="kids_section.php">Kids</a></li> 
-                <li><a href="bags_section.php">Bags</a></li> 
-                <li><a href="jewelry_section.php">Jewelry</a></li> 
-                <li><a href="accessories_section.php">Accessories</a></li> 
+                <?php foreach ($departments as $department): ?>
+                    <li>
+                        <a href="departments.php?department_id=<?php echo htmlspecialchars($department['id']); ?>">
+                            <?php echo htmlspecialchars($department['d_name']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
-        </nav> 
+        </nav>
 
         <div class="product-container">
             <div class="product-images">
@@ -83,7 +97,7 @@
                 <h3><?php echo htmlspecialchars($product['title']); ?></h3>
                 <ul>
                     <li><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand']); ?></li>
-                    <li><strong>Size:</strong> <?php echo htmlspecialchars($product['item_size']); ?></li>
+                    <li><strong>Size:</strong> <?php echo htmlspecialchars($product['size']); ?></li>
                     <li><strong>Color:</strong> <?php echo htmlspecialchars($product['color']); ?></li>
                     <li><strong>Condition:</strong> <?php echo htmlspecialchars($product['condition']); ?></li>
                 </ul>
