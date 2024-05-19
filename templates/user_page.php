@@ -167,7 +167,21 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
 
     <footer>
         <div class="footer-section">
-            <p>&copy;Elite Finds, 2024</p>
+            <p>Customer Care</p>
+            <ul>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Shipping info</a></li>
+                <li><a href="#">Returns policy</a></li>
+                <li><a href="#">Contact us</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p>Company</p>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">How to sell</a></li>
+                <li><a href="#">Terms of service</a></li>
+            </ul>
         </div>
     </footer>
 
@@ -228,18 +242,6 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
             xhr.send("item_id=" + itemId);
         }
 
-<<<<<<< HEAD
-    function addToCart(event, itemId) {
-    event.preventDefault(); 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "add_to_cart.php", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onload = function () {
-        if (this.status == 200) {
-            alert('Item added to cart successfully!');
-        } else {
-            alert('Error adding item to cart.');
-=======
         function addToCart(event, itemId) {
             event.preventDefault(); 
             var xhr = new XMLHttpRequest();
@@ -253,8 +255,8 @@ $soldItems = $soldStmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             };
             xhr.send("item_id=" + itemId + "&user_id=" + <?php echo json_encode($_SESSION['user_id']); ?>);
->>>>>>> c9d4c5e88ac35731caba352eb58e1817bf8e02c3
         }
     </script>
 </body>
 </html>
+
