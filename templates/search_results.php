@@ -132,11 +132,11 @@ try {
     </header>
 
     <main>
-        <nav class="category-bar">
+    <nav class="category-bar">
             <ul>
-                <?php foreach ($departments as $department): ?>
-                    <li class="<?php echo $current_department_id === $department['id'] ? 'pink-highlight' : ''; ?>">
-                        <a href="?department_id=<?php echo $department['id']; ?>">
+            <?php foreach ($departments as $department): ?>
+                    <li>
+                        <a href="departments.php">
                             <?php echo htmlspecialchars($department['d_name']); ?>
                         </a>
                     </li>
