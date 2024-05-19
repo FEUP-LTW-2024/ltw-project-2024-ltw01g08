@@ -1,0 +1,16 @@
+Test Case 6: Add Item for Sale
+Test Case ID: TC_ADD_ITEM_01
+Description: Test adding a new item for sale.
+Preconditions: User must be logged in.
+
+Steps:
+Open the "Add Item" page in user page.
+Enter valid information in all required fields (title, description, price, size, condition, category).
+Upload an image of the item.
+Click on the "Add Item" button.
+Expected Result:
+The item is added successfully and appears in the user's items for sale.
+A success message "Item added successfully" is displayed.
+Actual Result:
+The item is added successfully and appears in the user's items for sale.
+A success message "Item added successfully" is displayed.

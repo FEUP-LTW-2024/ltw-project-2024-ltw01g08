@@ -1,0 +1,14 @@
+Test Case 7: Add Review
+Test Case ID: TC_ADD_REVIEW_01
+Description: Test adding a review for a purchased item.
+Preconditions: User must have purchased items.
+Steps:
+Open the "Purchased Items" tab.
+Click on the "Add Review" button for a purchased item.
+Enter a rating and a comment.
+Click on the "Submit Review" button.
+Expected Result:
+The review is added successfully and appears in the seller's reviews.
+A success message "Review submitted successfully" is displayed.
+Actual Result:
+The review is added successfully and appears in the seller's reviews.

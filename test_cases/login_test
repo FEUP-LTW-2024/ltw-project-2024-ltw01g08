@@ -1,0 +1,33 @@
+Test Case 1: Login
+Test Case ID: TC_LOGIN_01
+Description: Test login functionality with valid credentials.
+Preconditions: User must be registered and have valid credentials.
+
+Steps:
+Open the login page.
+Enter a valid username and password.
+Click on the "Login" button.
+
+Expected Result:
+The user is redirected to the user's page.
+
+Actual Result:
+The user is redirected to the user's page.
+
+
+Test Case 2: Login with Invalid Credentials
+Test Case ID: TC_LOGIN_02
+Description: Test login functionality with invalid credentials.
+Preconditions: User must be registered.
+
+Steps:
+
+Open the login page.
+Enter an invalid username or password.
+Click on the "Login" button.
+Expected Result:
+
+An error message "Invalid username or password" is displayed.
+
+Actual Result:
+The message is displayed 
