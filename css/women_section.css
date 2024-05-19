@@ -167,17 +167,17 @@ footer {
     width: 200px;  
     float: left;  
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
     margin-right: 20px; 
 }
 
 .filter-sidebar fieldset {
-    margin-bottom: 20px; /* Add margin between each fieldset */
+    margin-bottom: 20px; 
 }
 
 .filter-sidebar label {
     display: block;
-    margin-top: 5px; /* Add margin between each label */
+    margin-top: 5px; 
 }
 
 
@@ -218,10 +218,10 @@ footer {
 }
 
 .filter-sidebar button.reset {
-    background-color: transparent; /* Transparent background */
-    color: black; /* Black text color */
-    border: 1px solid #ccc; /* Grey border */
-    padding: 8px 16px; /* Adjust padding */
+    background-color: transparent; 
+    color: black; 
+    border: 1px solid #ccc; 
+    padding: 8px 16px; 
     cursor: pointer;
     font-size: 14px;
     border-radius: 5px;
@@ -231,7 +231,7 @@ footer {
 }
 
 .filter-sidebar button.reset:hover {
-    background-color: #f0f0f0; /* Light grey background on hover */
+    background-color: #f0f0f0; 
 }
 
 
@@ -241,7 +241,7 @@ footer {
 }
 
 .products {
-    flex: 1; /* Takes remaining space */
+    flex: 1; 
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -300,7 +300,6 @@ footer {
 }
 
 
-/* Links in the Dropdown */
 .dropdown-content a {
     color: var(--black);
     padding: 8px 12px;
@@ -308,12 +307,10 @@ footer {
     display: block;
 }
 
-/* Link Hover Effect */
 .dropdown-content a:hover {
     background-color: var(--lightpink);
 }
 
-/* Toggling Visibility: Make Dropdown Visible */
 .profile-dropdown.show .dropdown-content {
     display: block;
 }
@@ -322,23 +319,23 @@ footer {
 @media only screen and (max-width: 768px) {
 
     .filter-sidebar {
-        width: 100%; /* Take full width on smaller screens */
-        padding: 20px; /* Restore padding */
-        box-sizing: border-box; /* Include padding in width calculation */
+        width: 100%; 
+        padding: 20px; 
+        box-sizing: border-box; 
     }
     
     .filter-sidebar label {
-        width: 100%; /* Make labels full width */
+        width: 100%; 
     }
     
     .filter-sidebar select,
     .filter-sidebar input[type="text"] {
-        width: 100%; /* Make inputs full width */
+        width: 100%;
     }
 
     .filter-sidebar button[type="submit"],
     .filter-sidebar button.reset {
-        width: 100%; /* Make buttons full width */
+        width: 100%; 
     }
 
     .category-bar ul {
@@ -401,15 +398,15 @@ footer {
 
     .sorter-sidebar h2,
     .filter-sidebar h2 {
-        font-size: 12px; /* Adjust the font size as needed */
+        font-size: 12px;
     }
     .filter-sidebar label {
-        font-size: 10px; /* Adjust the font size as needed */
+        font-size: 10px; 
     }
 
 
     .menu-toggle {
-        display: none; /* Initially hidden on larger screens */
+        display: none; 
         cursor: pointer;
     }
 }
