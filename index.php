@@ -30,8 +30,8 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
-// Assign profile picture or default
-$profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  // Use a default profile picture if none is set
+
+$profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  
 ?>
 
 

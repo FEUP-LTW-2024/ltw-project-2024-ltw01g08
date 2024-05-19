@@ -342,17 +342,40 @@ footer {
 
     .search-bar {
         width: 90%;
+        height: 0em;
         margin: 1em auto;
+    }
+
+    .search-bar form {
+        height: 0.2em;
     }
 
     .items {
         display: flex;
+        flex-direction: row;
+        align-items: center;
         flex-wrap: wrap;
         justify-content: center;
     }
+
 
     .top-picks .item {
         width: calc(50% - 20px);
         margin: 10px;
     }
+
+    .top-picks {
+        font-size: 0.5em;
+        margin-top: 4em;
+        padding: 20px;
+        margin-bottom: 50px; 
+    }
+
+    footer {
+        font-size: 0.5em;
+    }
+
+    
+
+    
 }

@@ -112,11 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
-    <footer>
-        <div class="footer-section">
-            <p>&copy;Elite Finds, 2024</p>
-        </div>
-    </footer>
+
 
     <script>
         function toggleSelects() {
