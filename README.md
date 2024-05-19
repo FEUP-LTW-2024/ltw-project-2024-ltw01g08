@@ -22,7 +22,7 @@
 <img width="1228" alt="Screenshot 2024-05-20 at 00 34 10" src="https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08/assets/146080260/5711b283-3206-4d1c-adb7-128be4409fb5">
 
 ## Install Instructions
-    git clone <your_repo_url>
+    git clone <https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08.git>
     git checkout final-delivery-v1
     sqlite database/database.db 
     php -S localhost:9000
