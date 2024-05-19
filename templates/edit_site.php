@@ -8,7 +8,6 @@ $stmt = $pdo->prepare($sql_dep);
 $stmt->execute();
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch categories
 // Fetch categories with their respective departments
 $sql_cat = "
     SELECT Category.id, Category.c_name, Department.d_name 
@@ -21,35 +20,39 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $editOption = $_POST['editOption'];
-    $inputField = $_POST['inputField'];
+    $inputField = filter_input(INPUT_POST, 'inputField', FILTER_SANITIZE_STRING);
     $categoryId = $_POST['category'] ?? null;
 
-    switch ($editOption) {
-        case 'department':
-            $stmt = $pdo->prepare("INSERT INTO Department (d_name) VALUES (?)");
-            $stmt->execute([$inputField]);
-            break;
-        case 'category':
-            $departmentId = $_POST['department'];
-            $stmt = $pdo->prepare("INSERT INTO Category (c_name, department_id) VALUES (?, ?)");
-            $stmt->execute([$inputField, $departmentId]);
-            break;
-        case 'subcategory':
-            $stmt = $pdo->prepare("INSERT INTO Subcategory (subc_name, category_id) VALUES (?, ?)");
-            $stmt->execute([$inputField, $categoryId]);
-            break;
-        case 'condition':
-            $stmt = $pdo->prepare("INSERT INTO Conditions (description, category_id) VALUES (?, ?)");
-            $stmt->execute([$inputField, $categoryId]);
-            break;
-        case 'size':
-            $stmt = $pdo->prepare("INSERT INTO Sizes (size, category_id) VALUES (?, ?)");
-            $stmt->execute([$inputField, $categoryId]);
-            break;
-    }
+    try {
+        switch ($editOption) {
+            case 'department':
+                $stmt = $pdo->prepare("INSERT INTO Department (d_name) VALUES (?)");
+                $stmt->execute([$inputField]);
+                break;
+            case 'category':
+                $departmentId = $_POST['department'];
+                $stmt = $pdo->prepare("INSERT INTO Category (c_name, department_id) VALUES (?, ?)");
+                $stmt->execute([$inputField, $departmentId]);
+                break;
+            case 'subcategory':
+                $stmt = $pdo->prepare("INSERT INTO Subcategory (subc_name, category_id) VALUES (?, ?)");
+                $stmt->execute([$inputField, $categoryId]);
+                break;
+            case 'condition':
+                $stmt = $pdo->prepare("INSERT INTO ItemConditions (condition_description) VALUES (?)");
+                $stmt->execute([$inputField]);
+                break;
+            case 'size':
+                $stmt = $pdo->prepare("INSERT INTO ItemSizes (size_description) VALUES (?)");
+                $stmt->execute([$inputField]);
+                break;
+        }
 
-    header("Location: ".$_SERVER['PHP_SELF']); 
-    exit;
+        header("Location: " . $_SERVER['PHP_SELF']); 
+        exit;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -135,10 +138,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var departmentSelect = document.getElementById("departmentSelect");
             var categorySelect = document.getElementById("categorySelect");
 
-            departmentSelect.style.display = (editOption === "category" || editOption === "department") ? "block" : "none";
+            departmentSelect.style.display = (editOption === "category") ? "block" : "none";
             categorySelect.style.display = (editOption === "subcategory" || editOption === "condition" || editOption === "size") ? "block" : "none";
         }
     </script>
 </body>
 </html>
-
