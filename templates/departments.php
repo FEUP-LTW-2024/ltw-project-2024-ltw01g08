@@ -29,6 +29,7 @@ try {
     $stmt_subcategories->execute();
     $subcategories = $stmt_subcategories->fetchAll(PDO::FETCH_ASSOC);
 
+
     // Fetch items for the current department with filtering and sorting
     $sort = filter_input(INPUT_GET, 'sort', FILTER_SANITIZE_STRING);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
@@ -79,7 +80,7 @@ try {
     }
 
     // Sorting
-    $sql .= " ORDER BY price $order";
+    $sql = "SELECT Item.*, ItemSizes.size_description FROM Item LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id WHERE department_id = ?";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -215,6 +216,9 @@ try {
                 $seller_username = $seller_username_stmt->fetchColumn();
                 $seller_username = $seller_username ?: 'Unknown';
                 $image_url = "../images/items/item{$item['id']}_1.png";
+
+
+                $size_display = $size_name ?: 'N/A';
             ?>
                 <a href="product_page.php?product_id=<?php echo htmlspecialchars($item['id']); ?>" class="product-link" data-product-id="<?php echo htmlspecialchars($item['id']); ?>">
                     <div class="product">
@@ -224,7 +228,7 @@ try {
                             <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['title'] ?? 'No title available'); ?>">
                         </div>
                         <p>€<?php echo htmlspecialchars(number_format($item['price'], 2)); ?></p>
-                        <p>Size <?php echo htmlspecialchars($item['item_size'] ?? 'N/A'); ?></p>
+                        <p>Size <?php echo htmlspecialchars($item['size_description']?? 'N/A'); ?></p>
                     </div>
                 </a>
             <?php endforeach; ?>
