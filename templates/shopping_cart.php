@@ -57,7 +57,6 @@ $total = 0;
     <div class="item-info">
         <div class="item-details">
             <h3><?php echo htmlspecialchars($item['title']); ?></h3>
-            <p>Size: <?php echo htmlspecialchars($item['item_size']); ?></p>
             <p>Seller: <?php 
                         $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
                         $seller_username_stmt->execute([$item['seller_id']]);
@@ -79,7 +78,7 @@ $total = 0;
         <div class="cart-summary">
             <div class="line"></div> 
             <p class="subtotal">SUBTOTAL: <span>€ <?php echo number_format($total, 2); ?></span></p>
-            <p class="shipping">SHIPPING: <span>€ 10,00</span></p>
+            <p class="shipping">SHIPPING: <span>€ 0,00</span></p>
             <p class="total">TOTAL: <span>€ <?php echo number_format($total + 10, 2); ?></span></p>
             <form action="checkout_page.php" method="post">
                  <button type="submit" class="checkout-btn">CHECKOUT</button>

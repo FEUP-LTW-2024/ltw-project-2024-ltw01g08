@@ -32,7 +32,23 @@ try {
 
 
 $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';  
+
+
+try {
+    $sql_top_picks = "
+        SELECT * FROM Item 
+        WHERE id NOT IN (SELECT item_id FROM \"Transaction\") 
+        ORDER BY RANDOM() 
+        LIMIT 3";
+    $stmt_top_picks = $pdo->prepare($sql_top_picks);
+    $stmt_top_picks->execute();
+    $topPicks = $stmt_top_picks->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error fetching top picks: " . $e->getMessage());
+}
 ?>
+
+
 
 
 
@@ -113,32 +129,6 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';
 
     </header>
 
-    <main>
-        <section class="top-picks">
-            <h2>Our Top Picks</h2>
-            <div class="items">
-                <!-- Each item -->
-                <div class="item">
-                    <img src="images/items/item10_1.png" alt="Balmain Blazer">
-                    <p>Balmain Blazer</p>
-                    <span>€ 110,00</span>
-                    <span>Size M</span>
-                </div>
-                <div class="item">
-                    <img src="images/items/item10_1.png" alt="Balmain Blazer">
-                    <p>Balmain Blazer</p>
-                    <span>€ 110,00</span>
-                    <span>Size M</span>
-                </div>
-                <div class="item">
-                    <img src="images/items/item10_1.png" alt="Balmain Blazer">
-                    <p>Balmain Blazer</p>
-                    <span>€ 110,00</span>
-                    <span>Size M</span>
-                </div>
-            </div>
-        </section>
-    </main>
 
     <footer>
         <div class="footer-section">
