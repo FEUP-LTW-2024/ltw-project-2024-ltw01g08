@@ -86,7 +86,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';
         </div>
         <nav class="category-bar">
             <ul>
-            <?php foreach ($departments as $department): ?>
+                <?php foreach ($departments as $department): ?>
                     <li>
                         <a href="templates/departments.php">
                             <?php echo htmlspecialchars($department['d_name']); ?>
@@ -95,6 +95,7 @@ $profilePic = $user['profile_picture'] ?? 'images/icons/default_profile.png';
                 <?php endforeach; ?>
             </ul>
         </nav>
+
         <div class="main-bar">
             <div class="main-text">
                 <span>ELITE</span>
