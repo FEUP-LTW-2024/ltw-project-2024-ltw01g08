@@ -14,22 +14,22 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 50em;
+    min-height: 100vh; /* Adjusted to ensure full-screen height */
     margin: 0;
     padding: 0;
 }
 
 h1 {
-    font-weight: 500;
-    font-size: 1.5em;
+    font-weight: 700; /* Increased font weight */
+    font-size: 2em; /* Increased font size */
     color: var(--black);
     margin-bottom: 20px;
 }
 
 p {
-    font-size: 1em;
+    font-size: 1.2em; /* Increased font size */
     color: var(--black);
-    margin-bottom: 10px;
+    margin-bottom: 20px; /* Increased margin */
 }
 
 .form-thank-you {
@@ -38,37 +38,40 @@ p {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 300px;
+    width: 400px; /* Increased width */
 }
 
 .logo-thank-you {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Increased margin */
     flex-direction: column;
+    align-items: center; /* Center-aligned logo */
 }
 
 .logo-thank-you .main-logo {
     color: var(--black);
-    font-size: 24px;
+    font-size: 32px; /* Increased font size */
     font-weight: bold;
 }
 
 .logo-thank-you .tagline {
-    font-family: 'Lexend Mega';
-    font-size: 0.8em;
+    font-family: 'Lexend Mega', sans-serif; /* Added missing font fallback */
+    font-size: 1em; /* Increased font size */
     color: var(--black);
 }
 
 .continue-shopping-btn {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 15px 30px; /* Increased padding */
     background-color: var(--lightpink);
     color: var(--black);
     text-decoration: none;
     border-radius: 5px;
+    font-size: 1.2em; /* Increased font size */
     transition: background-color 0.3s;
 }
 
 .continue-shopping-btn:hover {
-    background-color: var(--darkerpink);
+    background-color: var(--black); /* Changed to a more contrasting hover color */
+    color: var(--white); /* Changed text color on hover for better visibility */
 }
