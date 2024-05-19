@@ -14,8 +14,7 @@ try {
 }
 
 $userId = $_SESSION['user_id'];
-$username = $_SESSION['username'] ?? 'No username';  
-$profilePic = $_SESSION['profile_picture'] ?? '../images/icons/avatar.png';
+$username = $_SESSION['username'] ?? 'No username';
 
 $stmt = $pdo->prepare("SELECT * FROM User WHERE id = ?");
 $stmt->execute([$userId]);
@@ -79,7 +78,7 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
             <span class="logo"><a href="../index.php">ELITE FINDS</a></span>
             <div class="actions">
                 <span class="profile-dropdown">
-                    <img id="profile-icon" src="<?php echo htmlspecialchars($profilePic); ?>" alt="Profile" class="icon">
+                    <img id="profile-icon" src="../images/icons/avatar.png" alt="Profile" class="icon">
                     <div id="dropdown-menu" class="dropdown-content">
                         <a href="user_page.php">User Profile</a>
                         <a href="account_info.php">Account Info</a>
@@ -97,7 +96,6 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main>
         <div class="user-profile">
-            <img src="<?php echo htmlspecialchars($profilePic); ?>" alt="User's Profile" class="profile-photo">
             <div class="user-details">
                 <h1><?php echo htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']); ?>
                 <?php if ($isAdmin) { ?>
