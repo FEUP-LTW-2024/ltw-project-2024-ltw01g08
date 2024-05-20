@@ -11,17 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm_password = filter_input(INPUT_POST, 'confirm-password', FILTER_SANITIZE_STRING);
     $profile_pic = $_FILES['profile-pic'];
 
-    // Check if passwords match
     if ($password !== $confirm_password) {
         $_SESSION['error_message'] = "Passwords do not match.";
         header('Location: signup.php');
         exit;
     }
 
-    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Handle profile picture upload
     $profile_pic_url = null;
     if ($profile_pic['error'] === UPLOAD_ERR_OK) {
         $target_dir = "../images/profile_pics/";

@@ -148,8 +148,8 @@ if (!$product) {
 
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('addToFavoritesForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
-                const formData = new FormData(this); // Use 'this' to refer to the form itself
+                event.preventDefault(); 
+                const formData = new FormData(this); 
 
                 fetch('../actions/add_to_favorites.php', {
                     method: 'POST',

@@ -21,11 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
     $itemExists = $checkStmt->fetchColumn() > 0;
 
     if ($itemExists) {
-        // Prepare and execute the DELETE statement
         $stmt = $pdo->prepare("DELETE FROM Item WHERE id = ? AND seller_id = ?");
         $stmt->execute([$itemId, $userId]);
 
-        // Redirect to user_page.php if deletion was successful
         header('Location: ../templates/user_page.php');
         echo "Success";
         exit;

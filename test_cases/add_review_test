@@ -1,4 +1,4 @@
-Test Case 7: Add Review
+Test Case 6: Add Review
 Test Case ID: TC_ADD_REVIEW_01
 Description: Test adding a review for a purchased item.
 Preconditions: User must have purchased items.

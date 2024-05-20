@@ -1,16 +1,13 @@
 <?php
-// Start the session if it hasn't already been started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Redirect to login page if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.html');
     exit;
 }
 
-// Setup PDO connection to the SQLite database
 try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,10 +15,8 @@ try {
     die("Connection error: " . $e->getMessage());
 }
 
-// Retrieve user ID from session
 $userId = $_SESSION['user_id'];
 
-// Fetch user's items for sale from the database including detailed information about item sizes
 $stmt = $pdo->prepare("
     SELECT Item.id, Item.title, Item.price, ItemSizes.size_description AS item_size, Item.color, Category.c_name AS category_name, Department.d_name AS department_name
     FROM Item
@@ -71,7 +66,6 @@ function deleteItem(event, itemId) {
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = function () {
             if (this.status === 200 && this.responseText.trim() === "Success") {
-                // Reload the user page after successful deletion
                 window.location.href = "user_page.php";
                 alert('Item deleted successfully!');
             } else {

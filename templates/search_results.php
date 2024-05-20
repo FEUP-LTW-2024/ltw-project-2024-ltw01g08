@@ -3,7 +3,6 @@ try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Fetch departments
     $sql_departments = "SELECT * FROM Department";
     $stmt_departments = $pdo->prepare($sql_departments);
     $stmt_departments->execute();
@@ -11,7 +10,6 @@ try {
 
     
 
-    // Fetch categories for department 122 by default
     $sql_category = "SELECT * FROM Category WHERE department_id = 122";
     $stmt_category = $pdo->prepare($sql_category);
     $stmt_category->execute();
@@ -20,7 +18,7 @@ try {
     $sort = filter_input(INPUT_GET, 'sort', 513);
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
 
-    $searchQuery = filter_input(INPUT_GET, 'query', 513);  // Corrected to use 'query'
+    $searchQuery = filter_input(INPUT_GET, 'query', 513); 
     $categories = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $conditions = filter_input(INPUT_GET, 'condition', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $sizes = filter_input(INPUT_GET, 'size', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
@@ -28,20 +26,17 @@ try {
     $maxPrice = filter_input(INPUT_GET, 'max_price', FILTER_VALIDATE_FLOAT);
     $departmentsFilter = filter_input(INPUT_GET, 'departments', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
-    // Initialize the SQL query
     $sql = "SELECT Item.*, ItemSizes.size_description 
     FROM Item
     LEFT JOIN ItemSizes ON Item.item_size = ItemSizes.id
     WHERE Item.id NOT IN (SELECT item_id FROM 'Transaction')";
     $params = [];
 
-    // Process search query
     if (!empty($searchQuery)) {
         $sql .= " AND title LIKE ?";
         $params[] = '%' . $searchQuery . '%';
     }
 
-    // Process departments
     if (!empty($departmentsFilter)) {
         $placeholders = implode(', ', array_fill(0, count($departmentsFilter), '?'));
         $sql .= " AND department_id IN ($placeholders)";
@@ -50,7 +45,6 @@ try {
         }
     }
 
-    // Process categories
     if (!empty($categories) && !in_array('all', $categories)) {
         $placeholders = implode(', ', array_fill(0, count($categories), '?'));
         $sql .= " AND category_id IN (SELECT id FROM Category WHERE c_name IN ($placeholders))";
@@ -59,7 +53,6 @@ try {
         }
     }
 
-    // Process conditions
     if (!empty($conditions)) {
         $conditionPlaceholders = implode(', ', array_fill(0, count($conditions), '?'));
         $sql .= " AND condition IN ($conditionPlaceholders)";
@@ -68,7 +61,6 @@ try {
         }
     }
 
-    // Process sizes
     if (!empty($sizes)) {
         $sizePlaceholders = implode(', ', array_fill(0, count($sizes), '?'));
         $sql .= " AND item_size IN ($sizePlaceholders)";
@@ -77,7 +69,6 @@ try {
         }
     }
 
-    // conditions for price
     if ($minPrice !== false && $minPrice != null) {
         $sql .= " AND price >= ?";
         $params[] = $minPrice;
@@ -188,7 +179,7 @@ try {
                 <fieldset>
                     <legend>Subcategory</legend>
                     <div id="subcategory-container">
-                        <!-- Subcategories will be populated here -->
+                        <!-- Subcategories -->
                     </div>
                 </fieldset>
 
@@ -225,7 +216,6 @@ try {
         <div class="products">
         <p>Search result for "<?php echo $searchQuery; ?>"</p>
             <?php foreach ($items as $item):
-                // Fetch seller's username
                 $seller_username_stmt = $pdo->prepare("SELECT username FROM User WHERE id = ?");
                 $seller_username_stmt->execute([$item['seller_id']]);
                 $seller_username = $seller_username_stmt->fetchColumn();
@@ -264,7 +254,7 @@ try {
             var categoryCheckboxes = document.querySelectorAll('input[name="category[]"]:checked');
             var selectedCategories = Array.from(categoryCheckboxes).map(cb => cb.value);
             var subcategoryContainer = document.getElementById('subcategory-container');
-            subcategoryContainer.innerHTML = ''; // Clear previous subcategory options
+            subcategoryContainer.innerHTML = ''; 
 
             var options = {
                 'Dresses': ['Mini', 'Midi', 'Maxi'],
@@ -300,27 +290,22 @@ try {
                 checkbox.addEventListener('change', updateSubcategories);
             });
 
-            // Event listener for search input
             document.getElementById('search-bar').addEventListener('input', function() {
                 document.getElementById('search-query').value = this.value;
             });
 
-            // Initialize subcategories based on selected categories
             updateSubcategories();
         });
 
         function resetFilters() {
-            // Uncheck all checkboxes
             document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
 
-            // Clear text inputs
             document.querySelectorAll('input[type="text"]').forEach(input => {
                 input.value = '';
             });
 
-            // Submit the form
             document.getElementById('filters').submit();
         }
 

@@ -94,7 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_order'])) {
 </head>
 <body>
 <header>
-    <!--  for header content  -->
 </header>
 <main>
     <h1>Checkout</h1>

@@ -3,22 +3,19 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Initialize PDO for database connection
 try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_TIMEOUT, 10); // Set timeout to 10 seconds
+    $pdo->setAttribute(PDO::ATTR_TIMEOUT, 10); 
 } catch (PDOException $e) {
     die("Connection error: " . $e->getMessage());
 }
 
-// Fetch all departments
 $sql_dep = "SELECT * FROM Department";
 $stmt = $pdo->prepare($sql_dep);
 $stmt->execute();
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch categories linked with their departments for better context in selection
 $sql_cat = "
     SELECT Category.id, Category.c_name, Department.d_name 
     FROM Category 
@@ -67,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['error_message'] = "Database error: " . $e->getMessage();
     }
 
-    header("Location: " . $_SERVER['PHP_SELF']); // Redirect to refresh the form post submission
+    header("Location: " . $_SERVER['PHP_SELF']); 
     exit;
 }
 ?>
