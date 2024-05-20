@@ -235,19 +235,19 @@ footer {
 
 
 .search-bar button {
-    background-color: var(--black);  /* Button color */
-    color: var(--white);  /* Text color */
-    border: none;  /* Remove border */
-    padding: 12px 20px;  /* Padding for better sizing */
-    font-family: 'Lexend Mega', sans-serif;  /* Consistent font */
-    font-weight: bold;  /* Bold text */
-    font-size: 1rem;  /* Size of the text */
-    cursor: pointer;  /* Cursor indicates clickable */
-    transition: background-color 0.3s ease;  /* Smooth transition for hover effect */
+    background-color: var(--black);  
+    color: var(--white);  
+    border: none;  
+    padding: 12px 20px;  
+    font-family: 'Lexend Mega', sans-serif;  
+    font-weight: bold;  
+    font-size: 1rem; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;  
 }
 
 .search-bar button:hover {
-    background-color: var(--darkerpink);  /* Darker on hover */
+    background-color: var(--darkerpink);  
 }
 
 
@@ -317,22 +317,22 @@ footer {
     .main-text {
         margin-top: 2em;
         margin-bottom: 4em;
-        font-size: 1.2em; /* Adjust font size for smaller screens */
+        font-size: 1.2em; 
     }
 
     .main-text span {
         margin-left: 0;
         margin-right: 0;
-        text-align: center; /* Center align the text */
+        text-align: center; 
     }
 
     .main-text span:first-of-type,
     .main-text span:nth-of-type(2) {
-        font-size: 2em; /* Adjust font size for smaller screens */
+        font-size: 2em; 
     }
 
     .main-text span:last-of-type {
-        font-size: 0.8em; /* Adjust font size for smaller screens */
+        font-size: 0.8em; 
         margin-left: 0;
     }
 

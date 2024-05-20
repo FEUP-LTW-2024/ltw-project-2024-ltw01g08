@@ -22,8 +22,8 @@ body, html {
     margin: auto;
     padding: 20px;
     box-shadow: 0 0 10px var(--light-gray);
-    background-color: #fff; /* Adds a background color to make the chat stand out */
-    border-radius: 10px; /* Rounded corners for modern look */
+    background-color: #fff; 
+    border-radius: 10px; 
 }
 
 /* Messages Container */
@@ -32,7 +32,7 @@ body, html {
     overflow-y: scroll;
     border: 1px solid var(--light-gray);
     padding: 10px;
-    background-color: var(--white); /* Ensure background consistency */
+    background-color: var(--white); 
 }
 
 /* Individual Messages */
@@ -44,23 +44,21 @@ body, html {
 
 .sent {
     text-align: right;
-    background-color: var(--darkerpink); /* Theme color for sent messages */
-    color: var(--white); /* White text for contrast */
+    background-color: var(--darkerpink); 
+    color: var(--white);
 }
 
 .received {
     text-align: left;
-    background-color: #f2f2f2; /* Lighter for received messages */
+    background-color: #f2f2f2; 
 }
 
-/* Message Details */
 .details {
     font-size: 0.8em;
     opacity: 0.6;
-    color: var(--gray); /* Use theme gray for details */
+    color: var(--gray); 
 }
 
-/* Textarea for Message Input */
 textarea {
     width: 100%;
     height: 50px;
@@ -74,30 +72,28 @@ textarea {
 /* Send Button */
 button {
     padding: 10px 20px;
-    background-color: var(--darkerpink); /* Theme color */
+    background-color: var(--darkerpink); 
     color: var(--white);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     display: block;
-    margin-top: 10px; /* Adjust margin */
-    width: auto; /* Adjust width to content */
+    margin-top: 10px; 
+    width: auto; 
 }
 
-/* Styling for Links (if any) and hover effects */
 a {
-    color: var(--darkerpink); /* Link color matching the theme */
-    text-decoration: none; /* No underline */
+    color: var(--darkerpink); 
+    text-decoration: none; 
 }
 
 a:hover {
-    text-decoration: underline; /* Underline on hover for better UX */
+    text-decoration: underline; 
 }
 
-/* Responsive Design Considerations */
 @media (max-width: 768px) {
     .chat-container {
-        width: 95%; /* More screen-responsive */
+        width: 95%; 
         padding: 10px;
     }
 }

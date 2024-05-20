@@ -210,7 +210,7 @@ footer {
 }
 
 .products {
-    flex: 1; /* Takes remaining space */
+    flex: 1; 
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -252,7 +252,6 @@ footer {
     display: inline-block;
 }
 
-/* Dropdown Content: Initially Hidden */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -265,7 +264,6 @@ footer {
 }
 
 
-/* Links in the Dropdown */
 .dropdown-content a {
     color: var(--black);
     padding: 8px 12px;
@@ -273,12 +271,10 @@ footer {
     display: block;
 }
 
-/* Link Hover Effect */
 .dropdown-content a:hover {
     background-color: var(--lightpink);
 }
 
-/* Toggling Visibility: Make Dropdown Visible */
 .profile-dropdown.show .dropdown-content {
     display: block;
 }

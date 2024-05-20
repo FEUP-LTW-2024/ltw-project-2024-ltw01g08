@@ -295,7 +295,6 @@ footer {
 }
 
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -324,7 +323,6 @@ footer {
     margin: auto;
 }
 
-/* Close button */
 .close {
     position: absolute;
     top: 15px;
@@ -343,34 +341,33 @@ footer {
 }
 
 
-/* Blurred background class */
 .blur-background {
     filter: blur(5px);
 }
 
 
 #filters fieldset {
-    margin-bottom: 30px;  /* Increase bottom margin for better separation */
-    padding: 15px;  /* More internal space */
-    border: 1px solid #eee;  /* Light border for subtle separation */
-    background-color: #f9f9f9;  /* Light background to distinguish sections */
-    border-radius: 10px;  /* Rounded corners for a softer look */
+    margin-bottom: 30px; 
+    padding: 15px;  
+    border: 1px solid #eee; 
+    background-color: #f9f9f9;  
+    border-radius: 10px;  /* Rounded corners */
 }
 
 #filters legend {
-    font-weight: bold;  /* Bold text for emphasis */
-    color: #333;  /* Darker text for better readability */
-    padding-bottom: 10px;  /* Space below the legend */
-    border-bottom: 2px solid #ddd;  /* Underline to signify section start */
-    margin-bottom: 15px;  /* Space after the underline */
+    font-weight: bold; 
+    color: #333;  
+    padding-bottom: 10px;  
+    border-bottom: 2px solid #ddd;  
+    margin-bottom: 15px;  
 }
 
 #filters label {
-    display: block;  /* Each label on a new line */
-    margin: 10px 0;  /* Vertical space between checkboxes */
-    padding-left: 20px;  /* Indent text slightly for alignment */
-    position: relative;  /* Setup for potential custom checkbox styling */
-    cursor: pointer;  /* Indicates an interactive element */
+    display: block;  
+    margin: 10px 0;  
+    padding-left: 20px;  
+    position: relative;  
+    cursor: pointer;  
 }
 
 input[type="checkbox"] {
@@ -387,13 +384,13 @@ input[type="checkbox"] {
     }
 
     #filters, #sorters {
-        width: 100%;  /* Ensures full width on smaller screens */
-        padding: 0 10px;  /* Adds padding on the sides */
+        width: 100%;  
+        padding: 0 10px;  
     }
 
     #filters label,
     #sorters select {
-        width: 100%;  /* Ensures form elements use the full available width */
+        width: 100%; 
     }
 }
 
@@ -401,16 +398,16 @@ input[type="checkbox"] {
     padding: 3px 5px;
     display: block;
     margin: 5px 0;
-    background-color: #f4f4f4;  /* Light grey background */
-    border-radius: 5px;  /* Rounded corners for the label */
+    background-color: #f4f4f4; 
+    border-radius: 5px;  
 }
 
 #subcategory-container label:hover {
-    background-color: #e0e0e0;  /* Slightly darker on hover */
+    background-color: #e0e0e0;  
 }
 
 
 input[type="checkbox"] {
     cursor: pointer;
-    accent-color: #0066cc;  /* Styling the check color */
+    accent-color: #0066cc;  
 }
