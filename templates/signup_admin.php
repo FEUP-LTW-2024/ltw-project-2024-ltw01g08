@@ -12,14 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_code = filter_input(INPUT_POST, 'admin-code', FILTER_SANITIZE_STRING);
     $profile_pic = $_FILES['profile-pic'];
 
-    // Check if passwords match
     if ($password !== $confirm_password) {
         $_SESSION['error_message'] = "Passwords do not match.";
         header('Location: signup_admin.php');
         exit;
     }
 
-    // Validate the admin code
     $valid_admin_code = 'iamanadmin2024';
     if ($admin_code !== $valid_admin_code) {
         $_SESSION['error_message'] = "Invalid admin code.";
@@ -27,10 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Handle profile picture upload
     $profile_pic_url = null;
     if ($profile_pic['error'] === UPLOAD_ERR_OK) {
         $target_dir = "../images/profile_pics/";
@@ -47,29 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo = new PDO('sqlite:../database/database.db');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->beginTransaction(); // start the transaction
+        $pdo->beginTransaction(); 
 
-        // Insert user into the User table
         $sql = "INSERT INTO User (first_name, last_name, username, email, user_password, user_address, profile_picture) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$first_name, $last_name, $username, $email, $hashed_password, $address, $profile_pic_url]);
 
-        // Get the user ID of the newly created user
         $user_id = $pdo->lastInsertId();
 
-        // Insert user into the Admin table
         $sql_admin = "INSERT INTO Admin (user_id) VALUES (?)";
         $stmt_admin = $pdo->prepare($sql_admin);
         $stmt_admin->execute([$user_id]);
 
-        $pdo->commit(); // commit the transaction
+        $pdo->commit(); 
 
         $_SESSION['success_message'] = "Account created successfully!";
         header('Location: signup_admin.php');
         exit;
     } catch (PDOException $e) {
-        $pdo->rollBack(); // roll back the transaction if something failed
+        $pdo->rollBack(); 
         $_SESSION['error_message'] = "Error: " . $e->getMessage();
         header('Location: signup_admin.php');
         exit;

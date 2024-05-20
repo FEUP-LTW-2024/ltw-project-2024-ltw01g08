@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.html');
     exit;
@@ -10,9 +9,8 @@ if (!isset($_SESSION['user_id'])) {
 $pdo = new PDO('sqlite:../database/database.db');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$user_id = $_SESSION['user_id']; // The ID of the currently logged in user
+$user_id = $_SESSION['user_id']; 
 
-// Fetch all distinct chats for this user
 $query = "
     SELECT DISTINCT
         m.product_id,

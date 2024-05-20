@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.html');
     exit;
@@ -12,9 +11,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $seller_id = $_GET['seller_id'] ?? null;
 $product_id = $_GET['product_id'] ?? null;
-$user_id = $_SESSION['user_id']; // The ID of the currently logged in user
+$user_id = $_SESSION['user_id']; 
 
-// Fetch product details
 $productStmt = $pdo->prepare("SELECT * FROM Item WHERE id = ?");
 $productStmt->execute([$product_id]);
 $product = $productStmt->fetch(PDO::FETCH_ASSOC);
@@ -31,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['message'])) {
     }
 }
 
-// Fetch existing messages for this product
 $stmt = $pdo->prepare("SELECT m.*, u.username FROM messages m JOIN User u ON m.from_user_id = u.id WHERE product_id = ? ORDER BY created_at DESC");
 $stmt->execute([$product_id]);
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -3,7 +3,6 @@ try {
     $pdo = new PDO('sqlite:../database/database.db');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Fetch all departments
     $sql_departments = "SELECT * FROM Department";
     $stmt_departments = $pdo->prepare($sql_departments);
     $stmt_departments->execute();
@@ -14,7 +13,6 @@ try {
         $current_department_id = $departments[0]['id'];
     }
 
-    // Fetch categories and subcategories
     $sql_categories = "SELECT * FROM Category WHERE department_id = ?";
     $stmt_categories = $pdo->prepare($sql_categories);
     $stmt_categories->execute([$current_department_id]);
@@ -26,7 +24,6 @@ try {
     $stmt_subcategories->execute();
     $subcategories = $stmt_subcategories->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch conditions and sizes
     $sql_conditions = "SELECT * FROM ItemConditions";
     $stmt_conditions = $pdo->prepare($sql_conditions);
     $stmt_conditions->execute();
@@ -37,7 +34,6 @@ try {
     $stmt_sizes->execute();
     $sizes = $stmt_sizes->fetchAll(PDO::FETCH_ASSOC);
 
-    // Initialize the SQL query for items
     $sort = filter_input(INPUT_GET, 'sort');
     $order = ($sort === 'high-to-low') ? "DESC" : "ASC";
     $sql = "SELECT Item.*, ItemSizes.size_description 
@@ -46,9 +42,8 @@ try {
             WHERE department_id = ? 
             AND Item.id NOT IN (SELECT item_id FROM 'Transaction')";
 
-    $params = [$current_department_id]; // parameters for SQL execution
+    $params = [$current_department_id]; 
 
-    // Add filters to the SQL query
     $category_filter = filter_input(INPUT_GET, 'category', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     if ($category_filter) {
         $category_placeholders = implode(',', array_fill(0, count($category_filter), '?'));
@@ -89,12 +84,10 @@ try {
         $params[] = $max_price;
     }
 
-    // Execute SQL query
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // If sorting is requested, reorder the items array
     if ($sort) {
         usort($items, function ($item1, $item2) use ($order) {
             if ($order === "DESC") {
