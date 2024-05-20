@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../php/login.php');
+    header('Location: ../templates/login.html');
     exit;
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
         $stmt->execute([$itemId, $userId]);
 
         // Redirect to user_page.php if deletion was successful
-        header('Location: user_page.php');
+        header('Location: ../templates/user_page.php');
         echo "Success";
         exit;
     } else {

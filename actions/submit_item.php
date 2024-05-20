@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: ../templates/login.html');
     exit;
 }
 
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Redirect to user page after successful addition
-            header('Location: user_page.php');
+            header('Location: ../templates/user_page.php');
             exit;
         } else {
             echo "Error uploading images.";

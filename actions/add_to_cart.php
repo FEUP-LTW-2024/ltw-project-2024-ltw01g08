@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php'); // vai para login se não tiver logged in
+    header('Location: ../templates/login.html'); // vai para login se não tiver logged in
     exit;
 }
 
@@ -26,10 +26,10 @@ if (isset($_POST['item_id'], $_SESSION['user_id'])) {
         $insert_stmt->execute([$user_id, $item_id]);
     }
 
-    header('Location: shopping_cart.php'); 
+    header('Location: ../templates/shopping_cart.php'); 
     exit;
 } else {
-    header('Location: product_page.php');
+    header('Location: ../templates/product_page.php');
     exit;
 }
 ?>
