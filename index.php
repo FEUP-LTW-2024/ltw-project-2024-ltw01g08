@@ -1,16 +1,14 @@
 <?php
 declare(strict_types = 1);
-session_start();  // Start session management
+session_start();  
 
-// Check if a user is logged in and set $loggedIn accordingly
 $loggedIn = isset($_SESSION['user_id']);
 
 if (!$loggedIn) {
-    header('Location: templates/login.html');  // Adjust the path as necessary
+    header('Location: templates/login.html'); 
     exit;
 }
 
-// Database connection setup
 $pdo = new PDO('sqlite:database/database.db');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -19,7 +17,6 @@ $stmt = $pdo->prepare($sql_departments);
 $stmt->execute();
 $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch user details
 $userId = $_SESSION['user_id'];
 $user = null;
 try {

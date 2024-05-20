@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
     $department_id = filter_input(INPUT_POST, 'department', FILTER_SANITIZE_NUMBER_INT);
     $category_id = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
-    $subcategory_id = filter_input(INPUT_POST, 'subcategory', FILTER_VALIDATE_INT); // Optional, may be NULL
+    $subcategory_id = filter_input(INPUT_POST, 'subcategory', FILTER_VALIDATE_INT); 
     $brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
     $item_size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_NUMBER_INT);
     $color = filter_input(INPUT_POST, 'color', FILTER_SANITIZE_STRING);
@@ -40,13 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (count($image_paths) == 3) {
-            // If all images were uploaded successfully, update the image URLs in the database
             $stmt = $pdo->prepare("UPDATE Item SET image_url = ? WHERE id = ?");
             foreach ($image_paths as $index => $image_path) {
                 $stmt->execute([$image_path, $itemid]);
             }
 
-            // Redirect to user page after successful addition
             header('Location: ../templates/user_page.php');
             exit;
         } else {
