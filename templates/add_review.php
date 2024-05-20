@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php unset($_SESSION['error_message']); ?>
                 </div>
             <?php endif; ?>
-            <form action="submit_review.php" method="post">
+            <form action="../actions/submit_review.php" method="post">
                 <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($itemId); ?>">
                 <input type="hidden" name="seller_id" value="<?php echo htmlspecialchars($sellerId); ?>">
                 <div class="form-group">

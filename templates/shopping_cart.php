@@ -66,7 +66,7 @@ $total = 0;
         </div>
         <div class="item-price-action">
             <span class="item-price">€ <?php echo number_format($item['price'], 2); ?></span>
-            <a href="remove_from_cart.php?item_id=<?php echo $item['item_id']; ?>" class="remove-item">🗑 Remove</a>
+            <a href="../actions/remove_from_cart.php?item_id=<?php echo $item['item_id']; ?>" class="remove-item">🗑 Remove</a>
         </div>
     </div>
 </div>      
