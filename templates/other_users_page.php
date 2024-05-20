@@ -2,7 +2,7 @@
     session_start();
 
     if (!isset($_GET['user_id'])) {
-        header('Location: error_page.php');
+        header('Location: login.html');
         exit;
     }
 

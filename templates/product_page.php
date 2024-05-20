@@ -5,7 +5,7 @@ $pdo = new PDO('sqlite:../database/database.db');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if (!isset($_GET['product_id'])) {
-    header('Location: error_page.php');
+    header('Location: login.html');
     exit;
 }
 
@@ -55,8 +55,8 @@ if (!$product) {
                             <a href="../templates/user_page.php">User Profile</a>
                             <a href="../templates/account_info.php">Account Info</a>
                         <?php else: ?>
-                            <a href="../templates/login.php">Log In</a>
-                            <a href="../templates/register.php">Register</a>
+                            <a href="login.html">Log In</a>
+                            <a href="../templates/signup.php">Register</a>
                         <?php endif; ?>
                     </div>
                 </span>
@@ -104,7 +104,7 @@ if (!$product) {
                 <p><strong>Description:</strong> <?php echo htmlspecialchars($product['item_description']); ?></p>
 
                 <!-- Add to Cart Form -->
-                <form method="POST" action="add_to_cart.php">
+                <form method="POST" action="../actions/add_to_cart.php">
                     <input type="hidden" name="item_id" value="<?php echo $product['id']; ?>">
                     <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                     <button type="submit" class="add-to-cart">Add to cart</button>
@@ -151,7 +151,7 @@ if (!$product) {
                 event.preventDefault(); // Prevent the default form submission
                 const formData = new FormData(this); // Use 'this' to refer to the form itself
 
-                fetch('add_to_favorites.php', {
+                fetch('../actions/add_to_favorites.php', {
                     method: 'POST',
                     body: formData
                 })

@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Redirect to login page if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../php/login.php');
+    header('Location: login.html');
     exit;
 }
 
@@ -67,7 +67,7 @@ function deleteItem(event, itemId) {
 
     if (confirm('Are you sure you want to delete this item?')) {
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "delete_item.php", true);
+        xhr.open("POST", "../actions/delete_item.php", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = function () {
             if (this.status === 200 && this.responseText.trim() === "Success") {

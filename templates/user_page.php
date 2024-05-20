@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../php/login.php');
+    header('Location: login.html');
     exit;
 }
 
@@ -210,7 +210,7 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div id="add-item" class="tab-content" style="display:none;">
-            <?php include 'add_item.php'; ?>
+            <?php include '../actions/add_item.php'; ?>
         </div>
 
         <?php if ($isAdmin) { ?>
@@ -265,7 +265,7 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
         function removeFavorite(event, itemId) {
             event.preventDefault();  
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "remove_favorite.php", true);
+            xhr.open("POST", "../actions/remove_favorite.php", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onload = function () {
                 if (this.status === 200 && this.responseText.trim() === "Success") {
@@ -284,7 +284,7 @@ $reviews = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
         function addToCart(event, itemId) {
             event.preventDefault(); 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "add_to_cart.php", true);
+            xhr.open("POST", "../actions/add_to_cart.php", true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onload = function () {
                 if (this.status == 200) {
