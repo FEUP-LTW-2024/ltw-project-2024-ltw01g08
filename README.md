@@ -23,8 +23,7 @@
 
 ## Install Instructions
     git clone <https://github.com/FEUP-LTW-2024/ltw-project-2024-ltw01g08.git>
-    git checkout final-delivery-v1
-    sqlite database/database.db 
+    git checkout final-delivery-v3
     php -S localhost:9000
 
 ## Implemented Features
