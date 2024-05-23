@@ -134,7 +134,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_order'])) {
             <?php if (isset($_POST['district'])): ?>
                 <p>Shipping: €<?php echo number_format($shippingCost, 2); ?></p>
                 <p>Total with Shipping: €<?php echo number_format($total + $shippingCost, 2); ?></p>
-                <button type="submit" name="submit_order" class="submit-btn">Submit Order</button>
+                <a href="shopping_cart.php" class="back-to-cart-btn">
+                    <button type="submit" name="submit_order" class="submit-btn">Submit Order</button>
+                </a>
             <?php endif; ?>
         </form>
     </div>

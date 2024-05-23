@@ -105,7 +105,7 @@
 
     function updateCategories() {
         const deptId = document.getElementById('department').value;
-        fetch(`get_categories.php?deptId=${deptId}`)
+        fetch(`../actions/get_categories.php?deptId=${deptId}`)
             .then(response => response.json())
             .then(data => {
                 const categorySelect = document.getElementById('category');
@@ -118,7 +118,7 @@
 
     function updateSubcategories() {
         const categoryId = document.getElementById('category').value;
-        fetch(`get_subcategories.php?categoryId=${categoryId}`)
+        fetch(`../actions/get_subcategories.php?categoryId=${categoryId}`)
             .then(response => response.json())
             .then(data => {
                 const subcategorySelect = document.getElementById('subcategory');
